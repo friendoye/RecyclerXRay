@@ -1,9 +1,12 @@
 package com.friendoye.recyclerxray
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.friendoye.recyclerxray.databinding.ActivityMainBinding
+import com.friendoye.recyclerxray.xray.RecyclerXRay
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,8 +22,22 @@ class MainActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(context, 3).apply {
                 spanSizeLookup = SampleAdapterSpanLookup(sampleAdapter)
             }
-            adapter = sampleAdapter
+            // Test RecyclerXRay
+            adapter = RecyclerXRay.wrap(sampleAdapter)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.swap -> RecyclerXRay.toggleSecrets()
+            else -> return false
+        }
+        return true
     }
 
     class SampleAdapterSpanLookup(
