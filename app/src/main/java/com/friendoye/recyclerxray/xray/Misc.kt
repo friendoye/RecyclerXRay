@@ -7,6 +7,7 @@ import java.util.*
 import kotlin.math.sqrt
 
 internal val GOLDEN_RATIO_CONSTANT = (1.0 + sqrt(5.0)).toFloat() / 2
+internal val DEFAULT_LOG_TAG = "RecyclerXRay"
 internal val DEFAULT_X_RAY_SETTINGS = XRaySettings(
     defaultXRayDebugViewHolder = DefaultXRayDebugViewHolder()
 )
@@ -27,6 +28,22 @@ internal fun Random.generateColor(): Int {
         0.5f, // saturation
         0.95f // value
     ))
+}
+
+internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
+    try {
+        val constructor = constructors.first()
+        constructor.isAccessible = true
+        val argsTypes = constructor.parameterTypes
+        val array = Array(argsTypes.size) { index -> argsTypes[index].cast(null) }
+        constructor.newInstance(*array)
+    } catch (e: Exception) {
+        val linkToClass = e.cause?.stackTrace?.get(0)?.run {
+            "$fileName:$lineNumber"
+        }
+        return "$simpleName($linkToClass)"
+    }
+    return null
 }
 
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)

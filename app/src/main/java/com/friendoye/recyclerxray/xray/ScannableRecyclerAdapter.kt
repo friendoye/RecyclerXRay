@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray.xray
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,6 +69,10 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 val xRayResult = scanner.scan(this, itemType)
                 if (isInXRayMode) {
                     xRayDebugViewHolder.bindView(view, xRayResult)
+                    view.setOnClickListener {
+                        val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
+                        Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
+                    }
                 }
             } else {
                 view.isInvisible = isInXRayMode
