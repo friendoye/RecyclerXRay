@@ -1,12 +1,13 @@
 package com.friendoye.recyclerxray.xray
 
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.ref.WeakReference
 
 
 @Suppress("SimplifyBooleanWithConstants")
 object RecyclerXRay {
 
-    private val adapters: MutableSet<RecyclerView.Adapter<*>> = mutableSetOf()
+    private val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
     internal var isInXRayMode = false
     internal val xRayDebugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder()
 
@@ -36,8 +37,10 @@ object RecyclerXRay {
     }
 
     private fun updateAdapters() {
-        adapters.forEach { adapter ->
-            adapter.notifyItemRangeChanged(0, adapter.itemCount, XRayPayload)
+        adapters.forEach { weakAdapter ->
+            weakAdapter.get()?.let { adapter ->
+                adapter.notifyItemRangeChanged(0, adapter.itemCount, XRayPayload)
+            }
         }
     }
 }
