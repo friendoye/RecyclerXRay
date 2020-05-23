@@ -2,10 +2,14 @@ package com.friendoye.recyclerxray.xray
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.math.sqrt
 
 internal val GOLDEN_RATIO_CONSTANT = (1.0 + sqrt(5.0)).toFloat() / 2
+internal val DEFAULT_X_RAY_SETTINGS = XRaySettings(
+    defaultXRayDebugViewHolder = DefaultXRayDebugViewHolder()
+)
 
 internal fun provideDefaultColorGeneratorRandom() = Random(0xB00BB00B)
 
@@ -24,3 +28,5 @@ internal fun Random.generateColor(): Int {
         0.95f // value
     ))
 }
+
+internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)

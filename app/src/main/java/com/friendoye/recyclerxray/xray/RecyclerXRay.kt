@@ -9,7 +9,7 @@ object RecyclerXRay {
 
     private val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
     internal var isInXRayMode = false
-    internal val xRayDebugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder()
+    var settings: XRaySettings = DEFAULT_X_RAY_SETTINGS
 
     fun toggleSecrets() {
         if (isInXRayMode) {
@@ -32,8 +32,8 @@ object RecyclerXRay {
     }
 
     fun <T : RecyclerView.Adapter<VH>, VH: RecyclerView.ViewHolder> wrap(adapter: T): ScannableRecyclerAdapter<VH> {
-        adapters.add(adapter)
-        return ScannableRecyclerAdapter(adapter, xRayDebugViewHolder)
+        adapters.add(adapter.asWeakRef())
+        return ScannableRecyclerAdapter(adapter, settings.defaultXRayDebugViewHolder)
     }
 
     private fun updateAdapters() {
