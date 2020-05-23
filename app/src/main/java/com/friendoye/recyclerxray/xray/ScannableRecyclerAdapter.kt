@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
 class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
+    private val xRayDebugViewHolder: XRayDebugViewHolder,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter) {
 
@@ -23,8 +24,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val holder = super.onCreateViewHolder(xRayContainer, viewType)
         xRayContainer.addView(holder.itemView)
 
-        val debugLayout = LayoutInflater.from(parent.context)
-            .inflate(R.layout.xray_item_debug_layout, xRayContainer, false)
+        val debugLayout = xRayDebugViewHolder.provideView(xRayContainer)
         debugLayout.visibility = View.GONE
         debugLayout.isClickable = true
         debugLayout.tag = "DEBUG"
@@ -67,24 +67,11 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 view.isVisible = isInXRayMode
                 val xRayResult = scanner.scan(this, itemType)
                 if (isInXRayMode) {
-                    view.bindXRayResult(xRayResult)
+                    xRayDebugViewHolder.bindView(view, xRayResult)
                 }
             } else {
                 view.isInvisible = isInXRayMode
             }
-        }
-    }
-
-    private fun View.bindXRayResult(result: XRayResult) {
-        assert(tag == "DEBUG")
-
-        debug_info_text_view.apply {
-            text = """
-                ViewHolder class:
-                ${result.viewHolderClass.name}
-                ViewHolder type: ${result.viewHolderType}
-            """.trimIndent()
-            setBackgroundColor(result.color)
         }
     }
 }
