@@ -24,6 +24,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val debugLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.xray_item_debug_layout, xRayContainer, false)
         debugLayout.visibility = View.GONE
+        debugLayout.isClickable = true
         debugLayout.tag = "DEBUG"
         xRayContainer.addView(debugLayout)
 
@@ -34,25 +35,31 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return holder
     }
 
+    override fun onBindViewHolder(holder: T, position: Int) {
+        super.onBindViewHolder(holder, position)
+        holder.bindXRayMode(RecyclerXRay.isInXRayMode)
+    }
+
     override fun onBindViewHolder(holder: T, position: Int, payloads: List<Any>) {
         val xRayPayload = payloads.asSequence()
             .filterIsInstance<XRayPayload>()
             .firstOrNull()
-        if (xRayPayload != null) {
-            (holder.itemView as? ViewGroup)?.children?.forEach { view ->
-                if (view.tag == "DEBUG") {
-                    view.isVisible = xRayPayload.isInXRayMode
-                } else {
-                    view.isInvisible = xRayPayload.isInXRayMode
-                }
-            }
-        }
-
         val clearedPayload = payloads.asSequence()
             .filter { it !== xRayPayload }
             .toList()
-        if (clearedPayload.isNotEmpty()) {
-            super.onBindViewHolder(holder, position, clearedPayload)
+
+        super.onBindViewHolder(holder, position, clearedPayload)
+
+        holder.bindXRayMode(xRayPayload?.isInXRayMode ?: RecyclerXRay.isInXRayMode)
+    }
+
+    private fun T.bindXRayMode(isInXRayMode: Boolean) {
+        (itemView as? ViewGroup)?.children?.forEach { view ->
+            if (view.tag == "DEBUG") {
+                view.isVisible = isInXRayMode
+            } else {
+                view.isInvisible = isInXRayMode
+            }
         }
     }
 }

@@ -1,17 +1,16 @@
 package com.friendoye.recyclerxray.xray
 
 import androidx.recyclerview.widget.RecyclerView
-import java.lang.reflect.Proxy
 
 
 @Suppress("SimplifyBooleanWithConstants")
 object RecyclerXRay {
 
     private val adapters: MutableSet<RecyclerView.Adapter<*>> = mutableSetOf()
-    private var inXRayMode = false
+    internal var isInXRayMode = false
 
     fun toggleSecrets() {
-        if (inXRayMode) {
+        if (isInXRayMode) {
             hideSecrets()
         } else {
             showSecrets()
@@ -19,9 +18,9 @@ object RecyclerXRay {
     }
 
     fun showSecrets() {
-        assert(inXRayMode == false)
+        assert(isInXRayMode == false)
 
-        inXRayMode = true
+        isInXRayMode = true
         updateAdapters()
 
         // 1) try to replace adapter - hold on
@@ -33,14 +32,14 @@ object RecyclerXRay {
     }
 
     fun hideSecrets() {
-        assert(inXRayMode == true)
+        assert(isInXRayMode == true)
 
-        inXRayMode = false
+        isInXRayMode = false
         updateAdapters()
     }
 
     private fun updateAdapters() {
-        val payload = XRayPayload(inXRayMode)
+        val payload = XRayPayload(isInXRayMode)
         adapters.forEach { adapter ->
             adapter.notifyItemRangeChanged(0, adapter.itemCount, payload)
         }
