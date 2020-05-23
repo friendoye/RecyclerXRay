@@ -34,15 +34,22 @@ class LargeViewHolder private constructor(
     }
 }
 
-class WidestViewHolder private constructor(
-    private val binding: ItemSampleWidestBinding
-) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType> {
+/*
+ * Note: `Outer` class is introduced to test whether linking to file works,
+ * when ViewHolder subclass is placed inside other class.
+ */
+class Outer {
 
-    companion object {
-        fun fromParent(parent: ViewGroup): WidestViewHolder {
-            val inflater = LayoutInflater.from(parent.context)
-            val binding = ItemSampleWidestBinding.inflate(inflater)
-            return WidestViewHolder(binding)
+    class WidestViewHolder private constructor(
+        private val binding: ItemSampleWidestBinding
+    ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType> {
+
+        companion object {
+            fun fromParent(parent: ViewGroup): WidestViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = ItemSampleWidestBinding.inflate(inflater)
+                return WidestViewHolder(binding)
+            }
         }
     }
 }

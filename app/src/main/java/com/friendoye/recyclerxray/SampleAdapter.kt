@@ -1,12 +1,7 @@
 package com.friendoye.recyclerxray
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.databinding.ItemSampleLargeBinding
-import com.friendoye.recyclerxray.databinding.ItemSampleSmallBinding
-import com.friendoye.recyclerxray.databinding.ItemSampleWidestBinding
 import java.lang.IllegalStateException
 
 class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,7 +24,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when (type) {
             ItemType.SMALL -> SmallViewHolder.fromParent(parent)
             ItemType.LARGE -> LargeViewHolder.fromParent(parent)
-            ItemType.WIDEST -> WidestViewHolder.fromParent(parent)
+            ItemType.WIDEST -> Outer.WidestViewHolder.fromParent(parent)
         }
     }
 
