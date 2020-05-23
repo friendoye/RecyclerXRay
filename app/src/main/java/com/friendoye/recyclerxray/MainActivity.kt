@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sampleAdapter = SampleAdapter().apply {
+        var sampleAdapter: SampleAdapter = SampleAdapter().apply {
             items = SAMPLE_DATA
         }
         binding.recyclerView.apply {

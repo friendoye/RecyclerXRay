@@ -1,5 +1,4 @@
 package com.friendoye.recyclerxray.xray
 
 
-class ScannableViewHolder {
-}
+internal object XRayPayload

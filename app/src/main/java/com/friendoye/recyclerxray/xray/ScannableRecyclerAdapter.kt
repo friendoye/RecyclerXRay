@@ -57,7 +57,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
-            isInXRayMode = xRayPayload?.isInXRayMode ?: RecyclerXRay.isInXRayMode
+            isInXRayMode = RecyclerXRay.isInXRayMode
         )
     }
 
