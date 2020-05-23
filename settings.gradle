@@ -1,2 +1,3 @@
 rootProject.name='RecyclerXRay'
-include ':app'
+include ':library'
+include ':sample'
