@@ -19,16 +19,17 @@ internal fun provideDefaultColorGeneratorRandom() = Random(0xB00BB00B)
  * @implNote: For color generation uses approach with exploiting Golden Ratio
  * (more info: http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/).
  */
-@ColorInt
-internal fun Random.generateColor(): Int {
-    var hue: Float = nextFloat() + GOLDEN_RATIO_CONSTANT
-    hue %= 1
-    hue *= 360
-    return Color.HSVToColor(floatArrayOf(
-        hue,  // hue
-        0.5f, // saturation
-        0.95f // value
-    ))
+internal fun Random.generateColorSequence(): Sequence<Int> {
+    var hue = nextFloat()
+    return generateSequence {
+        hue += GOLDEN_RATIO_CONSTANT
+        hue %= 1
+        Color.HSVToColor(floatArrayOf(
+            360 * hue, // hue
+            0.5f,      // saturation
+            0.95f      // value
+        ))
+    }
 }
 
 internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
