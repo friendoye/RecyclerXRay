@@ -27,16 +27,8 @@ class MainActivity : AppCompatActivity() {
             // Test RecyclerXRay
             adapter = RecyclerXRay.wrap(sampleAdapter)
         }
-    }
 
-    override fun onStart() {
-        super.onStart()
-        adbToggleReceiver.register()
-    }
-
-    override fun onStop() {
-        adbToggleReceiver.unregister()
-        super.onStop()
+        lifecycle.addObserver(adbToggleReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
