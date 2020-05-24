@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
         override fun getSpanSize(position: Int): Int {
             val type = adapter.items[position]
             return when (type) {
-                ItemType.SMALL -> 1
-                ItemType.LARGE -> 2
-                ItemType.WIDEST -> 3
+                is ItemType.Small -> 1
+                is ItemType.Large -> 2
+                is ItemType.Widest -> 3
             }
         }
     }

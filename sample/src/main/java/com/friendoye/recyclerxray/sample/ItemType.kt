@@ -1,12 +1,8 @@
 package com.friendoye.recyclerxray.sample
 
 
-enum class ItemType {
-    SMALL,
-    LARGE,
-    WIDEST;
-
-    companion object {
-        fun fromOrdinal(ordinal: Int): ItemType? = values().getOrNull(ordinal)
-    }
+sealed class ItemType {
+    class Small(val number: Int) : ItemType()
+    class Large(val string: String) : ItemType()
+    object Widest : ItemType()
 }
