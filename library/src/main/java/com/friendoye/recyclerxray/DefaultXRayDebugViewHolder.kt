@@ -19,11 +19,18 @@ class DefaultXRayDebugViewHolder :
     override fun bindView(debugView: View, result: XRayResult) {
         debugView.apply {
             debug_info_text_view.apply {
-                text = """
+                var textToShow = """
                     ViewHolder class:
                     ${result.viewHolderClass.name}
                     ViewHolder type: ${result.viewHolderType}
                 """.trimIndent()
+                if (result.customParams.isNotEmpty()) {
+                    textToShow += "\n" + """
+                        Custom params:
+                        ${result.customParams.entries.joinToString(separator = "\n")}
+                    """.trimIndent()
+                }
+                text = textToShow
                 setBackgroundColor(result.color)
             }
         }

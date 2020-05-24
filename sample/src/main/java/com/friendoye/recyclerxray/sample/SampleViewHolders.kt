@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleLargeBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleSmallBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
@@ -12,10 +13,15 @@ import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
 @SuppressLint("SetTextI18n")
 class SmallViewHolder private constructor(
     private val binding: ItemSampleSmallBinding
-) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Small> {
+) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Small>,
+    XRayCustomParamsViewHolderProvider {
 
     override fun bind(item: ItemType.Small) {
         binding.textView.text = "Number: ${item.number}"
+    }
+
+    override fun provideCustomParams(): Map<String, Any?>? {
+        return mapOf("Type" to "Small")
     }
 
     companion object {
@@ -53,7 +59,12 @@ class Outer {
 
     class WidestViewHolder private constructor(
         private val binding: ItemSampleWidestBinding
-    ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Widest> {
+    ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Widest>,
+        XRayCustomParamsViewHolderProvider {
+
+        override fun provideCustomParams(): Map<String, Any?>? {
+            return mapOf("Type" to "Widest")
+        }
 
         companion object {
             fun fromParent(parent: ViewGroup): WidestViewHolder {

@@ -6,5 +6,6 @@ import androidx.annotation.ColorInt
 data class XRayResult(
     val viewHolderClass: Class<*>,
     val viewHolderType: Int,
-    @ColorInt val color: Int
+    @ColorInt val color: Int,
+    val customParams: Map<String, Any?>
 )

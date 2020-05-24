@@ -11,12 +11,27 @@ class Scanner(
 
     private val holderInfoToColorMap: MutableMap<Pair<Class<*>, Int>, Int> = mutableMapOf()
 
-    fun scan(holder: RecyclerView.ViewHolder, itemType: Int): XRayResult {
+    fun scan(holder: RecyclerView.ViewHolder, itemType: Int,
+             extraCustomParams: Map<String, Any?>?): XRayResult {
         return XRayResult(
             viewHolderClass = holder.javaClass,
             viewHolderType = itemType,
-            color = getColorForItemType(holder.javaClass to itemType)
+            color = getColorForItemType(holder.javaClass to itemType),
+            customParams = holder.extractCustomParams(extraParams = extraCustomParams)
         )
+    }
+
+    private fun <T : RecyclerView.ViewHolder> T.extractCustomParams(
+        extraParams: Map<String, Any?>? = null
+    ): Map<String, Any?> {
+        val holderParams = (this as? XRayCustomParamsViewHolderProvider)
+            ?.provideCustomParams()
+            ?.toMutableMap()
+            ?: mutableMapOf()
+        if (extraParams != null) {
+            holderParams.putAll(extraParams)
+        }
+        return holderParams
     }
 
     @ColorInt
