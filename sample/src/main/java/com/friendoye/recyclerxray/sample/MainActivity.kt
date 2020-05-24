@@ -10,6 +10,8 @@ import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private val adbToggleReceiver = AdbToggleReceiver(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -25,6 +27,16 @@ class MainActivity : AppCompatActivity() {
             // Test RecyclerXRay
             adapter = RecyclerXRay.wrap(sampleAdapter)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adbToggleReceiver.register()
+    }
+
+    override fun onStop() {
+        adbToggleReceiver.unregister()
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
