@@ -15,24 +15,29 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     override fun getItemViewType(position: Int): Int {
-        return items[position].ordinal
+        return when (items[position]) {
+            is ItemType.Small -> 1
+            is ItemType.Large -> 2
+            is ItemType.Widest -> 3
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val type = ItemType.fromOrdinal(viewType)
-            ?: throw IllegalStateException("Could not find ItemType for viewType = $viewType")
-        return when (type) {
-            ItemType.SMALL -> SmallViewHolder.fromParent(parent)
-            ItemType.LARGE -> LargeViewHolder.fromParent(parent)
-            ItemType.WIDEST -> Outer.WidestViewHolder.fromParent(parent)
+        return when (viewType) {
+            1 -> SmallViewHolder.fromParent(parent)
+            2 -> LargeViewHolder.fromParent(parent)
+            3 -> Outer.WidestViewHolder.fromParent(parent)
+            else -> throw IllegalStateException("Could not find ItemType for viewType = $viewType")
         }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder as? Bindable<ItemType>
-            ?: throw IllegalStateException("${holder.javaClass.simpleName} should implement Bindable!")
         val item = items[position]
-        holder.bind(item)
+        when (getItemViewType(position)) {
+            1 -> (holder as SmallViewHolder).bind(item as ItemType.Small)
+            2 -> (holder as LargeViewHolder).bind(item as ItemType.Large)
+            3 -> (holder as Outer.WidestViewHolder).bind(item as ItemType.Widest)
+        }
     }
 }
