@@ -17,7 +17,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     private val scanner: Scanner = Scanner()
-) : DelegateRecyclerAdapter<T>(decoratedAdapter) {
+) : DelegateRecyclerAdapter<T>(decoratedAdapter), XRayCustomParamsAdapterProvider {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val xRayContainer = FrameLayout(parent.context)
@@ -38,11 +38,20 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return holder
     }
 
+    override fun provideCustomParams(position: Int): Map<String, Any?>? {
+        return if (decoratedAdapter is XRayCustomParamsAdapterProvider) {
+            decoratedAdapter.provideCustomParams(position)
+        } else {
+            null
+        }
+    }
+
     override fun onBindViewHolder(holder: T, position: Int) {
         super.onBindViewHolder(holder, position)
         holder.bindXRayMode(
             itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode
+            isInXRayMode = RecyclerXRay.isInXRayMode,
+            customParamsFromAdapter = provideCustomParams(position)
         )
     }
 
@@ -58,15 +67,17 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode
+            isInXRayMode = RecyclerXRay.isInXRayMode,
+            customParamsFromAdapter = provideCustomParams(position)
         )
     }
 
-    private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean) {
+    private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
+                               customParamsFromAdapter: Map<String, Any?>?) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
             if (view.tag == "DEBUG") {
                 view.isVisible = isInXRayMode
-                val xRayResult = scanner.scan(this, itemType)
+                val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
                 if (isInXRayMode) {
                     xRayDebugViewHolder.bindView(view, xRayResult)
                     view.setOnClickListener {

@@ -2,9 +2,11 @@ package com.friendoye.recyclerxray.sample
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
 import java.lang.IllegalStateException
 
-class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+    XRayCustomParamsAdapterProvider {
 
     var items: List<ItemType> = emptyList()
         set(value) {
@@ -19,6 +21,19 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is ItemType.Small -> 1
             is ItemType.Large -> 2
             is ItemType.Widest -> 3
+        }
+    }
+
+    override fun provideCustomParams(position: Int): Map<String, Any?>? {
+        return when (getItemViewType(position)) {
+            1 -> mapOf(
+                "Number" to (items[position] as ItemType.Small).number
+            )
+            2 -> mapOf(
+                "String" to (items[position] as ItemType.Large).string
+            )
+            3 -> null
+            else -> null
         }
     }
 
