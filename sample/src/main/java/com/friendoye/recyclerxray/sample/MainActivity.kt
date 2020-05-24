@@ -5,10 +5,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.friendoye.recyclerxray.AdbToggleReceiver
 import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private val adbToggleReceiver = AdbToggleReceiver(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             // Test RecyclerXRay
             adapter = RecyclerXRay.wrap(sampleAdapter)
         }
+
+        lifecycle.addObserver(adbToggleReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
