@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.friendoye.recyclerxray.AdbToggleReceiver
 import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 

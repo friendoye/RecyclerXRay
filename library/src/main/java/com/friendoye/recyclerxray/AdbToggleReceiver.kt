@@ -1,4 +1,4 @@
-package com.friendoye.recyclerxray.sample
+package com.friendoye.recyclerxray
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.friendoye.recyclerxray.RecyclerXRay
 
 
 /**
