@@ -1,17 +1,20 @@
 package com.friendoye.recyclerxray.sample
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
-import java.lang.IllegalStateException
+
 
 class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider {
 
     var items: List<ItemType> = emptyList()
         set(value) {
+            val diffCallback = DiffCalculator(field, value)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = value
-            notifyDataSetChanged()
+            diffResult.dispatchUpdatesTo(this)
         }
 
     override fun getItemCount(): Int = items.size
