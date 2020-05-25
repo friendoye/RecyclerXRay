@@ -1,7 +1,6 @@
 package com.friendoye.recyclerxray
 
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -9,8 +8,6 @@ import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.R
-import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
 
 class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
