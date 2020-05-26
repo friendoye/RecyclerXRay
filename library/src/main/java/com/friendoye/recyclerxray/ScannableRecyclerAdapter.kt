@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
+    @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter), XRayCustomParamsAdapterProvider {
 
@@ -91,6 +93,9 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             connect(debugLayout.id, ConstraintSet.RIGHT,  holderWrapperView.id, ConstraintSet.RIGHT)
             connect(debugLayout.id, ConstraintSet.TOP,    holderWrapperView.id, ConstraintSet.TOP)
             connect(debugLayout.id, ConstraintSet.BOTTOM, holderWrapperView.id, ConstraintSet.BOTTOM)
+            minDebugViewSize?.let {
+                constrainMinHeight(debugLayout.id, it)
+            }
         }
         debugLayoutConstraints.applyTo(xRayContainer)
 
@@ -105,13 +110,17 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
                 if (isInXRayMode) {
                     xRayDebugViewHolder.bindView(view, xRayResult)
+                    view.alpha = 1.0f
                     view.setOnClickListener {
+                        it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
                         val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
                         Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
                     }
                 }
             } else {
-                view.isInvisible = isInXRayMode
+                // Do not hide ViewHolder view,
+                // so we could preview it on item click
+                // view.isInvisible = isInXRayMode
             }
         }
     }
