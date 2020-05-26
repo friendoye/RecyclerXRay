@@ -8,19 +8,38 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.friendoye.recyclerxray.AdbToggleReceiver
 import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
     private val adbToggleReceiver = AdbToggleReceiver(this)
+    private var isFullDataInAdapter = true
+        set(value) {
+            field = value
+            if (value) {
+                sampleAdapter.items = SAMPLE_DATA_FULL
+                binding.floatingActionButton
+                    .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
+            } else {
+                sampleAdapter.items = SAMPLE_DATA_PARTIAL
+                binding.floatingActionButton
+                    .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
+            }
+        }
+
+    private var binding by Delegates.notNull<ActivityMainBinding>()
+    private var sampleAdapter = SampleAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var sampleAdapter: SampleAdapter = SampleAdapter().apply {
-            items = SAMPLE_DATA
+        isFullDataInAdapter = true
+        binding.floatingActionButton.setOnClickListener {
+            isFullDataInAdapter = !isFullDataInAdapter
         }
+
         binding.sampleRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 3).apply {
                 spanSizeLookup = SampleAdapterSpanLookup(sampleAdapter)
