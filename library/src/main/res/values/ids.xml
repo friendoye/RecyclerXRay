@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="parent_constraint_layout_id" type="id"/>
+    <item name="holder_item_view_placeholder_id" type="id"/>
+    <item name="debug_layout_id" type="id"/>
+</resources>
