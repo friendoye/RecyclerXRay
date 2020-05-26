@@ -24,6 +24,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             is ItemType.Small -> 1
             is ItemType.Large -> 2
             is ItemType.Widest -> 3
+            is ItemType.Empty -> 4
         }
     }
 
@@ -35,7 +36,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             2 -> mapOf(
                 "String" to (items[position] as ItemType.Large).string
             )
-            3 -> null
+            3, 4 -> null
             else -> null
         }
     }
@@ -45,6 +46,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             1 -> SmallViewHolder.fromParent(parent)
             2 -> LargeViewHolder.fromParent(parent)
             3 -> Outer.WidestViewHolder.fromParent(parent)
+            4 -> EmptyViewHolder.fromParent(parent)
             else -> throw IllegalStateException("Could not find ItemType for viewType = $viewType")
         }
     }
@@ -56,6 +58,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             1 -> (holder as SmallViewHolder).bind(item as ItemType.Small)
             2 -> (holder as LargeViewHolder).bind(item as ItemType.Large)
             3 -> (holder as Outer.WidestViewHolder).bind(item as ItemType.Widest)
+            4 -> (holder as EmptyViewHolder).bind(item as ItemType.Empty)
         }
     }
 }

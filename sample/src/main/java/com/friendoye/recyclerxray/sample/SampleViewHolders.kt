@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleEmptyBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleLargeBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleSmallBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
@@ -72,6 +73,19 @@ class Outer {
                 val binding = ItemSampleWidestBinding.inflate(inflater)
                 return WidestViewHolder(binding)
             }
+        }
+    }
+}
+
+class EmptyViewHolder private constructor(
+    private val binding: ItemSampleEmptyBinding
+) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Empty> {
+
+    companion object {
+        fun fromParent(parent: ViewGroup): EmptyViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = ItemSampleEmptyBinding.inflate(inflater)
+            return EmptyViewHolder(binding)
         }
     }
 }

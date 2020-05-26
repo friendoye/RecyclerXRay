@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                 is ItemType.Small -> 1
                 is ItemType.Large -> 2
                 is ItemType.Widest -> 3
+                is ItemType.Empty -> 3
             }
         }
     }
