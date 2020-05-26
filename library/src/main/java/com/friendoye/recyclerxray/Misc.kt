@@ -8,10 +8,6 @@ import kotlin.math.sqrt
 
 internal val GOLDEN_RATIO_CONSTANT = (1.0 + sqrt(5.0)).toFloat() / 2
 internal val DEFAULT_LOG_TAG = "RecyclerXRay"
-internal val DEFAULT_X_RAY_SETTINGS =
-    XRaySettings(
-        defaultXRayDebugViewHolder = DefaultXRayDebugViewHolder()
-    )
 
 internal fun provideDefaultColorGeneratorRandom() = Random(0xB00BB00B)
 

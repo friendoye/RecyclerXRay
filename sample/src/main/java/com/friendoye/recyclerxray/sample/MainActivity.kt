@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.friendoye.recyclerxray.AdbToggleReceiver
 import com.friendoye.recyclerxray.RecyclerXRay
+import com.friendoye.recyclerxray.XRaySettings
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
 
@@ -39,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         binding.floatingActionButton.setOnClickListener {
             isFullDataInAdapter = !isFullDataInAdapter
         }
+
+        RecyclerXRay.settings = XRaySettings.Builder()
+            .withMinDebugViewSize(dip(100))
+            .build()
 
         binding.sampleRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 3).apply {
