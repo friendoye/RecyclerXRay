@@ -110,13 +110,17 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
                 if (isInXRayMode) {
                     xRayDebugViewHolder.bindView(view, xRayResult)
+                    view.alpha = 1.0f
                     view.setOnClickListener {
+                        it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
                         val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
                         Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
                     }
                 }
             } else {
-                view.isInvisible = isInXRayMode
+                // Do not hide ViewHolder view,
+                // so we could preview it on item click
+                // view.isInvisible = isInXRayMode
             }
         }
     }
