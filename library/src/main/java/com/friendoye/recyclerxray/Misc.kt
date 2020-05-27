@@ -1,7 +1,8 @@
 package com.friendoye.recyclerxray
 
 import android.graphics.Color
-import androidx.annotation.ColorInt
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.math.sqrt
@@ -42,6 +43,24 @@ internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
         return "$simpleName($linkToClass)"
     }
     return null
+}
+
+internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(xRayWrapperContainer: View): T = apply {
+    xRayWrapperContainer.setTag(R.id.original_item_view_key, itemView.asWeakRef())
+    val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
+    field.isAccessible = true
+    field.set(this, xRayWrapperContainer)
+}
+
+internal inline fun <T : RecyclerView.ViewHolder> T.originalItemViewContext(action: (T) -> Unit): T = apply {
+    val xRayWrapperContainer = itemView
+    val originalItemView = (itemView.getTag(R.id.original_item_view_key) as? WeakReference<View>)
+        ?.get()
+    val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
+    field.isAccessible = true
+    field.set(this, originalItemView)
+    action(this)
+    replaceItemView(xRayWrapperContainer)
 }
 
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)

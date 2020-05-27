@@ -8,7 +8,6 @@ import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
@@ -29,11 +28,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         val xRayContainer = wrap(holderWrapper)
 
-        val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
-        field.isAccessible = true
-        field.set(holder, xRayContainer)
-
-        return holder
+        return holder.replaceItemView(xRayWrapperContainer = xRayContainer)
     }
 
     override fun provideCustomParams(position: Int): Map<String, Any?>? {
@@ -45,23 +40,27 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: T, position: Int) {
-        super.onBindViewHolder(holder, position)
-        holder.bindXRayMode(
-            itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode,
-            customParamsFromAdapter = provideCustomParams(position)
-        )
+        holder.originalItemViewContext { holder ->
+            super.onBindViewHolder(holder, position)
+            holder.bindXRayMode(
+                itemType = getItemViewType(position),
+                isInXRayMode = RecyclerXRay.isInXRayMode,
+                customParamsFromAdapter = provideCustomParams(position)
+            )
+        }
     }
 
     override fun onBindViewHolder(holder: T, position: Int, payloads: List<Any>) {
-        val xRayPayload = payloads.asSequence()
-            .filterIsInstance<XRayPayload>()
-            .firstOrNull()
-        val clearedPayload = payloads.asSequence()
-            .filter { it !== xRayPayload }
-            .toList()
+        holder.originalItemViewContext { holder ->
+            val xRayPayload = payloads.asSequence()
+                .filterIsInstance<XRayPayload>()
+                .firstOrNull()
+            val clearedPayload = payloads.asSequence()
+                .filter { it !== xRayPayload }
+                .toList()
 
-        super.onBindViewHolder(holder, position, clearedPayload)
+            super.onBindViewHolder(holder, position, clearedPayload)
+        }
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
