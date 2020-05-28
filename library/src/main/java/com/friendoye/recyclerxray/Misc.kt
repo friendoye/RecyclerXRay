@@ -37,8 +37,22 @@ internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
         val array = Array(argsTypes.size) { index -> argsTypes[index].createInstance() }
         constructor.newInstance(*array)
     } catch (e: Exception) {
-        val linkToClass = e.cause?.stackTrace?.get(0)?.run {
-            "$fileName:$lineNumber"
+        var linkToClass: String?
+        // TODO: Think about Kotlin non-null check: Intrinsics.checkParameterIsNotNull
+        linkToClass = canonicalName?.run {
+            e.cause?.stackTrace?.find { it.toString().contains(this) }?.run {
+                "$fileName:$lineNumber"
+            }
+        }
+        if (linkToClass == null) {
+            linkToClass = e.cause?.stackTrace?.get(0)?.run {
+                "$fileName:$lineNumber"
+            }
+        }
+        if (linkToClass == null || linkToClass.startsWith("RecyclerView.java")) {
+            linkToClass = e.cause?.stackTrace?.get(1)?.run {
+                "$fileName:$lineNumber"
+            }
         }
         return "$simpleName($linkToClass)"
     }
