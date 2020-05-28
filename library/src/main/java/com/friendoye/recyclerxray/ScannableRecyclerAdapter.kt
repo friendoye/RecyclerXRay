@@ -24,9 +24,10 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             id = R.id.holder_item_view_placeholder_id
         }
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
+        val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
 
-        val xRayContainer = wrap(holderWrapper)
+        val xRayContainer = wrap(holderWrapper, holderItemParams)
 
         return holder.replaceItemView(xRayWrapperContainer = xRayContainer)
     }
@@ -69,10 +70,11 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         )
     }
 
-    private fun wrap(holderWrapperView: View): ConstraintLayout {
+    private fun wrap(holderWrapperView: View, holderItemParams: ViewGroup.LayoutParams): ConstraintLayout {
         val context = holderWrapperView.context
         val xRayContainer = ConstraintLayout(context).apply {
             id = R.id.parent_constraint_layout_id
+            layoutParams = holderItemParams
         }
 
         xRayContainer.addView(holderWrapperView,
