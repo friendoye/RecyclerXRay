@@ -34,7 +34,7 @@ internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
         val constructor = constructors.first()
         constructor.isAccessible = true
         val argsTypes = constructor.parameterTypes
-        val array = Array(argsTypes.size) { index -> argsTypes[index].cast(null) }
+        val array = Array(argsTypes.size) { index -> argsTypes[index].createInstance() }
         constructor.newInstance(*array)
     } catch (e: Exception) {
         val linkToClass = e.cause?.stackTrace?.get(0)?.run {
@@ -43,6 +43,23 @@ internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
         return "$simpleName($linkToClass)"
     }
     return null
+}
+
+@Suppress("UNCHECKED_CAST")
+internal fun <T> Class<T>.createInstance(): T? {
+    val value = when (this) {
+        Byte::class.java -> 0.toByte()
+        Short::class.java -> 0.toShort()
+        Int::class.java -> 0
+        Long::class.java -> 0L
+        Float::class.java -> 0f
+        Double::class.java -> 0.0
+        Char::class.java -> ' '
+        String::class.java -> ""
+        Boolean::class.java -> false
+        else -> null
+    }
+    return value as T?
 }
 
 internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(xRayWrapperContainer: View): T = apply {
