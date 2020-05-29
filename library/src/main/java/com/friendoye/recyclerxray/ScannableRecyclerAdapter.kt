@@ -1,13 +1,18 @@
 package com.friendoye.recyclerxray
 
+import android.animation.AnimatorInflater
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
@@ -26,6 +31,10 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
         val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
+        // TODO: Maybe make this thing observable
+        holderWrapper.doOnLayout {
+            holder.bindXRayMode()
+        }
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 
@@ -105,6 +114,12 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return xRayContainer
     }
 
+    private fun T.bindXRayMode() = bindXRayMode(
+        itemType = getItemViewType(adapterPosition),
+        isInXRayMode = RecyclerXRay.isInXRayMode,
+        customParamsFromAdapter = provideCustomParams(adapterPosition)
+    )
+
     private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
                                customParamsFromAdapter: Map<String, Any?>?) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
@@ -112,13 +127,8 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 view.isVisible = isInXRayMode
                 val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
                 if (isInXRayMode) {
+                    view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
-                    view.alpha = 1.0f
-                    view.setOnClickListener {
-                        it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
-                        val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
-                        Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
-                    }
                 }
             } else {
                 // Do not hide ViewHolder view,

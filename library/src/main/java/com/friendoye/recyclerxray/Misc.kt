@@ -16,7 +16,7 @@ internal fun provideDefaultColorGeneratorRandom() = Random(0xB00BB00B)
  * @implNote: For color generation uses approach with exploiting Golden Ratio
  * (more info: http://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/).
  */
-internal fun Random.generateColorSequence(): Sequence<Int> {
+fun Random.generateColorSequence(): Sequence<Int> {
     var hue = nextFloat()
     return generateSequence {
         hue += GOLDEN_RATIO_CONSTANT
@@ -29,7 +29,7 @@ internal fun Random.generateColorSequence(): Sequence<Int> {
     }
 }
 
-internal fun Class<*>.getLoggableLinkToFileWithClass(): String? {
+fun Class<out RecyclerView.ViewHolder>.getLoggableLinkToFileWithClass(): String? {
     try {
         val constructor = constructors.first()
         constructor.isAccessible = true
@@ -93,5 +93,11 @@ internal inline fun <T : RecyclerView.ViewHolder> T.originalItemViewContext(acti
     action(this)
     replaceItemView(xRayWrapperContainer)
 }
+
+internal inline val <T : RecyclerView.ViewHolder> T.originalItemView: View
+    get() {
+        return (itemView.getTag(R.id.original_item_view_key) as? WeakReference<View>)
+            ?.get() ?: itemView
+    }
 
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)

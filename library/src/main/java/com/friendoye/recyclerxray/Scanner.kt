@@ -21,7 +21,10 @@ class Scanner(
             viewHolderClass = holder.javaClass,
             viewHolderType = itemType,
             color = getColorForItemType(holder.javaClass to itemType),
-            customParams = holder.extractCustomParams(extraParams = extraCustomParams)
+            customParams = holder.extractCustomParams(extraParams = extraCustomParams),
+            viewWidth = holder.originalItemView.width,
+            viewHeight = holder.originalItemView.height,
+            viewVisibility = holder.originalItemView.visibility
         )
     }
 
