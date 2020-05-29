@@ -1,14 +1,18 @@
 package com.friendoye.recyclerxray
 
+import android.animation.AnimatorInflater
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
-import androidx.core.view.isInvisible
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
@@ -25,15 +29,16 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             id = R.id.holder_item_view_placeholder_id
         }
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
+        val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
+        // TODO: Maybe make this thing observable
+        holderWrapper.doOnLayout {
+            holder.bindXRayMode()
+        }
 
-        val xRayContainer = wrap(holderWrapper)
+        val xRayContainer = wrap(holderWrapper, holderItemParams)
 
-        val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
-        field.isAccessible = true
-        field.set(holder, xRayContainer)
-
-        return holder
+        return holder.replaceItemView(xRayWrapperContainer = xRayContainer)
     }
 
     override fun provideCustomParams(position: Int): Map<String, Any?>? {
@@ -45,23 +50,27 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: T, position: Int) {
-        super.onBindViewHolder(holder, position)
-        holder.bindXRayMode(
-            itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode,
-            customParamsFromAdapter = provideCustomParams(position)
-        )
+        holder.originalItemViewContext { holder ->
+            super.onBindViewHolder(holder, position)
+            holder.bindXRayMode(
+                itemType = getItemViewType(position),
+                isInXRayMode = RecyclerXRay.isInXRayMode,
+                customParamsFromAdapter = provideCustomParams(position)
+            )
+        }
     }
 
     override fun onBindViewHolder(holder: T, position: Int, payloads: List<Any>) {
-        val xRayPayload = payloads.asSequence()
-            .filterIsInstance<XRayPayload>()
-            .firstOrNull()
-        val clearedPayload = payloads.asSequence()
-            .filter { it !== xRayPayload }
-            .toList()
+        holder.originalItemViewContext { holder ->
+            val xRayPayload = payloads.asSequence()
+                .filterIsInstance<XRayPayload>()
+                .firstOrNull()
+            val clearedPayload = payloads.asSequence()
+                .filter { it !== xRayPayload }
+                .toList()
 
-        super.onBindViewHolder(holder, position, clearedPayload)
+            super.onBindViewHolder(holder, position, clearedPayload)
+        }
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
@@ -70,10 +79,13 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         )
     }
 
-    private fun wrap(holderWrapperView: View): ConstraintLayout {
+    private fun wrap(holderWrapperView: View, holderItemParams: ViewGroup.LayoutParams?): ConstraintLayout {
         val context = holderWrapperView.context
         val xRayContainer = ConstraintLayout(context).apply {
             id = R.id.parent_constraint_layout_id
+            if (holderItemParams != null) {
+                layoutParams = holderItemParams
+            }
         }
 
         xRayContainer.addView(holderWrapperView,
@@ -102,6 +114,12 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return xRayContainer
     }
 
+    private fun T.bindXRayMode() = bindXRayMode(
+        itemType = getItemViewType(adapterPosition),
+        isInXRayMode = RecyclerXRay.isInXRayMode,
+        customParamsFromAdapter = provideCustomParams(adapterPosition)
+    )
+
     private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
                                customParamsFromAdapter: Map<String, Any?>?) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
@@ -109,13 +127,8 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 view.isVisible = isInXRayMode
                 val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
                 if (isInXRayMode) {
+                    view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
-                    view.alpha = 1.0f
-                    view.setOnClickListener {
-                        it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
-                        val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
-                        Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
-                    }
                 }
             } else {
                 // Do not hide ViewHolder view,
