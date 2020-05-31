@@ -10,7 +10,7 @@ Doing it over and over again, you may find yourself wondering: *Is there any way
 
 ### Features
 
-<img src="https://imgur.com/KZyiopN.gif" width="300px"/>
+<img src="https://i.imgur.com/x3Uw8sd.gif" width="300px"/>
 
 By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It lets your:
 
