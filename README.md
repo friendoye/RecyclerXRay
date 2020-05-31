@@ -2,6 +2,8 @@
 
 RecyclerXRay is a debug tool for visual inspection of complex RecyclerView layouts. Also it helps you to navigate to specific item's ViewHolder faster.
 
+<img src="https://i.imgur.com/x3Uw8sd.gif" width="300px"/>
+
 ### Motivation
 
 Finding right ViewHolder in a complex and big RecyclerView layout may be hard.  
@@ -10,9 +12,7 @@ Doing it over and over again, you may find yourself wondering: *Is there any way
 
 ### Features
 
-<img src="https://i.imgur.com/x3Uw8sd.gif" width="300px"/>
-
-By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It lets your:
+By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It lets you:
 
 * Shows all debug information from `XRayResult`;
 * Previews current ViewHolder layout on item click;
