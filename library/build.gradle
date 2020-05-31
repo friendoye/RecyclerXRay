@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 29
@@ -9,8 +10,6 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.1"
     }
 
     buildTypes {
@@ -36,3 +35,15 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }
+
+ext {
+    bintrayName = 'recyclerxray'
+
+    libraryName = 'RecyclerXRay'
+    artifact = 'recyclerxray'
+    libraryVersion = artifactVersion
+
+    libraryDescription = 'Tool for visual debugging of complex RecyclerViews.'
+}
+
+apply from: '../deploy.gradle'
