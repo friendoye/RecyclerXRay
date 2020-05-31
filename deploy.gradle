@@ -1,0 +1,130 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: "org.jetbrains.dokka-android"
+
+ext {
+    bintrayRepo = 'maven'
+
+    publishedGroupId = 'com.friendoye'
+
+    siteUrl = 'https://github.com/friendoye/RecyclerXRay'
+    gitUrl = 'https://github.com/friendoye/RecyclerXRay.git'
+
+    developerId = 'friendoye'
+    developerName = 'Nikita Novik'
+    developerEmail = 'friendoye@gmail.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://github.com/friendoye/RecyclerXRay/blob/master/LICENSE.md'
+    allLicenses = ["MIT"]
+}
+
+group = publishedGroupId
+version = libraryVersion
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            packaging 'aar'
+            groupId publishedGroupId
+            artifactId artifact
+
+            name libraryName
+            description libraryDescription
+            url siteUrl
+
+            licenses {
+                license {
+                    name licenseName
+                    url licenseUrl
+                }
+            }
+            developers {
+                developer {
+                    id developerId
+                    name developerName
+                    email developerEmail
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
+                url siteUrl
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task dokkaJavadoc(type: dokka.getClass()) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    archiveClassifier.set('javadoc')
+    from "$buildDir/javadoc"
+}
+
+// Gradle task ':bintrayUpload' tries to upload artifacts from all subproject,
+// if either of following options are enabled:
+// org.gradle.parallel=true
+// org.gradle.configureondemand=true
+// https://github.com/bintray/gradle-bintray-plugin/issues/264
+task validatePublishing {
+    doLast {
+        if (gradle.startParameter.configureOnDemand) {
+            throw new Exception("Can't upload to bintray with enabled configureOnDemand")
+        }
+        if (gradle.startParameter.parallelProjectExecutionEnabled) {
+            throw new Exception("Can't upload to bintray with enabled parallel mode")
+        }
+    }
+}
+
+bintrayUpload.dependsOn validatePublishing
+bintrayUpload.dependsOn assemble
+bintrayUpload.dependsOn sourcesJar
+bintrayUpload.dependsOn javadocJar
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+def propertiesFile = project.rootProject.file('local.properties')
+if (propertiesFile.exists()) {
+    properties.load(propertiesFile.newDataInputStream())
+}
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        dryRun = false
+        publish = true
+        override = false
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+        }
+    }
+}
