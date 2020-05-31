@@ -8,6 +8,18 @@ Finding right ViewHolder in a complex and big RecyclerView layout may be hard.
 Finding right ViewHolder for an invisible item view might be even harder.  
 Doing it over and over again, you may find yourself wondering: *Is there any way to find my ViewHolders faster?*
 
+### Features
+
+<img src="https://imgur.com/KZyiopN.gif" width="300px"/>
+
+By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It lets your:
+
+* Shows all debug information from `XRayResult`;
+* Previews current ViewHolder layout on item click;
+* Logs link to file with current ViewHolder on item click:
+
+<img src="https://i.imgur.com/Pj59bvq.gif" width="800px"/>
+
 ## Setup
 
 Add to your top-level `build.gradle` this lines:
@@ -75,10 +87,8 @@ You can also configure `RecyclerXRay` to your needs:
 
 ```kotlin
 RecyclerXRay.settings = XRaySettings.Builder()
-        .withDefaultXRayDebugViewHolder( // Customize debug view, 
-            SampleXRayDebugViewHolder()  // used for inspection
-        )
-        .withMinDebugViewSize(100)       // Size of debug view for invisible or small
-                                         // RecyclerView.ViewHolder itemViews
+        .withDefaultXRayDebugViewHolder(...) // Customize debug view, used for inspection
+        .withMinDebugViewSize(100)           // Adjust size of debug view for invisible or small
+                                             // RecyclerView.ViewHolder itemViews
         .build()
 ```
