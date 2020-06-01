@@ -41,6 +41,19 @@ dependencies {
 }
 ```
 
+Also add this lines to your Application class:
+
+```kotlin
+// SampleApplication.kt
+
+override fun onCreate() {
+    super.onCreate()
+    RecyclerXRay.init(this) 
+    // If you need want to control no-op mode, use this version:
+    // RecyclerXRay.init(this, isNoOpMode = true)
+}
+```
+
 ## Get started
 
 To inspect `RecyclerView.Adapter`, use `RecyclerXRay.wrap()` and attach result to `RecyclerView`:
