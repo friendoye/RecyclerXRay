@@ -22,13 +22,15 @@ By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It can:
 
 ## Setup
 
+[ ![Download](https://api.bintray.com/packages/friendoye/maven/recyclerxray/images/download.svg) ](https://bintray.com/friendoye/maven/recyclerxray/_latestVersion)
+
 Add to your top-level `build.gradle` this lines:
 
 ```groovy
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        jcenter()
     }
 }
 ```
@@ -37,7 +39,7 @@ Then add dependency to your `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.github.friendoye:RecyclerXRay:-SNAPSHOT'
+    implementation 'com.friendoye:recyclerxray:$version'
 }
 ```
 
