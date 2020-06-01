@@ -1,12 +1,14 @@
-package com.friendoye.recyclerxray
+package com.friendoye.recyclerxray.internal
 
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
+import com.friendoye.recyclerxray.XRayResult
 import java.util.*
 import kotlin.LazyThreadSafetyMode.NONE
 
 
-class Scanner(
+internal class Scanner(
     private val colorRandom: Random = provideDefaultColorGeneratorRandom()
 ) {
 

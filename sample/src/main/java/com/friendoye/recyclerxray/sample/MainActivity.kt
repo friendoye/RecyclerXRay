@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             }
             // Test RecyclerXRay
             adapter = RecyclerXRay.wrap(sampleAdapter)
+            sampleAdapter = RecyclerXRay.unwrap(adapter!!)
         }
 
         lifecycle.addObserver(adbToggleReceiver)

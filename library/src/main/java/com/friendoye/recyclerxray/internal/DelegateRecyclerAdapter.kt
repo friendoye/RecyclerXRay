@@ -1,11 +1,10 @@
-package com.friendoye.recyclerxray
+package com.friendoye.recyclerxray.internal
 
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 
-open class DelegateRecyclerAdapter<T : RecyclerView.ViewHolder>(
+internal open class DelegateRecyclerAdapter<T : RecyclerView.ViewHolder>(
     internal val decoratedAdapter: RecyclerView.Adapter<T>
 ) : RecyclerView.Adapter<T>() {
 

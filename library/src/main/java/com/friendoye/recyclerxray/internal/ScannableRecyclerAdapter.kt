@@ -1,12 +1,7 @@
-package com.friendoye.recyclerxray
+package com.friendoye.recyclerxray.internal
 
-import android.animation.AnimatorInflater
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,14 +10,17 @@ import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.*
 
 
-class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
+internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
+    private val isInXRayModeProvider: () -> Boolean,
     private val scanner: Scanner = Scanner()
-) : DelegateRecyclerAdapter<T>(decoratedAdapter), XRayCustomParamsAdapterProvider {
+) : DelegateRecyclerAdapter<T>(decoratedAdapter),
+    XRayCustomParamsAdapterProvider {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val holderWrapper = FrameLayout(parent.context).apply {
@@ -54,7 +52,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
                 itemType = getItemViewType(position),
-                isInXRayMode = RecyclerXRay.isInXRayMode,
+                isInXRayMode = isInXRayModeProvider(),
                 customParamsFromAdapter = provideCustomParams(position)
             )
         }
@@ -74,7 +72,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode,
+            isInXRayMode = isInXRayModeProvider(),
             customParamsFromAdapter = provideCustomParams(position)
         )
     }
@@ -116,7 +114,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
     private fun T.bindXRayMode() = bindXRayMode(
         itemType = getItemViewType(adapterPosition),
-        isInXRayMode = RecyclerXRay.isInXRayMode,
+        isInXRayMode = isInXRayModeProvider(),
         customParamsFromAdapter = provideCustomParams(adapterPosition)
     )
 
