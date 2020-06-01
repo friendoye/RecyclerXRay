@@ -28,5 +28,9 @@ internal object NotInitializedRecyclerXRayApi : RecyclerXRayApi {
         fireNotInitializedException()
     }
 
+    override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
+        fireNotInitializedException()
+    }
+
     private fun fireNotInitializedException(): Nothing = throw IllegalStateException("RecyclerXRay wasn't initialized. Use one of RecyclerXRay.init() methods.")
 }

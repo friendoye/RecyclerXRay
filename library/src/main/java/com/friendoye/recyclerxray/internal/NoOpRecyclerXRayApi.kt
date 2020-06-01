@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRaySettings
 
 
-@Suppress("SetterBackingFieldAssignment")
+@Suppress("SetterBackingFieldAssignment", "UNCHECKED_CAST")
 internal object NoOpRecyclerXRayApi : RecyclerXRayApi {
 
     override var settings: XRaySettings = XRaySettings.Builder().build()
@@ -24,5 +24,9 @@ internal object NoOpRecyclerXRayApi : RecyclerXRayApi {
 
     override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH> {
         return adapter
+    }
+
+    override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
+        return adapter as T
     }
 }

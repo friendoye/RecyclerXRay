@@ -42,6 +42,10 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         )
     }
 
+    override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
+        return (adapter as ScannableRecyclerAdapter<*>).decoratedAdapter as T
+    }
+
     private fun updateAdapters() {
         adapters.forEach { weakAdapter ->
             weakAdapter.get()?.let { adapter ->

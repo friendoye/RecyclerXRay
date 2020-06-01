@@ -11,4 +11,5 @@ internal interface RecyclerXRayApi {
     fun showSecrets()
     fun hideSecrets()
     fun <T : RecyclerView.Adapter<VH>, VH: RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH>
+    fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T
 }

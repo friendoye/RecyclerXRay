@@ -50,4 +50,8 @@ object RecyclerXRay {
         adapter: T
     ): RecyclerView.Adapter<VH> = xRayApi.wrap(adapter)
 
+    fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(
+        adapter: RecyclerView.Adapter<*>
+    ): T = xRayApi.unwrap(adapter)
+
 }
