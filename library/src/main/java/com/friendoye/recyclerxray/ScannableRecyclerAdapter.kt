@@ -21,6 +21,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
+    private val isInXRayModeProvider: () -> Boolean,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter), XRayCustomParamsAdapterProvider {
 
@@ -54,7 +55,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
                 itemType = getItemViewType(position),
-                isInXRayMode = RecyclerXRay.isInXRayMode,
+                isInXRayMode = isInXRayModeProvider(),
                 customParamsFromAdapter = provideCustomParams(position)
             )
         }
@@ -74,7 +75,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         holder.bindXRayMode(
             itemType = getItemViewType(position),
-            isInXRayMode = RecyclerXRay.isInXRayMode,
+            isInXRayMode = isInXRayModeProvider(),
             customParamsFromAdapter = provideCustomParams(position)
         )
     }
@@ -116,7 +117,7 @@ class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
     private fun T.bindXRayMode() = bindXRayMode(
         itemType = getItemViewType(adapterPosition),
-        isInXRayMode = RecyclerXRay.isInXRayMode,
+        isInXRayMode = isInXRayModeProvider(),
         customParamsFromAdapter = provideCustomParams(adapterPosition)
     )
 
