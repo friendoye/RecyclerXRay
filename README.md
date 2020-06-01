@@ -12,11 +12,11 @@ Doing it over and over again, you may find yourself wondering: *Is there any way
 
 ### Features
 
-By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It lets you:
+By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It can:
 
-* Shows all debug information from `XRayResult`;
-* Previews current ViewHolder layout on item click;
-* Logs link to file with current ViewHolder on item click:
+* Show all debug information from `XRayResult`;
+* Show preview of current ViewHolder layout on item click;
+* Log link to file with current ViewHolder on item click:
 
 <img src="https://i.imgur.com/Pj59bvq.gif" width="800px"/>
 
