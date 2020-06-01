@@ -2,9 +2,6 @@ package com.friendoye.recyclerxray.internal
 
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
-import com.friendoye.recyclerxray.ScannableRecyclerAdapter
-import com.friendoye.recyclerxray.XRayPayload
-import com.friendoye.recyclerxray.asWeakRef
 import java.lang.ref.WeakReference
 
 

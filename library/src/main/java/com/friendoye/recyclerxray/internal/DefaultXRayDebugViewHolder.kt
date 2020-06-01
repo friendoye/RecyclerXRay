@@ -1,4 +1,4 @@
-package com.friendoye.recyclerxray
+package com.friendoye.recyclerxray.internal
 
 import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.friendoye.recyclerxray.*
 import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
-class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
+internal class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
     override fun provideView(parent: ViewGroup): View {
         return LayoutInflater
             .from(parent.context)
@@ -59,7 +60,9 @@ class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
 
     private fun View.startGripAnimation() {
         val animator = AnimatorInflater
-            .loadAnimator(context, R.animator.grip_animator).apply {
+            .loadAnimator(context,
+                R.animator.grip_animator
+            ).apply {
                 setTarget(this@startGripAnimation)
                 interpolator = AccelerateDecelerateInterpolator()
             }

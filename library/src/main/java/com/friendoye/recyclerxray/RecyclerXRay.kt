@@ -8,15 +8,14 @@ import com.friendoye.recyclerxray.internal.NoOpRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.NotInitializedRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RealRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RecyclerXRayApi
-import java.lang.ref.WeakReference
-import kotlin.properties.Delegates
 
 
 @Suppress("SimplifyBooleanWithConstants")
 object RecyclerXRay {
 
     // Global settings
-    private var xRayApi: RecyclerXRayApi = NotInitializedRecyclerXRayApi
+    private var xRayApi: RecyclerXRayApi =
+        NotInitializedRecyclerXRayApi
 
     // Internal state
     var settings: XRaySettings

@@ -2,18 +2,19 @@ package com.friendoye.recyclerxray
 
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.PX
+import com.friendoye.recyclerxray.internal.DefaultXRayDebugViewHolder
 
 
 data class XRaySettings internal constructor(
-    val defaultXRayDebugViewHolder: DefaultXRayDebugViewHolder,
+    val defaultXRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = PX) val minDebugViewSize: Int?
 ) {
 
     class Builder(
-        internal var debugViewHolder: DefaultXRayDebugViewHolder =  DefaultXRayDebugViewHolder(),
+        internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder(),
         @Dimension(unit = PX) internal var minDebugViewSize: Int? = null
     ) {
-        fun withDefaultXRayDebugViewHolder(debugViewHolder: DefaultXRayDebugViewHolder) = apply {
+        fun withDefaultXRayDebugViewHolder(debugViewHolder: XRayDebugViewHolder) = apply {
             this.debugViewHolder = debugViewHolder
         }
 

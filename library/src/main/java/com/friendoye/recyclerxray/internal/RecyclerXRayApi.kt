@@ -1,10 +1,7 @@
 package com.friendoye.recyclerxray.internal
 
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.RecyclerXRay
-import com.friendoye.recyclerxray.ScannableRecyclerAdapter
 import com.friendoye.recyclerxray.XRaySettings
-import com.friendoye.recyclerxray.asWeakRef
 
 
 internal interface RecyclerXRayApi {
