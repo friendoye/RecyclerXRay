@@ -21,15 +21,17 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
     }
 
     override fun showSecrets() {
-        assert(isInXRayMode == false)
-        isInXRayMode = true
-        updateAdapters()
+        if (!isInXRayMode) {
+            isInXRayMode = true
+            updateAdapters()
+        }
     }
 
     override fun hideSecrets() {
-        assert(isInXRayMode == true)
-        isInXRayMode = false
-        updateAdapters()
+        if (isInXRayMode) {
+            isInXRayMode = false
+            updateAdapters()
+        }
     }
 
     override fun <T : RecyclerView.Adapter<VH>, VH: RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH> {
