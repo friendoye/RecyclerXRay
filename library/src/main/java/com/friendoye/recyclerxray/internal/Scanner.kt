@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray.internal
 
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
@@ -18,15 +19,16 @@ internal class Scanner(
     }
 
     fun scan(holder: RecyclerView.ViewHolder, itemType: Int,
-             extraCustomParams: Map<String, Any?>?): XRayResult {
+             extraCustomParams: Map<String, Any?>?,
+             originalItemView: View): XRayResult {
         return XRayResult(
             viewHolderClass = holder.javaClass,
             viewHolderType = itemType,
             color = getColorForItemType(holder.javaClass to itemType),
             customParams = holder.extractCustomParams(extraParams = extraCustomParams),
-            viewWidth = holder.originalItemView.width,
-            viewHeight = holder.originalItemView.height,
-            viewVisibility = holder.originalItemView.visibility
+            viewWidth = originalItemView.width,
+            viewHeight = originalItemView.height,
+            viewVisibility = originalItemView.visibility
         )
     }
 
