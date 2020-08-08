@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.friendoye.recyclerxray.test">
+
+    <application>
+        <activity
+            android:name="com.friendoye.recyclerxray.utils.TestActivity"/>
+    </application>
+
+</manifest>
