@@ -83,7 +83,7 @@ jobs:
           path: library/build/reports/androidTests
 
   # Runs screenshot tests
-  instrumentation-tests:
+  screenshot-tests:
     name: Screenshot tests
     needs: assemble
     runs-on: macos-latest
@@ -100,7 +100,6 @@ jobs:
         with:
           api-level: 24
           arch: x86_64
-          profile: Pixel 2
           script: ./gradlew :library:executeScreenshotTests --build-cache --no-daemon --stacktrace
 
       - name: Upload tests reports
