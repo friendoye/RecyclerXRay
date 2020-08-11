@@ -10,7 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.friendoye.recyclerxray.*
 import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
-internal class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
+internal open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
     override fun provideView(parent: ViewGroup): View {
         return LayoutInflater
             .from(parent.context)
@@ -38,7 +38,7 @@ internal class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
         }
     }
 
-    private fun prepareDebugText(result: XRayResult): String {
+    protected open fun prepareDebugText(result: XRayResult): String {
         var textToShow = """
             ViewHolder class:
             ${result.viewHolderClass.name}

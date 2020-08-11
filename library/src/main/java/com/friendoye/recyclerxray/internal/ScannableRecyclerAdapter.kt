@@ -123,7 +123,9 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         (itemView as? ViewGroup)?.children?.forEach { view ->
             if (view.tag == "DEBUG") {
                 view.isVisible = isInXRayMode
-                val xRayResult = scanner.scan(this, itemType, customParamsFromAdapter)
+                val xRayResult = scanner.scan(
+                    this, itemType, customParamsFromAdapter, originalItemView
+                )
                 if (isInXRayMode) {
                     view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)

@@ -3,6 +3,7 @@ package com.friendoye.recyclerxray
 import android.app.Application
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.internal.NoOpRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.NotInitializedRecyclerXRayApi
@@ -14,8 +15,7 @@ import com.friendoye.recyclerxray.internal.RecyclerXRayApi
 object RecyclerXRay {
 
     // Global settings
-    private var xRayApi: RecyclerXRayApi =
-        NotInitializedRecyclerXRayApi
+    internal var xRayApi: RecyclerXRayApi = NotInitializedRecyclerXRayApi
 
     // Internal state
     var settings: XRaySettings
@@ -38,6 +38,11 @@ object RecyclerXRay {
         } else {
             RealRecyclerXRayApi()
         }
+    }
+
+    @VisibleForTesting
+    internal fun reset() {
+        xRayApi = NotInitializedRecyclerXRayApi
     }
 
     fun toggleSecrets() = xRayApi.toggleSecrets()

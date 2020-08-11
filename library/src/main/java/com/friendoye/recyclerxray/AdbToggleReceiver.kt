@@ -18,6 +18,8 @@ class AdbToggleReceiver(
     private val intentAction: String = "xray-toggle"
 ) : BroadcastReceiver(), LifecycleObserver {
 
+    internal var recyclerXRay = RecyclerXRay
+
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun register() {
         context.registerReceiver(this, IntentFilter(intentAction))
@@ -29,6 +31,6 @@ class AdbToggleReceiver(
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        RecyclerXRay.toggleSecrets()
+        recyclerXRay.toggleSecrets()
     }
 }
