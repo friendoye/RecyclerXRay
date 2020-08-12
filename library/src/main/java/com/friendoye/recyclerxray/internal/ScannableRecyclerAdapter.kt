@@ -15,6 +15,7 @@ import com.friendoye.recyclerxray.*
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
+    private val parentXRayApiId: Long,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
     private val isInXRayModeProvider: () -> Boolean,
@@ -29,10 +30,10 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
         val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
-        // TODO: Maybe make this thing observable
-        holderWrapper.doOnLayout {
-            holder.bindXRayMode()
-        }
+        // TODO: Check why this thing is even was added
+        // holderWrapper.doOnLayout {
+        //    holder.bindXRayMode()
+        // }
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 
@@ -51,9 +52,9 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holder.originalItemViewContext { holder ->
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
-                itemType = getItemViewType(position),
+                itemType = getItemViewType(holder.bindingAdapterPosition),
                 isInXRayMode = isInXRayModeProvider(),
-                customParamsFromAdapter = provideCustomParams(position)
+                customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
             )
         }
     }
@@ -62,6 +63,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holder.originalItemViewContext { holder ->
             val xRayPayload = payloads.asSequence()
                 .filterIsInstance<XRayPayload>()
+                .filter { it.xRayApiId == parentXRayApiId }
                 .firstOrNull()
             val clearedPayload = payloads.asSequence()
                 .filter { it !== xRayPayload }
@@ -71,9 +73,9 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
 
         holder.bindXRayMode(
-            itemType = getItemViewType(position),
+            itemType = getItemViewType(holder.bindingAdapterPosition),
             isInXRayMode = isInXRayModeProvider(),
-            customParamsFromAdapter = provideCustomParams(position)
+            customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
         )
     }
 
@@ -112,11 +114,14 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return xRayContainer
     }
 
-    private fun T.bindXRayMode() = bindXRayMode(
-        itemType = getItemViewType(adapterPosition),
-        isInXRayMode = isInXRayModeProvider(),
-        customParamsFromAdapter = provideCustomParams(adapterPosition)
-    )
+//    NOTE: Check line 33
+//    private fun T.bindXRayMode() {
+//        bindXRayMode(
+//            itemType = getItemViewType(bindingAdapterPosition),
+//            isInXRayMode = isInXRayModeProvider(),
+//            customParamsFromAdapter = provideCustomParams(bindingAdapterPosition)
+//        )
+//    }
 
     private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
                                customParamsFromAdapter: Map<String, Any?>?) {

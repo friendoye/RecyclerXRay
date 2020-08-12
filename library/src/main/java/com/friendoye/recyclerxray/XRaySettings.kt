@@ -2,7 +2,6 @@ package com.friendoye.recyclerxray
 
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.PX
-import com.friendoye.recyclerxray.internal.DefaultXRayDebugViewHolder
 
 
 data class XRaySettings internal constructor(

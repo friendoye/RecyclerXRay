@@ -7,7 +7,7 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayResult
-import com.friendoye.recyclerxray.internal.DefaultXRayDebugViewHolder
+import com.friendoye.recyclerxray.DefaultXRayDebugViewHolder
 import com.friendoye.recyclerxray.test.R
 
 

@@ -1,12 +1,7 @@
 package com.friendoye.recyclerxray
 
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
-import androidx.core.view.setMargins
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.friendoye.recyclerxray.internal.DefaultXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.*
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible

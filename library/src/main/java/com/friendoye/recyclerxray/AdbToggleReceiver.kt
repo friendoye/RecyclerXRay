@@ -15,10 +15,9 @@ import androidx.lifecycle.OnLifecycleEvent
  */
 class AdbToggleReceiver(
     private val context: Context,
-    private val intentAction: String = "xray-toggle"
+    private val intentAction: String = "xray-toggle",
+    internal var recyclerXRays: List<LocalRecyclerXRay> = listOf(RecyclerXRay)
 ) : BroadcastReceiver(), LifecycleObserver {
-
-    internal var recyclerXRay = RecyclerXRay
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun register() {
@@ -31,6 +30,10 @@ class AdbToggleReceiver(
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        recyclerXRay.toggleSecrets()
+        toggleSecrets()
+    }
+
+    fun toggleSecrets() {
+        recyclerXRays.forEach(LocalRecyclerXRay::toggleSecrets)
     }
 }

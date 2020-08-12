@@ -3,9 +3,17 @@ package com.friendoye.recyclerxray.internal
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import java.lang.ref.WeakReference
+import java.util.concurrent.atomic.AtomicLong
 
 
 internal class RealRecyclerXRayApi : RecyclerXRayApi {
+
+    companion object {
+        internal var counter = AtomicLong(0)
+        fun createUniqueId(): Long = counter.getAndIncrement()
+    }
+
+    private val id: Long = createUniqueId()
 
     // Internal state
     private val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
@@ -38,6 +46,7 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         adapters.add(adapter.asWeakRef())
         return ScannableRecyclerAdapter(
             adapter,
+            id,
             settings.defaultXRayDebugViewHolder,
             settings.minDebugViewSize,
             this::isInXRayMode
@@ -52,7 +61,7 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         adapters.forEach { weakAdapter ->
             weakAdapter.get()?.let { adapter ->
                 adapter.notifyItemRangeChanged(0, adapter.itemCount,
-                    XRayPayload
+                    XRayPayload(id)
                 )
             }
         }
