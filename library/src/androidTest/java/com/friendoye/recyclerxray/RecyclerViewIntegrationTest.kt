@@ -20,12 +20,15 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     val currentActivity: TestActivity
         get() = activityTestRule.activity
 
+    lateinit var recyclerXRay: LocalRecyclerXRay
+
     @Before
     fun setup() {
         ActivityTestRule<TestActivity>(TestActivity::class.java)
         val context = InstrumentationRegistry.getInstrumentation().context
         XRayInitializer.init(isNoOpMode = false)
-        RecyclerXRay.settings = XRaySettings.Builder()
+        recyclerXRay = LocalRecyclerXRay()
+        recyclerXRay.settings = XRaySettings.Builder()
             .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
             .withMinDebugViewSize(context.dip(50))
             .build()
@@ -40,7 +43,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun wrapDoesNotChangeLayout() {
         activityTestRule.runOnUiThread {
             val testAdapter = createTestAdapter(Visible, Visible, Visible)
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
         }
 
         compareScreenshot(currentActivity.testRecycler)
@@ -50,8 +53,8 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun checkXRayIsOn() {
         activityTestRule.runOnUiThread {
             val testAdapter = createTestAdapter(Visible, Visible, Visible)
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         compareScreenshot(currentActivity.testRecycler)
@@ -61,12 +64,12 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun checkXRayIsOff() {
         activityTestRule.runOnUiThread {
             val testAdapter = createTestAdapter(Visible, Visible, Visible)
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         activityTestRule.runOnUiThread {
-            RecyclerXRay.hideSecrets()
+            recyclerXRay.hideSecrets()
         }
 
         compareScreenshot(currentActivity.testRecycler)
@@ -76,8 +79,8 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun checkNotifyDataSetChange() {
         val testAdapter = createTestAdapter(Visible, Visible, Visible)
         activityTestRule.runOnUiThread {
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         activityTestRule.runOnUiThread {
@@ -91,8 +94,8 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun checkDiffUtilsChange() {
         val testAdapter = createTestAdapterWithDiffUtil(Visible, Visible, Visible)
         activityTestRule.runOnUiThread {
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         activityTestRule.runOnUiThread {
@@ -107,8 +110,8 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
         activityTestRule.runOnUiThread {
             val testAdapter = createTestAdapterWithDiffUtil(Visible,
                 IntegrationTestItemType.Ghost(), Visible)
-            currentActivity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         compareScreenshot(currentActivity.testRecycler)
