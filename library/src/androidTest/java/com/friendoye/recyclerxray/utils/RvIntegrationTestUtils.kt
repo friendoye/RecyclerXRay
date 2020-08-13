@@ -93,7 +93,7 @@ class LargeVisibleViewHolder private constructor(root: View) : RecyclerView.View
     companion object {
         fun fromParent(parent: ViewGroup): LargeVisibleViewHolder {
             val root = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_integration_visible_test_layout, parent, false)
+                .inflate(R.layout.item_integration_large_visible_test_layout, parent, false)
             return LargeVisibleViewHolder(root)
         }
     }
