@@ -7,9 +7,22 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayResult
-import com.friendoye.recyclerxray.internal.DefaultXRayDebugViewHolder
+import com.friendoye.recyclerxray.DefaultXRayDebugViewHolder
 import com.friendoye.recyclerxray.test.R
 
+
+
+internal fun createTestAdapter(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
+    return RvIntegrationTestAdapter().apply {
+        this.items = items.toList()
+    }
+}
+
+internal fun createTestAdapterWithDiffUtil(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
+    return RvIntegrationTestAdapter(useDiffUtils = true).apply {
+        this.items = items.toList()
+    }
+}
 
 class RvIntegrationTestAdapter(
     val useDiffUtils: Boolean = false
@@ -80,7 +93,7 @@ class LargeVisibleViewHolder private constructor(root: View) : RecyclerView.View
     companion object {
         fun fromParent(parent: ViewGroup): LargeVisibleViewHolder {
             val root = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_integration_visible_test_layout, parent, false)
+                .inflate(R.layout.item_integration_large_visible_test_layout, parent, false)
             return LargeVisibleViewHolder(root)
         }
     }

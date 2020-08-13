@@ -1,4 +1,4 @@
-package com.friendoye.recyclerxray.internal
+package com.friendoye.recyclerxray
 
 import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.friendoye.recyclerxray.*
+import com.friendoye.recyclerxray.internal.DEFAULT_LOG_TAG
 import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
-internal open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
+open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
     override fun provideView(parent: ViewGroup): View {
         return LayoutInflater
             .from(parent.context)

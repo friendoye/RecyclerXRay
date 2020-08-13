@@ -50,9 +50,9 @@ Also add this lines to your Application class:
 
 override fun onCreate() {
     super.onCreate()
-    RecyclerXRay.init(this) 
+    XRayInitializer.init(this)
     // If you need want to control no-op mode, use this version:
-    // RecyclerXRay.init(this, isNoOpMode = true)
+    // XRayInitializer.init(isNoOpMode = true)
 }
 ```
 
@@ -72,6 +72,14 @@ RecyclerXRay.hideSecrets() // Stop inspection
 RecyclerXRay.toggleSecrets() // Toggle current inspection state
 ```
 
+If you want more fine-grained control over different `RecyclerView.Adapter`'s (for example, you want another `XRayDebugViewHolder` setup), than you may create instance of `LocalRecyclerXRay` and use it same way as `RecyclerXRay`:
+
+```kotlin
+val localRecyclerXRay = LocalRecyclerXRay()
+val wrappedAdapter = localRecyclerXRay.wrap(adapter)
+recyclerView.adapter = wrappedAdapter
+```
+
 ### Adb Toggling
 
 `AdbToggleReceiver` class makes it easy to toggle current inspection mode using `adb` command.
@@ -81,7 +89,9 @@ RecyclerXRay.toggleSecrets() // Toggle current inspection state
 
 val adbToggleReceiver = AdbToggleReceiver(
     context = this,               // default Context object
-    intentAction = "xray-toggle"  // (optional) action name to use in adb command
+    intentAction = "xray-toggle", // (optional) action name to use in adb command
+    recyclerXRays = listOf(RecyclerXRay), // (optional) list of RecyclerXRay's, 
+                                          // which modes will be toggled
 )
 
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,5 +115,7 @@ RecyclerXRay.settings = XRaySettings.Builder()
         .withDefaultXRayDebugViewHolder(...) // Customize debug view, used for inspection
         .withMinDebugViewSize(100)           // Adjust size of debug view for invisible or small
                                              // RecyclerView.ViewHolder itemViews
+        .withLabel("test_label")             // Will be used in logs/exceptions to indicate debug
+                                             // name for given RecyclerXRay.
         .build()
 ```

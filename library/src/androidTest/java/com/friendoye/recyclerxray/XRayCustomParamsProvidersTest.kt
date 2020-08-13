@@ -2,7 +2,6 @@ package com.friendoye.recyclerxray
 
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.*
 import org.junit.runner.RunWith
 import com.friendoye.recyclerxray.utils.*
@@ -14,13 +13,12 @@ class XRayCustomParamsProvidersTest {
 
     @Before
     fun setup() {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        RecyclerXRay.init(context, isNoOpMode = false)
+        XRayInitializer.init(isNoOpMode = false)
     }
 
     @After
     fun teardown() {
-        RecyclerXRay.reset()
+        XRayInitializer.reset()
     }
 
     @Test
@@ -51,7 +49,8 @@ class XRayCustomParamsProvidersTest {
             }
         )
 
-        RecyclerXRay.settings = XRaySettings.Builder()
+        val recyclerXRay = LocalRecyclerXRay()
+        recyclerXRay.settings = XRaySettings.Builder()
             .apply {
                 debugViewHolder = testDebugViewHolder
             }
@@ -59,8 +58,8 @@ class XRayCustomParamsProvidersTest {
 
         val scenario = launchActivity<TestActivity>()
         scenario.onActivity { activity ->
-            activity.testRecycler.adapter = RecyclerXRay.wrap(testAdapter)
-            RecyclerXRay.showSecrets()
+            activity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
         }
 
         // Awaiting receiving all XRayResult via RV binding

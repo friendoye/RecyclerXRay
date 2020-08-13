@@ -4,32 +4,40 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import com.friendoye.recyclerxray.AdbToggleReceiver
-import com.friendoye.recyclerxray.RecyclerXRay
-import com.friendoye.recyclerxray.XRaySettings
+import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
-    private val adbToggleReceiver = AdbToggleReceiver(this)
     private var isFullDataInAdapter = true
         set(value) {
             field = value
             if (value) {
                 sampleAdapter.items = SAMPLE_DATA_FULL
+                localSampleAdapter.items = LOCAL_SAMPLE_DATA_FULL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
             } else {
                 sampleAdapter.items = SAMPLE_DATA_PARTIAL
+                localSampleAdapter.items = LOCAL_SAMPLE_DATA_PARTIAL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
             }
         }
 
     private var binding by Delegates.notNull<ActivityMainBinding>()
+
     private var sampleAdapter = SampleAdapter()
+
+    private var localRecyclerXRay = LocalRecyclerXRay()
+    private var localSampleAdapter = SampleAdapter()
+
+    private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
+    private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
+    private val adbToggleReceiverForLocal = AdbToggleReceiver( this, intentAction = "xray-toggle-local", recyclerXRays = listOf(localRecyclerXRay))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,20 +49,27 @@ class MainActivity : AppCompatActivity() {
             isFullDataInAdapter = !isFullDataInAdapter
         }
 
-        RecyclerXRay.settings = XRaySettings.Builder()
-            .withMinDebugViewSize(dip(100))
-            .build()
+        setupRecyclerXRays()
 
         binding.sampleRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 3).apply {
-                spanSizeLookup = SampleAdapterSpanLookup(sampleAdapter)
+                spanSizeLookup = SampleAdapterSpanLookup {
+                    adapter as? ConcatAdapter ?: RecyclerXRay.unwrap(adapter!!)
+                }
             }
             // Test RecyclerXRay
-            adapter = RecyclerXRay.wrap(sampleAdapter)
-            sampleAdapter = RecyclerXRay.unwrap(adapter!!)
+            adapter = ConcatAdapter(
+                ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(false)
+                    .build(),
+                listOf(
+                    RecyclerXRay.wrap(sampleAdapter),
+                    localRecyclerXRay.wrap(localSampleAdapter)
+                )
+            )
+            sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
         }
 
-        lifecycle.addObserver(adbToggleReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,22 +79,48 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.swap -> RecyclerXRay.toggleSecrets()
+            // On "Swap" toggle all possible RecyclerXRay's
+            R.id.swap -> adbToggleReceiverForAll.toggleSecrets()
             else -> return false
         }
         return true
     }
 
+    private fun setupRecyclerXRays() {
+        // Setup global RecyclerXRay
+        RecyclerXRay.settings = XRaySettings.Builder()
+            .withMinDebugViewSize(dip(100))
+            .build()
+        // Setup local RecyclerXRay
+        localRecyclerXRay.settings = XRaySettings.Builder()
+            .withDefaultXRayDebugViewHolder(object : DefaultXRayDebugViewHolder() {
+                override fun prepareDebugText(result: XRayResult): String {
+                    return """
+                        ${super.prepareDebugText(result)}
+                        <From local RecyclerXRay>
+                    """.trimIndent()
+                }
+            })
+            .build()
+        // Setup ability to toggle XRay mode via adb
+        lifecycle.addObserver(adbToggleReceiverForAll)
+        lifecycle.addObserver(adbToggleReceiverForGlobal)
+        lifecycle.addObserver(adbToggleReceiverForLocal)
+    }
+
     class SampleAdapterSpanLookup(
-        private val adapter: SampleAdapter
+        private val adapterProvider: () -> ConcatAdapter
     ) : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
-            val type = adapter.items[position]
-            return when (type) {
-                is ItemType.Small -> 1
-                is ItemType.Large -> 2
-                is ItemType.Widest -> 3
-                is ItemType.Empty -> 3
+            val ordinal = adapterProvider().getItemViewType(position)
+            return when (ItemType.fromOrdinal(ordinal)) {
+                type<ItemType.Small>() -> 1
+                type<ItemType.Large>() -> 2
+                type<ItemType.Widest>() -> 3
+                type<ItemType.Empty>() -> 3
+                else -> throw IllegalStateException(
+                    "Unknown viewType = $ordinal for position = $position"
+                )
             }
         }
     }

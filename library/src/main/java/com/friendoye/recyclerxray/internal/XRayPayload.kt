@@ -1,4 +1,6 @@
 package com.friendoye.recyclerxray.internal
 
 
-internal object XRayPayload
+internal data class XRayPayload(
+    val xRayApiId: Long
+)

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="original_item_view_key" type="id"/>
+    <item name="x_ray_api_id" type="id"/>
+    <item name="x_ray_debug_label" type="id"/>
 
     <item name="parent_constraint_layout_id" type="id"/>
     <item name="holder_item_view_placeholder_id" type="id"/>

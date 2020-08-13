@@ -43,8 +43,8 @@ class DelegateRecyclerAdapterTest {
     @Test
     fun `Delegate onBindViewHolder() with payload`() {
         val viewHolder = TestViewHolder1(parentViewMock)
-        DelegateRecyclerAdapter(adapterMock).onBindViewHolder(viewHolder, 0, listOf(XRayPayload))
-        verify(exactly = 1) { adapterMock.onBindViewHolder(viewHolder, 0, listOf(XRayPayload)) }
+        DelegateRecyclerAdapter(adapterMock).onBindViewHolder(viewHolder, 0, listOf(XRayPayload(xRayApiId = 1)))
+        verify(exactly = 1) { adapterMock.onBindViewHolder(viewHolder, 0, listOf(XRayPayload(xRayApiId = 1))) }
         confirmVerified()
     }
 

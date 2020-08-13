@@ -1,14 +1,24 @@
 package com.friendoye.recyclerxray.internal
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import java.lang.ref.WeakReference
+import java.util.concurrent.atomic.AtomicLong
 
 
 internal class RealRecyclerXRayApi : RecyclerXRayApi {
 
+    companion object {
+        internal var counter = AtomicLong(0)
+        fun createUniqueId(): Long = counter.getAndIncrement()
+    }
+
+    private val id: Long = createUniqueId()
+
     // Internal state
-    private val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
+    // TODO: Check possibility not to keep several refs to same adapter
+    internal val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
     internal var isInXRayMode = false
     override var settings: XRaySettings = XRaySettings.Builder().build()
 
@@ -34,12 +44,22 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         }
     }
 
-    override fun <T : RecyclerView.Adapter<VH>, VH: RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH> {
+    override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH> {
+        if (adapter is ScannableRecyclerAdapter<*> && adapter.parentXRayApiId == id) {
+            Log.i(
+                DEFAULT_LOG_TAG,
+                "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)"
+            )
+            return adapter
+        }
+
         adapters.add(adapter.asWeakRef())
         return ScannableRecyclerAdapter(
             adapter,
+            id,
             settings.defaultXRayDebugViewHolder,
             settings.minDebugViewSize,
+            settings.label,
             this::isInXRayMode
         )
     }
@@ -52,7 +72,7 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         adapters.forEach { weakAdapter ->
             weakAdapter.get()?.let { adapter ->
                 adapter.notifyItemRangeChanged(0, adapter.itemCount,
-                    XRayPayload
+                    XRayPayload(id)
                 )
             }
         }

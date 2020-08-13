@@ -31,8 +31,21 @@ internal fun Random.generateColorSequence(): Sequence<Int> {
     }
 }
 
-internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(xRayWrapperContainer: View): T = apply {
+internal fun <T : RecyclerView.ViewHolder> T.isWrappedByXRay(): Boolean {
+    val xRayWrapperContainer = itemView
+    return xRayWrapperContainer.getTag(R.id.original_item_view_key) != null
+}
+
+internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(
+    xRayWrapperContainer: View,
+    xRayApiId: Long? = _xRayApiId,
+    xRayDebugLabel: String? = _xRayDebugLabel
+): T = apply {
     xRayWrapperContainer.setTag(R.id.original_item_view_key, itemView.asWeakRef())
+    if (xRayApiId != null) {
+        xRayWrapperContainer.setTag(R.id.x_ray_api_id, xRayApiId)
+    }
+    xRayWrapperContainer.setTag(R.id.x_ray_debug_label, xRayDebugLabel)
     val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
     field.isAccessible = true
     field.set(this, xRayWrapperContainer)
@@ -54,5 +67,11 @@ internal inline val <T : RecyclerView.ViewHolder> T.originalItemView: View
         return (itemView.getTag(R.id.original_item_view_key) as? WeakReference<View>)
             ?.get() ?: itemView
     }
+
+internal inline val <T : RecyclerView.ViewHolder> T._xRayApiId: Long?
+    get() = itemView.getTag(R.id.x_ray_api_id) as? Long
+
+internal inline val <T : RecyclerView.ViewHolder> T._xRayDebugLabel: String?
+    get() = itemView.getTag(R.id.x_ray_debug_label) as? String
 
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)

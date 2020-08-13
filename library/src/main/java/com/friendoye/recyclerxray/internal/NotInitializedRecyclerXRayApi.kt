@@ -1,6 +1,7 @@
 package com.friendoye.recyclerxray.internal
 
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.RecyclerXRayIsNotInitializedException
 import com.friendoye.recyclerxray.XRaySettings
 
 
@@ -32,5 +33,5 @@ internal object NotInitializedRecyclerXRayApi : RecyclerXRayApi {
         fireNotInitializedException()
     }
 
-    private fun fireNotInitializedException(): Nothing = throw IllegalStateException("RecyclerXRay wasn't initialized. Use one of RecyclerXRay.init() methods.")
+    private fun fireNotInitializedException(): Nothing = throw RecyclerXRayIsNotInitializedException()
 }
