@@ -11,13 +11,15 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
+import com.friendoye.recyclerxray.testing.ExceptionShooter
 
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
-    private val parentXRayApiId: Long,
+    val parentXRayApiId: Long,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
+    val debugXRayLabel: String?,
     private val isInXRayModeProvider: () -> Boolean,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
@@ -28,6 +30,15 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             id = R.id.holder_item_view_placeholder_id
         }
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
+        if (holder.isWrappedByXRay()) {
+            ExceptionShooter.fire(
+                MultipleRecyclerXRayAttachedException("""
+                    |It seems like ViewHolder was decorated by several ${ScannableRecyclerAdapter::class.java.simpleName}'s.
+                    |${holder.prepareDebugInfo()}
+                """.trimMargin())
+            )
+        }
+
         val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
         // TODO: Check why this thing is even was added
@@ -37,7 +48,11 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 
-        return holder.replaceItemView(xRayWrapperContainer = xRayContainer)
+        return holder.replaceItemView(
+            xRayWrapperContainer = xRayContainer,
+            xRayApiId = parentXRayApiId,
+            xRayDebugLabel = debugXRayLabel
+        )
     }
 
     override fun provideCustomParams(position: Int): Map<String, Any?>? {
@@ -141,5 +156,13 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 // view.isInvisible = isInXRayMode
             }
         }
+    }
+
+    private fun <T : RecyclerView.ViewHolder> T.prepareDebugInfo(): String {
+        return """
+            |Debug info:
+            |> RecyclerXRays: $debugXRayLabel($parentXRayApiId) -> $_xRayDebugLabel($_xRayApiId)
+            |> Decorated ViewHolder class: ${javaClass.simpleName}
+        """.trimMargin()
     }
 }

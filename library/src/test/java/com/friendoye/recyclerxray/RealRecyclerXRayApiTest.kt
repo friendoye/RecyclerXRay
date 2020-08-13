@@ -141,4 +141,16 @@ class RealRecyclerXRayApiTest {
 
         Assert.assertEquals(result, adapter)
     }
+
+    @Test
+    fun `Nested wrap() has no extra effect`() {
+        val recyclerApi = RealRecyclerXRayApi()
+
+        val wrappedAdapter = recyclerApi.wrap(adapter)
+        val superWrappedAdapter = recyclerApi.wrap(wrappedAdapter)
+
+        Assert.assertEquals(recyclerApi.adapters.size, 1)
+        Assert.assertEquals(recyclerApi.adapters.first().get(), adapter)
+        Assert.assertEquals(wrappedAdapter, superWrappedAdapter)
+    }
 }

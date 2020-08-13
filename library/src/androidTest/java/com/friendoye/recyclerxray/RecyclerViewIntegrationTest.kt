@@ -113,16 +113,4 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
 
         compareScreenshot(currentActivity.testRecycler)
     }
-
-    private fun createTestAdapter(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
-        return RvIntegrationTestAdapter().apply {
-            this.items = items.toList()
-        }
-    }
-
-    private fun createTestAdapterWithDiffUtil(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
-        return RvIntegrationTestAdapter(useDiffUtils = true).apply {
-            this.items = items.toList()
-        }
-    }
 }

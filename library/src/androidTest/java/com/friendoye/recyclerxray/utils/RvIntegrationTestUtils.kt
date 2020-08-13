@@ -11,6 +11,19 @@ import com.friendoye.recyclerxray.DefaultXRayDebugViewHolder
 import com.friendoye.recyclerxray.test.R
 
 
+
+internal fun createTestAdapter(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
+    return RvIntegrationTestAdapter().apply {
+        this.items = items.toList()
+    }
+}
+
+internal fun createTestAdapterWithDiffUtil(vararg items: IntegrationTestItemType): RvIntegrationTestAdapter {
+    return RvIntegrationTestAdapter(useDiffUtils = true).apply {
+        this.items = items.toList()
+    }
+}
+
 class RvIntegrationTestAdapter(
     val useDiffUtils: Boolean = false
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
