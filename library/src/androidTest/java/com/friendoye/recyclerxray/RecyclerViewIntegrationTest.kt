@@ -24,7 +24,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     fun setup() {
         ActivityTestRule<TestActivity>(TestActivity::class.java)
         val context = InstrumentationRegistry.getInstrumentation().context
-        RecyclerXRay.init(context, isNoOpMode = false)
+        XRayInitializer.init(isNoOpMode = false)
         RecyclerXRay.settings = XRaySettings.Builder()
             .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
             .withMinDebugViewSize(context.dip(50))
@@ -33,7 +33,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
 
     @After
     fun teardown() {
-        RecyclerXRay.reset()
+        XRayInitializer.reset()
     }
 
     @Test

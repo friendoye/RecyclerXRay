@@ -14,13 +14,12 @@ class XRayCustomParamsProvidersTest {
 
     @Before
     fun setup() {
-        val context = InstrumentationRegistry.getInstrumentation().context
-        RecyclerXRay.init(context, isNoOpMode = false)
+        XRayInitializer.init(isNoOpMode = false)
     }
 
     @After
     fun teardown() {
-        RecyclerXRay.reset()
+        XRayInitializer.reset()
     }
 
     @Test

@@ -5,8 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode
-import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode.NO_STABLE_IDS
 import androidx.recyclerview.widget.GridLayoutManager
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
@@ -37,10 +35,9 @@ class MainActivity : AppCompatActivity() {
     private var localRecyclerXRay = LocalRecyclerXRay()
     private var localSampleAdapter = SampleAdapter()
 
-    private val adbToggleReceiver = AdbToggleReceiver(
-        this,
-        recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay)
-    )
+    private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
+    private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
+    private val adbToggleReceiverForLocal = AdbToggleReceiver( this, intentAction = "xray-toggle-local", recyclerXRays = listOf(localRecyclerXRay))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             // Test RecyclerXRay
-            // 1)
             adapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -72,13 +68,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
             sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
-            // 2)
-            //adapter = RecyclerXRay.wrap(ConcatAdapter(
-            //    ConcatAdapter.Config.Builder()
-            //        .setIsolateViewTypes(true)
-            //        .build(),
-            //    listOf(sampleAdapter, localSampleAdapter)
-            //))
         }
 
     }
@@ -90,7 +79,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.swap -> adbToggleReceiver.toggleSecrets()
+            // On "Swap" toggle all possible RecyclerXRay's
+            R.id.swap -> adbToggleReceiverForAll.toggleSecrets()
             else -> return false
         }
         return true
@@ -113,7 +103,9 @@ class MainActivity : AppCompatActivity() {
             })
             .build()
         // Setup ability to toggle XRay mode via adb
-        lifecycle.addObserver(adbToggleReceiver)
+        lifecycle.addObserver(adbToggleReceiverForAll)
+        lifecycle.addObserver(adbToggleReceiverForGlobal)
+        lifecycle.addObserver(adbToggleReceiverForLocal)
     }
 
     class SampleAdapterSpanLookup(

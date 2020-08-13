@@ -11,8 +11,8 @@ import com.friendoye.recyclerxray.internal.RecyclerXRayApi
 
 object XRayInitializer {
 
-    private val NOT_INITIALIZED_PROVIDER: () -> RecyclerXRayApi = { NotInitializedRecyclerXRayApi }
-    private val NO_OP_PROVIDER: () -> RecyclerXRayApi = { NoOpRecyclerXRayApi }
+    internal var NOT_INITIALIZED_PROVIDER: () -> RecyclerXRayApi = { NotInitializedRecyclerXRayApi }
+    internal var NO_OP_PROVIDER: () -> RecyclerXRayApi = { NoOpRecyclerXRayApi }
 
     internal var xRayApiProvider: () -> RecyclerXRayApi = NOT_INITIALIZED_PROVIDER
     internal var isInitialized = false
@@ -20,10 +20,10 @@ object XRayInitializer {
     fun init(context: Context) {
         val app = context.applicationContext as Application
         val isAppDebuggable = (app.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
-        init(context, isNoOpMode = !isAppDebuggable)
+        init(isNoOpMode = !isAppDebuggable)
     }
 
-    fun init(context: Context, isNoOpMode: Boolean) {
+    fun init(isNoOpMode: Boolean = false) {
         if (isInitialized) {
             throw IllegalStateException("RecyclerXRay is already initialized.")
         }
@@ -35,6 +35,12 @@ object XRayInitializer {
         }
 
         isInitialized = true
+    }
+
+    @VisibleForTesting
+    internal fun init(xRayApiProvider: () -> RecyclerXRayApi) {
+        init(isNoOpMode = false)
+        this.xRayApiProvider = xRayApiProvider
     }
 
     @VisibleForTesting

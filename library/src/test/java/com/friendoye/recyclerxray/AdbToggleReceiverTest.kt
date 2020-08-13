@@ -27,7 +27,7 @@ class AdbToggleReceiverTest {
     fun setup() {
         lifecycle = LifecycleRegistry(mockk())
         adbToggleReceiver = AdbToggleReceiver(testContext, intentAction = "test-toggle-x-ray").apply {
-            recyclerXRay = recyclerXRayMock
+            recyclerXRays = listOf(recyclerXRayMock)
         }
         lifecycle.addObserver(adbToggleReceiver)
     }
@@ -84,6 +84,14 @@ class AdbToggleReceiverTest {
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
         adbToggleReceiver.unregister()
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+
+        verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
+        confirmVerified()
+    }
+
+    @Test
+    fun `Can manually toggle mode`() {
+        adbToggleReceiver.toggleSecrets()
 
         verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
         confirmVerified()
