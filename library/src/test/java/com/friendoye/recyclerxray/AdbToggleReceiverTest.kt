@@ -26,9 +26,11 @@ class AdbToggleReceiverTest {
     @Before
     fun setup() {
         lifecycle = LifecycleRegistry(mockk())
-        adbToggleReceiver = AdbToggleReceiver(testContext, intentAction = "test-toggle-x-ray").apply {
+        adbToggleReceiver = AdbToggleReceiver(
+            testContext,
+            intentAction = "test-toggle-x-ray",
             recyclerXRays = listOf(recyclerXRayMock)
-        }
+        )
         lifecycle.addObserver(adbToggleReceiver)
     }
 
