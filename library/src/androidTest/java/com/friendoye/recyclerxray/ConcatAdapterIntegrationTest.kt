@@ -4,8 +4,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.utils.*
-import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
-import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.*
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.karumi.shot.ScreenshotTest
@@ -56,8 +55,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    firstXRay.wrap(createTestAdapter(LargeVisible, Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Visible, LargeVisible))
+                    firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
             currentActivity.testRecycler.adapter = testAdapter
@@ -75,8 +74,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    firstXRay.wrap(createTestAdapter(LargeVisible, Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Visible, LargeVisible))
+                    firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
             currentActivity.testRecycler.adapter = testAdapter
@@ -94,8 +93,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    firstXRay.wrap(createTestAdapter(LargeVisible, Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Visible, LargeVisible))
+                    firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
             currentActivity.testRecycler.adapter = testAdapter
@@ -114,8 +113,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    createTestAdapter(LargeVisible, Visible, Visible),
-                    createTestAdapter(Visible, Visible, LargeVisible)
+                    createTestAdapter(LargeVisible, Ghost(), Visible, Visible),
+                    createTestAdapter(Visible, Ghost(), Visible, LargeVisible)
                 )
             )
             currentActivity.testRecycler.adapter = firstXRay.wrap(testAdapter)

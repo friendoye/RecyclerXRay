@@ -67,7 +67,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holder.originalItemViewContext { holder ->
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
-                itemType = getItemViewType(holder.bindingAdapterPosition),
+                itemType = holder.itemViewType,
                 isInXRayMode = isInXRayModeProvider(),
                 customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
             )
@@ -88,7 +88,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
 
         holder.bindXRayMode(
-            itemType = getItemViewType(holder.bindingAdapterPosition),
+            itemType = holder.itemViewType,
             isInXRayMode = isInXRayModeProvider(),
             customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
         )
