@@ -46,7 +46,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -57,7 +57,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             recyclerXRay.showSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -72,7 +72,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             recyclerXRay.hideSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -87,7 +87,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             testAdapter.changeItems(Visible, LargeVisible, Visible)
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -102,7 +102,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             testAdapter.changeItems(Visible, LargeVisible, Visible)
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -114,6 +114,6 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
             recyclerXRay.showSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 }

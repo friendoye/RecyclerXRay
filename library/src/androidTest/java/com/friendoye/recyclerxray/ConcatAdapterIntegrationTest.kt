@@ -63,7 +63,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
             firstXRay.toggleSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -82,7 +82,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
             secondXRay.toggleSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -102,7 +102,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
             secondXRay.toggleSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
@@ -121,6 +121,6 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
             firstXRay.toggleSecrets()
         }
 
-        compareScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 }
