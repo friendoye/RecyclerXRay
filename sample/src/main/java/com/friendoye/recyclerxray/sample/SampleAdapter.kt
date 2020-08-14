@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray.sample
 
+import android.content.ClipData
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,21 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
 
     var items: List<ItemType> = emptyList()
         set(value) {
-            val diffCallback = DiffCalculator(field, value)
+            val diffCallback = object : DiffCalculator<ItemType>(field, value) {
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    val oldItem = getOldItem(oldItemPosition)
+                    val newItem = getNewItem(newItemPosition)
+
+                    // To animate change of horizontal RecyclerView content,
+                    // we treat all ItemType.HorizontalRecycler items as the same.
+                    if (oldItem is ItemType.HorizontalRecycler
+                        && newItem is ItemType.HorizontalRecycler) {
+                        return true
+                    } else {
+                        return super.areItemsTheSame(oldItemPosition, newItemPosition)
+                    }
+                }
+            }
             val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = value
             diffResult.dispatchUpdatesTo(this)
@@ -42,6 +57,7 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             type<ItemType.Large>() -> LargeViewHolder.fromParent(parent)
             type<ItemType.Widest>() -> Outer.WidestViewHolder.fromParent(parent)
             type<ItemType.Empty>() -> EmptyViewHolder.fromParent(parent)
+            type<ItemType.HorizontalRecycler>() -> HorizontalRecyclerViewHolder.fromParent(parent)
             else -> throw IllegalStateException("Could not find ItemType for viewType = $viewType")
         }
     }
@@ -54,6 +70,8 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
             type<ItemType.Large>() -> (holder as LargeViewHolder).bind(item as ItemType.Large)
             type<ItemType.Widest>() -> (holder as Outer.WidestViewHolder).bind(item as ItemType.Widest)
             type<ItemType.Empty>() -> (holder as EmptyViewHolder).bind(item as ItemType.Empty)
+            type<ItemType.HorizontalRecycler>() -> (holder as HorizontalRecyclerViewHolder)
+                .bind(item as ItemType.HorizontalRecycler)
         }
     }
 }

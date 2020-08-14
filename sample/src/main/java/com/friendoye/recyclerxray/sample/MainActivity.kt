@@ -17,11 +17,13 @@ class MainActivity : AppCompatActivity() {
             field = value
             if (value) {
                 sampleAdapter.items = SAMPLE_DATA_FULL
+                horizontalRecyclerAdapter.items = INNER_DATA_FULL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_FULL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
             } else {
                 sampleAdapter.items = SAMPLE_DATA_PARTIAL
+                horizontalRecyclerAdapter.items = INNER_DATA_PARTIAL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_PARTIAL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
@@ -31,9 +33,10 @@ class MainActivity : AppCompatActivity() {
     private var binding by Delegates.notNull<ActivityMainBinding>()
 
     private var sampleAdapter = SampleAdapter()
+    private var horizontalRecyclerAdapter = SampleAdapter()
+    private var localSampleAdapter = SampleAdapter()
 
     private var localRecyclerXRay = LocalRecyclerXRay()
-    private var localSampleAdapter = SampleAdapter()
 
     private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
     private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 listOf(
                     RecyclerXRay.wrap(sampleAdapter),
+                    horizontalRecyclerAdapter,
                     localRecyclerXRay.wrap(localSampleAdapter)
                 )
             )
@@ -116,8 +120,9 @@ class MainActivity : AppCompatActivity() {
             return when (ItemType.fromOrdinal(ordinal)) {
                 type<ItemType.Small>() -> 1
                 type<ItemType.Large>() -> 2
-                type<ItemType.Widest>() -> 3
-                type<ItemType.Empty>() -> 3
+                type<ItemType.Widest>(),
+                type<ItemType.Empty>(),
+                type<ItemType.HorizontalRecycler>() -> 3
                 else -> throw IllegalStateException(
                     "Unknown viewType = $ordinal for position = $position"
                 )

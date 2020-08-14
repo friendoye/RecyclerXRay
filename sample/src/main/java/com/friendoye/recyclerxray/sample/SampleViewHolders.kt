@@ -3,12 +3,13 @@ package com.friendoye.recyclerxray.sample
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleEmptyBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleLargeBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleSmallBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
+import com.friendoye.recyclerxray.sample.databinding.*
 
 
 @SuppressLint("SetTextI18n")
@@ -86,6 +87,32 @@ class EmptyViewHolder private constructor(
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemSampleEmptyBinding.inflate(inflater)
             return EmptyViewHolder(binding)
+        }
+    }
+}
+
+class HorizontalRecyclerViewHolder private constructor(
+    private val binding: ItemSampleHorizontalRecyclerBinding
+) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.HorizontalRecycler> {
+
+    private val innerAdapter = InnerHorizontalAdapter()
+
+    init {
+        binding.innerRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            adapter = innerAdapter
+        }
+    }
+
+    override fun bind(item: ItemType.HorizontalRecycler) {
+        innerAdapter.items = item.items
+    }
+
+    companion object {
+        fun fromParent(parent: ViewGroup): HorizontalRecyclerViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val binding = ItemSampleHorizontalRecyclerBinding.inflate(inflater)
+            return HorizontalRecyclerViewHolder(binding)
         }
     }
 }
