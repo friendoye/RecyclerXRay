@@ -1,7 +1,6 @@
 package com.friendoye.recyclerxray.sample
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
+
+private val localRecyclerXRay = LocalRecyclerXRay()
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,8 +42,6 @@ class MainActivity : AppCompatActivity() {
     private var localSampleAdapter = SampleAdapter()
     private var horizontalRecyclerWithAdapterChangeAdapter = SampleAdapter()
 
-    private var localRecyclerXRay = LocalRecyclerXRay()
-
     private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
     private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
     private val adbToggleReceiverForLocal = AdbToggleReceiver( this, intentAction = "xray-toggle-local", recyclerXRays = listOf(localRecyclerXRay))
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerXRays()
 
-        binding.sampleRecyclerView.apply {
+        binding.sampleRecyclerViewView.apply {
             layoutManager = GridLayoutManager(context, 3).apply {
                 spanSizeLookup = SampleAdapterSpanLookup {
                     adapter as? ConcatAdapter ?: RecyclerXRay.unwrap(adapter!!)
@@ -72,9 +71,9 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 listOf(
                     RecyclerXRay.wrap(sampleAdapter),
-                    RecyclerXRay.wrap(horizontalRecyclerAdapter),
+                    RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter),
                     localRecyclerXRay.wrap(localSampleAdapter),
-                    RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter)
+                    RecyclerXRay.wrap(horizontalRecyclerAdapter)
                 )
             )
             sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
@@ -100,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         RecyclerXRay.settings = XRaySettings.Builder()
             .withMinDebugViewSize(dip(100))
             .enableNestedRecyclersSupport(true)
-            .withRecyclerXRayProvider(object : NestedRecyclerXRayProvider {
+            .withRecyclerXRayProvider(object : NestedXRaySettingsProvider {
                 override fun provide(
                     nestedAdapter: RecyclerView.Adapter<*>,
                     isDecorated: Boolean

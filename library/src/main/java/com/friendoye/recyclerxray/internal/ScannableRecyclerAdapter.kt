@@ -20,18 +20,17 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     val parentXRayApiId: Long,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
-    val debugXRayLabel: String?,
+    private val debugXRayLabel: String?,
     private val isInXRayModeProvider: () -> Boolean,
     private val enableNestedRecyclersSupport: Boolean,
-    private val nestedRecyclerXRayProvider: NestedRecyclerXRayProvider?,
+    private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
 
     private val innerAdapterWatcher = InnerAdapterWatcher<T>(
         xRayApi,
-        parentXRayApiId,
-        nestedRecyclerXRayProvider
+        nestedXRaySettingsProvider
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
@@ -52,11 +51,13 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holderWrapper.addView(holder.itemView)
 
         // TODO: Unstable API
-         holderWrapper.doOnLayout {
+        holderWrapper.doOnLayout {
             holder.bindXRayMode()
-         }
+        }
 
-        innerAdapterWatcher.startWatching(holder)
+        if (enableNestedRecyclersSupport) {
+            innerAdapterWatcher.startWatching(holder)
+        }
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 

@@ -4,7 +4,7 @@ import androidx.annotation.Dimension
 import androidx.annotation.Dimension.PX
 import androidx.recyclerview.widget.RecyclerView
 
-interface NestedRecyclerXRayProvider {
+interface NestedXRaySettingsProvider {
     fun provide(nestedAdapter: RecyclerView.Adapter<*>, isDecorated: Boolean): XRaySettings?
 }
 
@@ -13,7 +13,7 @@ data class XRaySettings internal constructor(
     @Dimension(unit = PX) val minDebugViewSize: Int?,
     val label: String?,
     val enableNestedRecyclersSupport: Boolean,
-    val recyclerXRayProvider: NestedRecyclerXRayProvider?
+    val xRaySettingsProvider: NestedXRaySettingsProvider?
 ) {
 
     class Builder(
@@ -21,7 +21,7 @@ data class XRaySettings internal constructor(
         @Dimension(unit = PX) internal var minDebugViewSize: Int? = null,
         internal var label: String? = null,
         internal var enableNestedRecyclersSupport: Boolean = false,
-        internal var recyclerXRayProvider: NestedRecyclerXRayProvider? = null
+        internal var xRaySettingsProvider: NestedXRaySettingsProvider? = null
     ) {
         fun withDefaultXRayDebugViewHolder(debugViewHolder: XRayDebugViewHolder) = apply {
             this.debugViewHolder = debugViewHolder
@@ -39,8 +39,8 @@ data class XRaySettings internal constructor(
             enableNestedRecyclersSupport = isEnabled
         }
 
-        fun withRecyclerXRayProvider(provider: NestedRecyclerXRayProvider) = apply {
-            recyclerXRayProvider = provider
+        fun withNestedXRaySettingsProvider(settingsProvider: NestedXRaySettingsProvider) = apply {
+            xRaySettingsProvider = settingsProvider
         }
 
         fun build(): XRaySettings = XRaySettings(
@@ -48,7 +48,7 @@ data class XRaySettings internal constructor(
             minDebugViewSize = minDebugViewSize,
             label = label,
             enableNestedRecyclersSupport = enableNestedRecyclersSupport,
-            recyclerXRayProvider = recyclerXRayProvider
+            xRaySettingsProvider = xRaySettingsProvider
         )
     }
 }

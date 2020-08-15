@@ -2,12 +2,11 @@ package com.friendoye.recyclerxray.internal
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.NestedRecyclerXRayProvider
+import com.friendoye.recyclerxray.NestedXRaySettingsProvider
 
 internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
     private val xRayApi: RealRecyclerXRayApi,
-    private val parentXRayApiId: Long,
-    private val nestedRecyclerXRayProvider: NestedRecyclerXRayProvider?
+    private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?
 ) {
 
     fun hasInnerAdapter(holder: T) = holder.innerAdapter != null
@@ -16,24 +15,21 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
         // TODO: Investigate, when to remove this listener...
         holder.originalItemView.viewTreeObserver.addOnGlobalLayoutListener {
             val recycler = holder.innerRecycler
-//            Log.i(DEFAULT_LOG_TAG, "${holder.javaClass.simpleName} -> $recycler")
-//            if (holder.innerRecycler != recycler) {
-                val wrappedInnerAdapter = tryWrapNestedAdapter(recycler?.adapter)
-                if (recycler?.adapter != wrappedInnerAdapter) {
-                    recycler?.adapter = wrappedInnerAdapter
-                }
+            val wrappedInnerAdapter = tryWrapNestedAdapter(recycler?.adapter)
+            if (recycler?.adapter != wrappedInnerAdapter) {
+                recycler?.adapter = wrappedInnerAdapter
+            }
 
-                Log.i(DEFAULT_LOG_TAG, "${holder.innerAdapter} -> ${recycler?.adapter}")
-                recycler?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-                    if (holder.innerAdapter != recycler.adapter) {
-                        Log.i(DEFAULT_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
-                        val wrappedInnerAdapter = tryWrapNestedAdapter(recycler.adapter)
-                        if (recycler.adapter != wrappedInnerAdapter) {
-                            recycler.adapter = wrappedInnerAdapter
-                        }
+            Log.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
+            recycler?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+                if (holder.innerAdapter != recycler.adapter) {
+                    Log.d(DEFAULT_INTERNAL_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
+                    val wrappedInnerAdapter = tryWrapNestedAdapter(recycler.adapter)
+                    if (recycler.adapter != wrappedInnerAdapter) {
+                        recycler.adapter = wrappedInnerAdapter
                     }
                 }
-//            }
+            }
         }
     }
 
@@ -42,7 +38,7 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
     ): RecyclerView.Adapter<*>? {
         var adapter = innerAdapter
         if (adapter != null && adapter !is ScannableRecyclerAdapter<*>) {
-            val nestedXRaySettings = nestedRecyclerXRayProvider
+            val nestedXRaySettings = nestedXRaySettingsProvider
                 ?.provide(adapter, false)
             if (nestedXRaySettings != null) {
                 adapter = xRayApi.wrap(adapter, nestedXRaySettings)

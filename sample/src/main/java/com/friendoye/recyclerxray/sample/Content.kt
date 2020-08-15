@@ -43,11 +43,7 @@ val INNER_DATA_FULL = listOf(
     )
 )
 
-val INNER_DATA_PARTIAL = listOf(
-    HorizontalRecycler(
-        listOf(Box, Circle, Box, Circle)
-    )
-)
+val INNER_DATA_PARTIAL = INNER_DATA_FULL
 
 val INNER_DATA_ADAPTER_CHANGE_FULL = listOf(
     HorizontalRecycler(

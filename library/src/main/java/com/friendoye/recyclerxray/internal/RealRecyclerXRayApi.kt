@@ -81,7 +81,7 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
             settings.label,
             this::isInXRayMode,
             settings.enableNestedRecyclersSupport,
-            settings.recyclerXRayProvider
+            settings.xRaySettingsProvider
         )
     }
 
