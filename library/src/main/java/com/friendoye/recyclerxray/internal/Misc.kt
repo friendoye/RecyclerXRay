@@ -4,6 +4,8 @@ import com.friendoye.recyclerxray.R
 
 import android.graphics.Color
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
 import java.util.*
@@ -74,4 +76,24 @@ internal inline val <T : RecyclerView.ViewHolder> T._xRayApiId: Long?
 internal inline val <T : RecyclerView.ViewHolder> T._xRayDebugLabel: String?
     get() = itemView.getTag(R.id.x_ray_debug_label) as? String
 
+internal val <T : RecyclerView.ViewHolder> T.innerRecycler: RecyclerView?
+    get() = originalItemView.findFirstView<RecyclerView>()
+
+internal val <T : RecyclerView.ViewHolder> T.innerAdapter: RecyclerView.Adapter<*>?
+    get() = innerRecycler?.adapter
+
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)
+
+internal inline fun <reified T> View.findFirstView(): T? = findFirstView(T::class.java)
+
+internal fun <T> View.findFirstView(clazz: Class<T>): T? {
+    if (clazz.isInstance(this)) {
+        return this as T
+    } else if (this is ViewGroup) {
+        return children.map { it.findFirstView(clazz) }
+            .filter { it != null }
+            .firstOrNull()
+    } else {
+        return null
+    }
+}

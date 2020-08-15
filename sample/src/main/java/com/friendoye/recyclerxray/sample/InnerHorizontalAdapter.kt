@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.sample.InnerItemType.Companion.getOrdinal
 
-class InnerHorizontalAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class InnerHorizontalAdapter(
+    givenItems: List<InnerItemType> = emptyList()
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items: List<InnerItemType> = emptyList()
+    var items = givenItems
         set(value) {
             val diffCallback = DiffCalculator(field, value)
             val diffResult = DiffUtil.calculateDiff(diffCallback)

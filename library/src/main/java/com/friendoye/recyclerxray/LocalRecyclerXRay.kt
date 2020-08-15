@@ -29,6 +29,10 @@ open class LocalRecyclerXRay internal constructor(
         adapter: T
     ): RecyclerView.Adapter<VH> = xRayApi.wrap(adapter)
 
+    internal fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
+        adapter: T, settings: XRaySettings
+    ): RecyclerView.Adapter<VH> = xRayApi.wrap(adapter, settings)
+
     fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(
         adapter: RecyclerView.Adapter<*>
     ): T = xRayApi.unwrap(adapter)

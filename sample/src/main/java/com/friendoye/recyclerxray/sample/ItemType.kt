@@ -6,7 +6,10 @@ sealed class ItemType {
     data class Large(val string: String) : ItemType()
     object Widest : ItemType()
     object Empty : ItemType()
-    data class HorizontalRecycler(val items: List<InnerItemType>) : ItemType()
+    data class HorizontalRecycler(
+        val items: List<InnerItemType>,
+        val changeAdapter: Boolean = false
+    ) : ItemType()
 
     companion object {
         fun fromOrdinal(ordinal: Int): Class<out ItemType> {

@@ -1,11 +1,13 @@
 package com.friendoye.recyclerxray.sample
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
@@ -19,12 +21,14 @@ class MainActivity : AppCompatActivity() {
                 sampleAdapter.items = SAMPLE_DATA_FULL
                 horizontalRecyclerAdapter.items = INNER_DATA_FULL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_FULL
+                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_FULL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
             } else {
                 sampleAdapter.items = SAMPLE_DATA_PARTIAL
                 horizontalRecyclerAdapter.items = INNER_DATA_PARTIAL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_PARTIAL
+                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_PARTIAL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
             }
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private var sampleAdapter = SampleAdapter()
     private var horizontalRecyclerAdapter = SampleAdapter()
     private var localSampleAdapter = SampleAdapter()
+    private var horizontalRecyclerWithAdapterChangeAdapter = SampleAdapter()
 
     private var localRecyclerXRay = LocalRecyclerXRay()
 
@@ -67,13 +72,13 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 listOf(
                     RecyclerXRay.wrap(sampleAdapter),
-                    horizontalRecyclerAdapter,
-                    localRecyclerXRay.wrap(localSampleAdapter)
+                    RecyclerXRay.wrap(horizontalRecyclerAdapter),
+                    localRecyclerXRay.wrap(localSampleAdapter),
+                    RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter)
                 )
             )
             sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,6 +99,15 @@ class MainActivity : AppCompatActivity() {
         // Setup global RecyclerXRay
         RecyclerXRay.settings = XRaySettings.Builder()
             .withMinDebugViewSize(dip(100))
+            .enableNestedRecyclersSupport(true)
+            .withRecyclerXRayProvider(object : NestedRecyclerXRayProvider {
+                override fun provide(
+                    nestedAdapter: RecyclerView.Adapter<*>,
+                    isDecorated: Boolean
+                ): XRaySettings? {
+                    return XRaySettings.Builder().build()
+                }
+            })
             .build()
         // Setup local RecyclerXRay
         localRecyclerXRay.settings = XRaySettings.Builder()

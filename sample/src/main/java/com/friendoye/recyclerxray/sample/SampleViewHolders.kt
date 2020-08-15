@@ -105,7 +105,16 @@ class HorizontalRecyclerViewHolder private constructor(
     }
 
     override fun bind(item: ItemType.HorizontalRecycler) {
-        innerAdapter.items = item.items
+        if (item.changeAdapter) {
+            // 1) Replace adapter on each re-bind
+            binding.innerRecyclerView.adapter = RecyclerXRay.wrap(
+                InnerHorizontalAdapter(item.items)
+            )
+            binding.innerRecyclerView.post { binding.innerRecyclerView.requestLayout() }
+        } else {
+            // 2) Replace adapter items on each re-bind
+            innerAdapter.items = item.items
+        }
     }
 
     companion object {

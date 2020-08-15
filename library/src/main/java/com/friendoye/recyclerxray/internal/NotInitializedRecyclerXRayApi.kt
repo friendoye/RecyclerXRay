@@ -29,6 +29,13 @@ internal object NotInitializedRecyclerXRayApi : RecyclerXRayApi {
         fireNotInitializedException()
     }
 
+    override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
+        adapter: T,
+        settings: XRaySettings
+    ): RecyclerView.Adapter<VH> {
+        fireNotInitializedException()
+    }
+
     override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
         fireNotInitializedException()
     }

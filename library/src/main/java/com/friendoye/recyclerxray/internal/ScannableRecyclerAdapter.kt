@@ -16,14 +16,23 @@ import com.friendoye.recyclerxray.testing.ExceptionShooter
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
+    xRayApi: RealRecyclerXRayApi, // TODO: Should be retrievable by id?
     val parentXRayApiId: Long,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
     val debugXRayLabel: String?,
     private val isInXRayModeProvider: () -> Boolean,
+    private val enableNestedRecyclersSupport: Boolean,
+    private val nestedRecyclerXRayProvider: NestedRecyclerXRayProvider?,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
+
+    private val innerAdapterWatcher = InnerAdapterWatcher<T>(
+        xRayApi,
+        parentXRayApiId,
+        nestedRecyclerXRayProvider
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val holderWrapper = FrameLayout(parent.context).apply {
@@ -41,10 +50,13 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
-        // TODO: Check why this thing is even was added
-        // holderWrapper.doOnLayout {
-        //    holder.bindXRayMode()
-        // }
+
+        // TODO: Unstable API
+         holderWrapper.doOnLayout {
+            holder.bindXRayMode()
+         }
+
+        innerAdapterWatcher.startWatching(holder)
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 
@@ -64,11 +76,14 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: T, position: Int) {
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(holder)
+
         holder.originalItemViewContext { holder ->
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
                 itemType = holder.itemViewType,
-                isInXRayMode = isInXRayModeProvider(),
+                isInXRayMode = isInXRayModeProvider() && !shouldShowInnerAdapterXRay,
                 customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
             )
         }
@@ -87,9 +102,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             super.onBindViewHolder(holder, position, clearedPayload)
         }
 
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(holder)
+
         holder.bindXRayMode(
             itemType = holder.itemViewType,
-            isInXRayMode = isInXRayModeProvider(),
+            isInXRayMode = isInXRayModeProvider() && !shouldShowInnerAdapterXRay,
             customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
         )
     }
@@ -129,14 +147,23 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         return xRayContainer
     }
 
-//    NOTE: Check line 33
-//    private fun T.bindXRayMode() {
-//        bindXRayMode(
-//            itemType = getItemViewType(bindingAdapterPosition),
-//            isInXRayMode = isInXRayModeProvider(),
-//            customParamsFromAdapter = provideCustomParams(bindingAdapterPosition)
-//        )
-//    }
+    // TODO: Unstable API
+    private fun T.bindXRayMode() {
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(this)
+
+        bindXRayMode(
+            // WARNING: Temporary workaround. Remove it
+            itemType = itemViewType, //getItemViewType(bindingAdapterPosition),
+            isInXRayMode = isInXRayModeProvider() && !shouldShowInnerAdapterXRay,
+            // WARNING: Temporary workaround. Remove it
+            customParamsFromAdapter = try {
+                provideCustomParams(bindingAdapterPosition)
+            } catch (e: Throwable) {
+                null
+            }
+        )
+    }
 
     private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
                                customParamsFromAdapter: Map<String, Any?>?) {
