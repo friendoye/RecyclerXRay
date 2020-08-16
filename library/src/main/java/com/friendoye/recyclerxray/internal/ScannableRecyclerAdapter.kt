@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.testing.ExceptionShooter
@@ -32,6 +33,18 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         xRayApi,
         nestedXRaySettingsProvider
     )
+
+    @RecyclerView.Orientation
+    private var currentOrientation: Int = RecyclerView.VERTICAL
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager = recyclerView.layoutManager
+        currentOrientation = when (layoutManager) {
+            is LinearLayoutManager -> layoutManager.orientation
+            else -> RecyclerView.VERTICAL
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val holderWrapper = FrameLayout(parent.context).apply {
@@ -130,7 +143,10 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             connect(childId, ConstraintSet.TOP,    parentId, ConstraintSet.TOP)
             connect(childId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
             minDebugViewSize?.let {
-                constrainMinHeight(childId, it)
+                when (currentOrientation) {
+                    RecyclerView.VERTICAL   -> constrainMinHeight(childId, it)
+                    RecyclerView.HORIZONTAL -> constrainMinWidth(childId, it)
+                }
             }
         }
 
