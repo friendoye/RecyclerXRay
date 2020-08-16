@@ -26,7 +26,6 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
 
     @Before
     fun setup() {
-        ActivityTestRule<TestActivity>(TestActivity::class.java)
         val context = InstrumentationRegistry.getInstrumentation().context
         XRayInitializer.init(isNoOpMode = false)
 
