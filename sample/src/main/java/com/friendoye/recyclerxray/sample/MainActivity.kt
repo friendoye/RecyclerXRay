@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         RecyclerXRay.settings = XRaySettings.Builder()
             .withMinDebugViewSize(dip(100))
             .enableNestedRecyclersSupport(true)
-            .withRecyclerXRayProvider(object : NestedXRaySettingsProvider {
+            .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                 override fun provide(
                     nestedAdapter: RecyclerView.Adapter<*>,
                     isDecorated: Boolean
