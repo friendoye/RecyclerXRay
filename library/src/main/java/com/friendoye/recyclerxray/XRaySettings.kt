@@ -13,7 +13,7 @@ data class XRaySettings internal constructor(
     @Dimension(unit = PX) val minDebugViewSize: Int?,
     val label: String?,
     val enableNestedRecyclersSupport: Boolean,
-    val xRaySettingsProvider: NestedXRaySettingsProvider?
+    val nestedXRaySettingsProvider: NestedXRaySettingsProvider?
 ) {
 
     class Builder(
@@ -21,7 +21,7 @@ data class XRaySettings internal constructor(
         @Dimension(unit = PX) internal var minDebugViewSize: Int? = null,
         internal var label: String? = null,
         internal var enableNestedRecyclersSupport: Boolean = false,
-        internal var xRaySettingsProvider: NestedXRaySettingsProvider? = null
+        internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null
     ) {
         fun withDefaultXRayDebugViewHolder(debugViewHolder: XRayDebugViewHolder) = apply {
             this.debugViewHolder = debugViewHolder
@@ -39,8 +39,8 @@ data class XRaySettings internal constructor(
             enableNestedRecyclersSupport = isEnabled
         }
 
-        fun withNestedXRaySettingsProvider(settingsProvider: NestedXRaySettingsProvider) = apply {
-            xRaySettingsProvider = settingsProvider
+        fun withNestedXRaySettingsProvider(settingsProvider: NestedXRaySettingsProvider?) = apply {
+            nestedXRaySettingsProvider = settingsProvider
         }
 
         fun build(): XRaySettings = XRaySettings(
@@ -48,7 +48,7 @@ data class XRaySettings internal constructor(
             minDebugViewSize = minDebugViewSize,
             label = label,
             enableNestedRecyclersSupport = enableNestedRecyclersSupport,
-            xRaySettingsProvider = xRaySettingsProvider
+            nestedXRaySettingsProvider = nestedXRaySettingsProvider
         )
     }
 }
