@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <View
+        android:id="@+id/item_root_layout"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/drawable_circle"/>
+
+</FrameLayout>
