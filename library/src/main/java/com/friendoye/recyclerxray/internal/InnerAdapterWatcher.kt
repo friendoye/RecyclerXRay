@@ -21,7 +21,7 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
             }
 
             Log.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
-            recycler?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            recycler?.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
                 if (holder.innerAdapter != recycler.adapter) {
                     Log.d(DEFAULT_INTERNAL_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
                     val wrappedInnerAdapter = tryWrapNestedAdapter(recycler.adapter)
