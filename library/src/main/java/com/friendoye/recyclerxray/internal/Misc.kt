@@ -3,6 +3,7 @@ package com.friendoye.recyclerxray.internal
 import com.friendoye.recyclerxray.R
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
@@ -52,6 +53,19 @@ internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(
     val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
     field.isAccessible = true
     field.set(this, xRayWrapperContainer)
+}
+
+internal fun <T : RecyclerView.ViewHolder> T.rebindInfo(
+    xRayApiId: Long? = _xRayApiId,
+    xRayDebugLabel: String? = _xRayDebugLabel
+): T = apply {
+    if (isWrappedByXRay()) {
+        val xRayWrapperContainer = itemView
+        xRayWrapperContainer.setTag(R.id.x_ray_api_id, xRayApiId)
+        xRayWrapperContainer.setTag(R.id.x_ray_debug_label, xRayDebugLabel)
+    } else {
+        Log.d(DEFAULT_INTERNAL_LOG_TAG, "Couldn't rebind info, because $this is not wrapped...")
+    }
 }
 
 internal inline fun <T : RecyclerView.ViewHolder> T.originalItemViewContext(action: (T) -> Unit): T = apply {

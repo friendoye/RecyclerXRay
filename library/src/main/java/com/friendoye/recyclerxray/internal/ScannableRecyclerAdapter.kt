@@ -65,7 +65,9 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         // TODO: Unstable API
         holderWrapper.doOnLayout {
-            holder.bindXRayMode()
+            if (holder._xRayApiId == parentXRayApiId) {
+                holder.bindXRayMode()
+            }
         }
 
         if (enableNestedRecyclersSupport) {
@@ -90,6 +92,10 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: T, position: Int) {
+        // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
+        // To ensure correct bindings, rebind VH info before view bindings.
+        holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
+
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
                 && innerAdapterWatcher.hasInnerAdapter(holder)
 
@@ -116,6 +122,10 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
             super.onBindViewHolder(holder, position, clearedPayload)
         }
+
+        // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
+        // To ensure correct bindings, rebind VH info before view bindings.
+        holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
 
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
                 && innerAdapterWatcher.hasInnerAdapter(holder)
