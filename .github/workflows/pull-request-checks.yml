@@ -17,8 +17,11 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Gradle Assemble
+    - name: Assemble library
       run: ./gradlew :library:assembleDebug --build-cache --no-daemon --stacktrace
+
+    - name: Assemble sample
+      run: ./gradlew :sample:assembleDebug --build-cache --no-daemon --stacktrace
 
   # Executes checks (unit tests, linter and etc.)
   checks:
@@ -73,14 +76,14 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
-          script: ./gradlew :library:connectedDebugAndroidTest --build-cache --no-daemon --stacktrace
+          script: ./gradlew connectedDebugAndroidTest mergeAndroidReports --build-cache --no-daemon --stacktrace
 
       - name: Upload tests reports
         if: always()
         uses: actions/upload-artifact@v1
         with:
           name: 'android-tests-${{ matrix.api-level }}-reports'
-          path: library/build/reports/androidTests
+          path: build/reports/androidTests
 
   # Runs screenshot tests
   screenshot-tests:
