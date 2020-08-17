@@ -6,9 +6,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
+
+private val localRecyclerXRay = LocalRecyclerXRay()
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,12 +20,16 @@ class MainActivity : AppCompatActivity() {
             field = value
             if (value) {
                 sampleAdapter.items = SAMPLE_DATA_FULL
+                horizontalRecyclerAdapter.items = INNER_DATA_FULL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_FULL
+                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_FULL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
             } else {
                 sampleAdapter.items = SAMPLE_DATA_PARTIAL
+                horizontalRecyclerAdapter.items = INNER_DATA_PARTIAL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_PARTIAL
+                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_PARTIAL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
             }
@@ -31,9 +38,9 @@ class MainActivity : AppCompatActivity() {
     private var binding by Delegates.notNull<ActivityMainBinding>()
 
     private var sampleAdapter = SampleAdapter()
-
-    private var localRecyclerXRay = LocalRecyclerXRay()
+    private var horizontalRecyclerAdapter = SampleAdapter()
     private var localSampleAdapter = SampleAdapter()
+    private var horizontalRecyclerWithAdapterChangeAdapter = SampleAdapter()
 
     private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
     private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
@@ -51,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerXRays()
 
-        binding.sampleRecyclerView.apply {
+        binding.sampleRecyclerViewView.apply {
             layoutManager = GridLayoutManager(context, 3).apply {
                 spanSizeLookup = SampleAdapterSpanLookup {
                     adapter as? ConcatAdapter ?: RecyclerXRay.unwrap(adapter!!)
@@ -64,12 +71,13 @@ class MainActivity : AppCompatActivity() {
                     .build(),
                 listOf(
                     RecyclerXRay.wrap(sampleAdapter),
-                    localRecyclerXRay.wrap(localSampleAdapter)
+                    RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter),
+                    localRecyclerXRay.wrap(localSampleAdapter),
+                    RecyclerXRay.wrap(horizontalRecyclerAdapter)
                 )
             )
             sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -90,6 +98,15 @@ class MainActivity : AppCompatActivity() {
         // Setup global RecyclerXRay
         RecyclerXRay.settings = XRaySettings.Builder()
             .withMinDebugViewSize(dip(100))
+            .enableNestedRecyclersSupport(true)
+            .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
+                override fun provide(
+                    nestedAdapter: RecyclerView.Adapter<*>,
+                    isDecorated: Boolean
+                ): XRaySettings? {
+                    return XRaySettings.Builder().build()
+                }
+            })
             .build()
         // Setup local RecyclerXRay
         localRecyclerXRay.settings = XRaySettings.Builder()
@@ -116,8 +133,9 @@ class MainActivity : AppCompatActivity() {
             return when (ItemType.fromOrdinal(ordinal)) {
                 type<ItemType.Small>() -> 1
                 type<ItemType.Large>() -> 2
-                type<ItemType.Widest>() -> 3
-                type<ItemType.Empty>() -> 3
+                type<ItemType.Widest>(),
+                type<ItemType.Empty>(),
+                type<ItemType.HorizontalRecycler>() -> 3
                 else -> throw IllegalStateException(
                     "Unknown viewType = $ordinal for position = $position"
                 )

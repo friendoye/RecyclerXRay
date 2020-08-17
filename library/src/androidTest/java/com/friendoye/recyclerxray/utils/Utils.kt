@@ -2,6 +2,8 @@ package com.friendoye.recyclerxray.utils
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.rule.ActivityTestRule
 
 
 fun Context.dip(value: Int): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
@@ -44,5 +46,18 @@ class DiffCalculator<T>(
 
     private fun checkEquality(oldItem: T?, newItem: T?): Boolean {
         return oldItem == newItem
+    }
+}
+
+fun ActivityTestRule<*>.ensureAllViewHoldersBind(recyclerView: RecyclerView) {
+    runOnUiThread {
+        recyclerView.scrollToPosition(
+            recyclerView.adapter?.itemCount?.minus(1)?.coerceAtLeast(0)
+                ?: 0
+        )
+    }
+
+    runOnUiThread {
+        recyclerView.scrollToPosition(0)
     }
 }

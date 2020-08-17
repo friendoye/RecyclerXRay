@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.testing.ExceptionShooter
@@ -16,14 +17,34 @@ import com.friendoye.recyclerxray.testing.ExceptionShooter
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
+    xRayApi: RealRecyclerXRayApi, // TODO: Should be retrievable by id?
     val parentXRayApiId: Long,
     private val xRayDebugViewHolder: XRayDebugViewHolder,
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?,
-    val debugXRayLabel: String?,
+    private val debugXRayLabel: String?,
     private val isInXRayModeProvider: () -> Boolean,
+    private val enableNestedRecyclersSupport: Boolean,
+    private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
+
+    private val innerAdapterWatcher = InnerAdapterWatcher<T>(
+        xRayApi,
+        nestedXRaySettingsProvider
+    )
+
+    @RecyclerView.Orientation
+    private var currentOrientation: Int = RecyclerView.VERTICAL
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager = recyclerView.layoutManager
+        currentOrientation = when (layoutManager) {
+            is LinearLayoutManager -> layoutManager.orientation
+            else -> RecyclerView.VERTICAL
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         val holderWrapper = FrameLayout(parent.context).apply {
@@ -41,10 +62,17 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         val holderItemParams = holder.itemView.layoutParams
         holderWrapper.addView(holder.itemView)
-        // TODO: Check why this thing is even was added
-        // holderWrapper.doOnLayout {
-        //    holder.bindXRayMode()
-        // }
+
+        // TODO: Unstable API
+        holderWrapper.doOnLayout {
+            if (holder._xRayApiId == parentXRayApiId) {
+                holder.bindXRayMode()
+            }
+        }
+
+        if (enableNestedRecyclersSupport) {
+            innerAdapterWatcher.startWatching(holder)
+        }
 
         val xRayContainer = wrap(holderWrapper, holderItemParams)
 
@@ -64,11 +92,19 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: T, position: Int) {
+        // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
+        // To ensure correct bindings, rebind VH info before view bindings.
+        holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
+
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(holder)
+
         holder.originalItemViewContext { holder ->
             super.onBindViewHolder(holder, position)
             holder.bindXRayMode(
                 itemType = holder.itemViewType,
                 isInXRayMode = isInXRayModeProvider(),
+                showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
                 customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
             )
         }
@@ -87,9 +123,17 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             super.onBindViewHolder(holder, position, clearedPayload)
         }
 
+        // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
+        // To ensure correct bindings, rebind VH info before view bindings.
+        holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
+
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(holder)
+
         holder.bindXRayMode(
             itemType = holder.itemViewType,
             isInXRayMode = isInXRayModeProvider(),
+            showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
             customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
         )
     }
@@ -100,6 +144,19 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             id = R.id.parent_constraint_layout_id
             if (holderItemParams != null) {
                 layoutParams = holderItemParams
+            }
+        }
+
+        fun createMatchViewConstraint(childId: Int, parentId: Int) = ConstraintSet().apply {
+            connect(childId, ConstraintSet.LEFT,   parentId, ConstraintSet.LEFT)
+            connect(childId, ConstraintSet.RIGHT,  parentId, ConstraintSet.RIGHT)
+            connect(childId, ConstraintSet.TOP,    parentId, ConstraintSet.TOP)
+            connect(childId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
+            minDebugViewSize?.let {
+                when (currentOrientation) {
+                    RecyclerView.VERTICAL   -> constrainMinHeight(childId, it)
+                    RecyclerView.HORIZONTAL -> constrainMinWidth(childId, it)
+                }
             }
         }
 
@@ -114,35 +171,46 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             tag = "DEBUG"
         }
         xRayContainer.addView(debugLayout)
-
-        val debugLayoutConstraints = ConstraintSet().apply {
-            connect(debugLayout.id, ConstraintSet.LEFT,   holderWrapperView.id, ConstraintSet.LEFT)
-            connect(debugLayout.id, ConstraintSet.RIGHT,  holderWrapperView.id, ConstraintSet.RIGHT)
-            connect(debugLayout.id, ConstraintSet.TOP,    holderWrapperView.id, ConstraintSet.TOP)
-            connect(debugLayout.id, ConstraintSet.BOTTOM, holderWrapperView.id, ConstraintSet.BOTTOM)
-            minDebugViewSize?.let {
-                constrainMinHeight(debugLayout.id, it)
-            }
-        }
+        val debugLayoutConstraints = createMatchViewConstraint(debugLayout.id, holderWrapperView.id)
         debugLayoutConstraints.applyTo(xRayContainer)
+
+        val innerRecyclerIndicatorView = View(context).apply {
+            id = R.id.inner_indicator_view_id
+            visibility = View.GONE
+            setBackgroundResource(R.drawable.bg_inner_recycler_indicator)
+        }
+        xRayContainer.addView(innerRecyclerIndicatorView)
+        val indicatorViewConstraints = createMatchViewConstraint(innerRecyclerIndicatorView.id, holderWrapperView.id)
+        indicatorViewConstraints.applyTo(xRayContainer)
 
         return xRayContainer
     }
 
-//    NOTE: Check line 33
-//    private fun T.bindXRayMode() {
-//        bindXRayMode(
-//            itemType = getItemViewType(bindingAdapterPosition),
-//            isInXRayMode = isInXRayModeProvider(),
-//            customParamsFromAdapter = provideCustomParams(bindingAdapterPosition)
-//        )
-//    }
+    // TODO: Unstable API
+    private fun T.bindXRayMode() {
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
+                && innerAdapterWatcher.hasInnerAdapter(this)
+
+        bindXRayMode(
+            // WARNING: Temporary workaround. Remove it
+            itemType = itemViewType, //getItemViewType(bindingAdapterPosition),
+            isInXRayMode = isInXRayModeProvider(),
+            showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
+            // WARNING: Temporary workaround. Remove it
+            customParamsFromAdapter = try {
+                provideCustomParams(bindingAdapterPosition)
+            } catch (e: Throwable) {
+                null
+            }
+        )
+    }
 
     private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
+                               showInnerAdapterIndicator: Boolean,
                                customParamsFromAdapter: Map<String, Any?>?) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
             if (view.tag == "DEBUG") {
-                view.isVisible = isInXRayMode
+                view.isVisible = isInXRayMode && !showInnerAdapterIndicator
                 val xRayResult = scanner.scan(
                     this, itemType, customParamsFromAdapter, originalItemView
                 )
@@ -150,6 +218,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                     view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
                 }
+            } else if (view.id == R.id.inner_indicator_view_id) {
+                view.isVisible = isInXRayMode && showInnerAdapterIndicator
             } else {
                 // Do not hide ViewHolder view,
                 // so we could preview it on item click

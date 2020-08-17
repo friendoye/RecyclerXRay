@@ -23,7 +23,6 @@ class MultipleRecyclerXRayTest {
 
     @Before
     fun setup() {
-        ActivityTestRule<TestActivity>(TestActivity::class.java)
         XRayInitializer.init(isNoOpMode = false)
         ExceptionShooter.current = ExceptionShooter.TestExceptionShooter()
     }

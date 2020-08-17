@@ -1,5 +1,7 @@
 package com.friendoye.recyclerxray.sample
 
+import com.friendoye.recyclerxray.sample.InnerItemType.Box
+import com.friendoye.recyclerxray.sample.InnerItemType.Circle
 import com.friendoye.recyclerxray.sample.ItemType.*
 
 
@@ -33,4 +35,26 @@ val LOCAL_SAMPLE_DATA_PARTIAL = listOf(
     Widest,
     /*Small(9),*/ Small(10), // Small(11),
     Large("Three") // , Small(12)
+)
+
+val INNER_DATA_FULL = listOf(
+    HorizontalRecycler(
+        listOf(Box, Circle, Circle, Box, Box, Circle, Box)
+    )
+)
+
+val INNER_DATA_PARTIAL = INNER_DATA_FULL
+
+val INNER_DATA_ADAPTER_CHANGE_FULL = listOf(
+    HorizontalRecycler(
+        listOf(Box, Circle, Box, Box, Box, Circle, Box),
+        changeAdapter = true
+    )
+)
+
+val INNER_DATA_ADAPTER_CHANGE_PARTIAL = listOf(
+    HorizontalRecycler(
+        listOf(Box, Circle, Box, Circle),
+        changeAdapter = true
+    )
 )

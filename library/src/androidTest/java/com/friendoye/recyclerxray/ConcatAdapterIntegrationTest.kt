@@ -26,7 +26,6 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
 
     @Before
     fun setup() {
-        ActivityTestRule<TestActivity>(TestActivity::class.java)
         val context = InstrumentationRegistry.getInstrumentation().context
         XRayInitializer.init(isNoOpMode = false)
 
@@ -79,8 +78,14 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                 )
             )
             currentActivity.testRecycler.adapter = testAdapter
+        }
+
+        // TODO: Find out why we should post toggleSecrets()
+        activityTestRule.runOnUiThread {
             secondXRay.toggleSecrets()
         }
+
+        activityTestRule.ensureAllViewHoldersBind(currentActivity.testRecycler)
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }

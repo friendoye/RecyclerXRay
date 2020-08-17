@@ -45,6 +45,24 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
     }
 
     override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(adapter: T): RecyclerView.Adapter<VH> {
+        return internalWrap(adapter, settings)
+    }
+
+    override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
+        adapter: T,
+        settings: XRaySettings
+    ): RecyclerView.Adapter<VH> {
+        return internalWrap(adapter, settings)
+    }
+
+    override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
+        return (adapter as ScannableRecyclerAdapter<*>).decoratedAdapter as T
+    }
+
+    private fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> internalWrap(
+        adapter: T,
+        settings: XRaySettings
+    ): RecyclerView.Adapter<VH> {
         if (adapter is ScannableRecyclerAdapter<*> && adapter.parentXRayApiId == id) {
             Log.i(
                 DEFAULT_LOG_TAG,
@@ -56,16 +74,15 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
         adapters.add(adapter.asWeakRef())
         return ScannableRecyclerAdapter(
             adapter,
+            this,
             id,
             settings.defaultXRayDebugViewHolder,
             settings.minDebugViewSize,
             settings.label,
-            this::isInXRayMode
+            this::isInXRayMode,
+            settings.enableNestedRecyclersSupport,
+            settings.nestedXRaySettingsProvider
         )
-    }
-
-    override fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(adapter: RecyclerView.Adapter<*>): T {
-        return (adapter as ScannableRecyclerAdapter<*>).decoratedAdapter as T
     }
 
     private fun updateAdapters() {
