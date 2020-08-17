@@ -89,7 +89,7 @@ class XRaySettingsBuilderTest {
             .withNestedXRaySettingsProvider(mockNestedXRaySettingsProvider)
         val result = builder.build()
         Assert.assertEquals(
-            result.enableNestedRecyclersSupport, mockNestedXRaySettingsProvider
+            result.nestedXRaySettingsProvider, mockNestedXRaySettingsProvider
         )
     }
 }
