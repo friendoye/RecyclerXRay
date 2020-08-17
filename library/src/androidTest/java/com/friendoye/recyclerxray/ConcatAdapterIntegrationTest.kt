@@ -78,8 +78,14 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                 )
             )
             currentActivity.testRecycler.adapter = testAdapter
+        }
+
+        // TODO: Find out why we should post toggleSecrets()
+        activityTestRule.runOnUiThread {
             secondXRay.toggleSecrets()
         }
+
+        activityTestRule.ensureAllViewHoldersBind(currentActivity.testRecycler)
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
