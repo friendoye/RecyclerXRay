@@ -106,16 +106,39 @@ To toggle inspection mode enter this command in your Terminal:
 adb shell am broadcast -a xray-toggle
 ```
 
+### Nested RecyclerViews
+
+Sometimes `RecyclerView` is nested inside one of your `RecyclerView`. If you want your `LocalRecyclerXRay` to be able to inspect them as well, you should enable such support in `XRaySettings`:
+
+```kotlin
+val localRecyclerXRay = LocalRecyclerXRay()
+localRecyclerXRay.settings = XRaySettings.Builder()
+        // ...
+        .enableNestedRecyclersSupport(true) // enable nested support
+        .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
+            override fun provide(
+                nestedAdapter: RecyclerView.Adapter<*>,
+                isDecorated: Boolean
+            ): XRaySettings? {
+                return XRaySettings.Builder().build()
+            }
+        }) // provide XRaySetting for given nested adapter 
+           // if `null` is returned, there will be no inspection for given adapter
+        .build()
+```
+
 ## Configuration
 
 You can also configure `RecyclerXRay` to your needs:
 
 ```kotlin
 RecyclerXRay.settings = XRaySettings.Builder()
-        .withDefaultXRayDebugViewHolder(...) // Customize debug view, used for inspection
-        .withMinDebugViewSize(100)           // Adjust size of debug view for invisible or small
-                                             // RecyclerView.ViewHolder itemViews
-        .withLabel("test_label")             // Will be used in logs/exceptions to indicate debug
-                                             // name for given RecyclerXRay.
+        .withDefaultXRayDebugViewHolder(...)  // Customize debug view, used for inspection
+        .withMinDebugViewSize(100)            // Adjust size of debug view for invisible or small
+                                              // RecyclerView.ViewHolder itemViews
+        .withLabel("test_label")              // Will be used in logs/exceptions to indicate debug
+                                              // name for given RecyclerXRay.
+        .enableNestedRecyclersSupport(false)  // Enable nested RecyclerView inspecion support
+        .withNestedXRaySettingsProvider(null) // Provide custom XRaySetting for given nested adapter. 
         .build()
 ```
