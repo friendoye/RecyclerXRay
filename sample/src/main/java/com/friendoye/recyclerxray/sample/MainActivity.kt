@@ -15,7 +15,7 @@ private val localRecyclerXRay = LocalRecyclerXRay()
 
 class MainActivity : AppCompatActivity() {
 
-    private var isFullDataInAdapter = true
+    internal var isFullDataInAdapter = true
         set(value) {
             field = value
             if (value) {
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    private var binding by Delegates.notNull<ActivityMainBinding>()
+    internal var binding by Delegates.notNull<ActivityMainBinding>()
 
     private var sampleAdapter = SampleAdapter()
     private var horizontalRecyclerAdapter = SampleAdapter()
@@ -88,10 +88,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             // On "Swap" toggle all possible RecyclerXRay's
-            R.id.swap -> adbToggleReceiverForAll.toggleSecrets()
+            R.id.swap -> toggleAllSecrets()
             else -> return false
         }
         return true
+    }
+
+    internal fun toggleAllSecrets() {
+        adbToggleReceiverForAll.toggleSecrets()
     }
 
     private fun setupRecyclerXRays() {
