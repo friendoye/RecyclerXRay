@@ -20,7 +20,9 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
                 recycler?.adapter = wrappedInnerAdapter
             }
 
-            Log.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
+            if (holder.innerAdapter != null) {
+                Log.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
+            }
             recycler?.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
                 if (holder.innerAdapter != recycler.adapter) {
                     Log.d(DEFAULT_INTERNAL_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
