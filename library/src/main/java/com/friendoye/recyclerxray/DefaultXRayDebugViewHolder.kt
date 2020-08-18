@@ -1,13 +1,10 @@
 package com.friendoye.recyclerxray
 
-import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import com.friendoye.recyclerxray.internal.DEFAULT_LOG_TAG
+import com.friendoye.recyclerxray.internal.startGripAnimation
 import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
 open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
@@ -24,17 +21,12 @@ open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
                 text = prepareDebugText(result)
                 setBackgroundColor(result.color)
             }
+        }
+    }
 
-            alpha = 1.0f
-            setOnClickListener {
-                val loggableLinkToFile = result.viewHolderClass.getLoggableLinkToFileWithClass()
-                Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
-                if (result.isViewVisibleForUser) {
-                    it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
-                } else {
-                    debug_info_text_view.startGripAnimation()
-                }
-            }
+    override fun onEmptyViewClick(debugView: View, result: XRayResult) {
+        debugView.apply {
+            debug_info_text_view.startGripAnimation()
         }
     }
 
@@ -56,16 +48,5 @@ open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
             """.trimIndent()
         }
         return textToShow
-    }
-
-    private fun View.startGripAnimation() {
-        val animator = AnimatorInflater
-            .loadAnimator(context,
-                R.animator.grip_animator
-            ).apply {
-                setTarget(this@startGripAnimation)
-                interpolator = AccelerateDecelerateInterpolator()
-            }
-        animator.start()
     }
 }

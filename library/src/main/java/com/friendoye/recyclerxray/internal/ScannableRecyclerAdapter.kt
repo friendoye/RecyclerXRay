@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray.internal
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.testing.ExceptionShooter
+import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
 
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
@@ -217,6 +219,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 if (isInXRayMode) {
                     view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
+                    view.setLoggableLinkClickListener(xRayResult)
                 }
             } else if (view.id == R.id.inner_indicator_view_id) {
                 view.isVisible = isInXRayMode && showInnerAdapterIndicator
@@ -224,6 +227,19 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 // Do not hide ViewHolder view,
                 // so we could preview it on item click
                 // view.isInvisible = isInXRayMode
+            }
+        }
+    }
+
+    private fun View.setLoggableLinkClickListener(xRayResult: XRayResult) {
+        alpha = 1.0f
+        setOnClickListener {
+            val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
+            Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
+            if (xRayResult.isViewVisibleForUser) {
+                it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
+            } else {
+                xRayDebugViewHolder.onEmptyViewClick(this, xRayResult)
             }
         }
     }

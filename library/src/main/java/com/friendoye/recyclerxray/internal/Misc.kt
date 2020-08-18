@@ -1,11 +1,13 @@
 package com.friendoye.recyclerxray.internal
 
+import android.animation.AnimatorInflater
 import com.friendoye.recyclerxray.R
 
 import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
@@ -111,4 +113,14 @@ internal fun <T> View.findFirstView(clazz: Class<T>): T? {
     } else {
         return null
     }
+}
+
+internal fun View.startGripAnimation() {
+    val animator = AnimatorInflater
+        .loadAnimator(context,R.animator.grip_animator)
+        .apply {
+            setTarget(this@startGripAnimation)
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+    animator.start()
 }

@@ -6,4 +6,5 @@ import android.view.ViewGroup
 interface XRayDebugViewHolder {
     fun provideView(parent: ViewGroup): View
     fun bindView(debugView: View, result: XRayResult)
+    fun onEmptyViewClick(debugView: View, result: XRayResult) = Unit
 }
