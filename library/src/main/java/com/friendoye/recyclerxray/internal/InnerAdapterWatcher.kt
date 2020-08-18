@@ -41,7 +41,7 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
         var adapter = innerAdapter
         if (adapter != null && adapter !is ScannableRecyclerAdapter<*>) {
             val nestedXRaySettings = nestedXRaySettingsProvider
-                ?.provide(adapter, false)
+                ?.provide(adapter)
             if (nestedXRaySettings != null) {
                 adapter = xRayApi.wrap(adapter, nestedXRaySettings)
             }

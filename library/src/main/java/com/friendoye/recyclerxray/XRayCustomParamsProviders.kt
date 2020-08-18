@@ -1,6 +1,5 @@
 package com.friendoye.recyclerxray
 
-
 /**
  * Interface facilitates the easy extraction of custom information
  * about ViewHolder for given position in adapter.

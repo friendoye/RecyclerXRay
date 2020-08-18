@@ -8,10 +8,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 
-
 /**
- * To toggle RecyclerXRay use "adb shell am broadcast -a xray-toggle" command.
- * Inspired by this read: https://medium.com/@gpeal/reliable-hot-reload-on-android-27f14a80df60
+ * Allows to toggle several [LocalRecyclerXRay]'s secrets at once.
+ *
+ * To toggle secrets, use "adb shell am broadcast -a xray-toggle" command.
+ *
+ * Inspired by [this read](https://medium.com/@gpeal/reliable-hot-reload-on-android-27f14a80df60)
  */
 class AdbToggleReceiver(
     private val context: Context,
@@ -33,6 +35,9 @@ class AdbToggleReceiver(
         toggleSecrets()
     }
 
+    /**
+     * Toggle secrets for all [recyclerXRays].
+     */
     fun toggleSecrets() {
         recyclerXRays.forEach(LocalRecyclerXRay::toggleSecrets)
     }
