@@ -1,22 +1,22 @@
 # RecyclerXRay
 
-RecyclerXRay is a debug tool for visual inspection of complex RecyclerView layouts. Also it helps you to navigate to specific item's ViewHolder faster.
+`RecyclerXRay` is a debug tool for visual inspection of complex `RecyclerView` layouts. Also it helps you navigate to specific `ViewHolder` faster.
 
 <img src="https://i.imgur.com/x3Uw8sd.gif" width="300px"/>
 
 ### Motivation
 
-Finding right ViewHolder in a complex and big RecyclerView layout may be hard.  
-Finding right ViewHolder for an invisible item view might be even harder.  
+Finding specific `ViewHolder` in a complex and big `RecyclerView` layout may be hard.  
+Finding specific `ViewHolder` for an invisible item view might be even harder.  
 Doing it over and over again, you may find yourself wondering: *Is there any way to find my ViewHolders faster?*
 
 ### Features
 
-By default `RecyclerXRay` uses `DefaultXRayDebugViewHolder`. It can:
+During visual inspection of `RecyclerView.Adapter`, `RecyclerXRay` allows the following things:
 
-* Show all debug information from `XRayResult`;
-* Show preview of current ViewHolder layout on item click;
-* Log link to file with current ViewHolder on item click:
+* Show all debug information from `XRayResult` (`ViewHolder`'s class, view type, custom params, etc.);
+* Show preview of `ViewHolder` original item view on item click;
+* Log clickable link to file, where given `ViewHolder` is placed, on item click (clicking on this link in Android Studio will navigate you to `ViewHolder`!):
 
 <img src="https://i.imgur.com/Pj59bvq.gif" width="800px"/>
 
@@ -35,9 +35,17 @@ allprojects {
 }
 ```
 
-Then add dependency to your `build.gradle`:
+Then add the following lines to your `build.gradle`:
 
 ```groovy
+android {
+    kotlinOptions {
+        // This param is necessary for correct work
+        // of logging of clickable link to ViewHolder
+        freeCompilerArgs += ["-Xno-param-assertions"]
+    }
+}
+
 dependencies {
     implementation 'com.friendoye:recyclerxray:$version'
 }
@@ -50,9 +58,20 @@ Also add this lines to your Application class:
 
 override fun onCreate() {
     super.onCreate()
+    // Depending on whether Application is debuggable or not,
+    // sets real or no-op implementation.
     XRayInitializer.init(this)
-    // If you need want to control no-op mode, use this version:
-    // XRayInitializer.init(isNoOpMode = true)
+}
+```
+
+If you need want to control no-op mode manually, use this version:
+
+```kotlin
+// SampleApplication.kt
+
+override fun onCreate() {
+    super.onCreate()
+    XRayInitializer.init(isNoOpMode = true)
 }
 ```
 
