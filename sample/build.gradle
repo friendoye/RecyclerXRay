@@ -36,6 +36,10 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        // Adding this flag causes removing of Intrinsics.checkParameterIsNotNull()
+        // checks in generated Java bytecode, which eases our logic of
+        // retrieving loggable links to VH files
+        freeCompilerArgs += ["-Xno-param-assertions"]
     }
 }
 

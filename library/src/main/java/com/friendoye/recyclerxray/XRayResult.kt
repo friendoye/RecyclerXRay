@@ -3,7 +3,9 @@ package com.friendoye.recyclerxray
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.RecyclerView
 
-
+/**
+ * Inspection info, provided by [RecyclerXRay] library.
+ */
 data class XRayResult(
     val viewHolderClass: Class<out RecyclerView.ViewHolder>,
     val viewHolderType: Int,

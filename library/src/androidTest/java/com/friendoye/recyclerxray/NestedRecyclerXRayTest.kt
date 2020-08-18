@@ -132,8 +132,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>,
-                        isDecorated: Boolean
+                        nestedAdapter: RecyclerView.Adapter<*>
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
@@ -164,8 +163,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>,
-                        isDecorated: Boolean
+                        nestedAdapter: RecyclerView.Adapter<*>
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
@@ -210,8 +208,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>,
-                        isDecorated: Boolean
+                        nestedAdapter: RecyclerView.Adapter<*>
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
