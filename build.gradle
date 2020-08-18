@@ -29,7 +29,7 @@ allprojects {
 
 subprojects {
     ext {
-        artifactVersion = '0.2.0'
+        artifactVersion = '0.3.0'
     }
 }
 
