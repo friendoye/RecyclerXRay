@@ -187,7 +187,13 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                     view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
                 }
-                view.setLoggableLinkClickListener(xRayResult, bindingAdapterPosition)
+
+                // WARNING: Temporary workaround. Remove it
+                try {
+                    view.setLoggableLinkClickListener(xRayResult, bindingAdapterPosition)
+                } catch (e: Exception) {
+                    // Do nothing...
+                }
             } else if (view.id == R.id.inner_indicator_view_id) {
                 view.isVisible = isInXRayMode && showInnerAdapterIndicator
             } else {
