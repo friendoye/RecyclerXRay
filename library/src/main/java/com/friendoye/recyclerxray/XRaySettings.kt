@@ -16,6 +16,9 @@ data class XRaySettings internal constructor(
     val failOnNotFullyWrappedAdapter: Boolean
 ) {
 
+    /**
+     * Builder class for [XRaySettings].
+     */
     class Builder(
         internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder(),
         @Dimension(unit = PX) internal var minDebugViewSize: Int? = null,
