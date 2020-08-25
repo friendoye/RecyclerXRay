@@ -8,6 +8,7 @@ import androidx.annotation.Dimension
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.*
@@ -24,6 +25,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     private val isInXRayModeProvider: () -> Boolean,
     private val enableNestedRecyclersSupport: Boolean,
     private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
+    private val failOnNotFullyWrappedAdapter: Boolean,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
@@ -48,6 +50,15 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+
+        if (failOnNotFullyWrappedAdapter) {
+            val recyclerAdapter = recyclerView.adapter
+                ?: throw RuntimeException("Is it possible? If happened, please, report to library maintainer.")
+            if (!recyclerAdapter.checkIsWrappedCorrectly()) {
+                throw RecyclerAdapterNotFullyWrappedException()
+            }
+        }
+
         val layoutManager = recyclerView.layoutManager
         currentOrientation = when (layoutManager) {
             is LinearLayoutManager -> layoutManager.orientation
