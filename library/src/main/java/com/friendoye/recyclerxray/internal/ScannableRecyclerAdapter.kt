@@ -36,6 +36,11 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         nestedXRaySettingsProvider
     )
 
+    private val overlayHideController = OverlayHideController(
+        ownerAdapter = this,
+        isInXRayModeProvider = isInXRayModeProvider
+    )
+
     @RecyclerView.Orientation
     private var currentOrientation: Int = RecyclerView.VERTICAL
 
@@ -46,6 +51,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
             is LinearLayoutManager -> layoutManager.orientation
             else -> RecyclerView.VERTICAL
         }
+        overlayHideController.onAttachedToRecyclerView(recyclerView)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        overlayHideController.onDetachedFromRecyclerView(recyclerView)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
@@ -219,8 +230,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 if (isInXRayMode) {
                     view.isClickable = true
                     xRayDebugViewHolder.bindView(view, xRayResult)
-                    view.setLoggableLinkClickListener(xRayResult)
                 }
+                view.setLoggableLinkClickListener(xRayResult, bindingAdapterPosition)
             } else if (view.id == R.id.inner_indicator_view_id) {
                 view.isVisible = isInXRayMode && showInnerAdapterIndicator
             } else {
@@ -231,13 +242,14 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
     }
 
-    private fun View.setLoggableLinkClickListener(xRayResult: XRayResult) {
-        alpha = 1.0f
+    private fun View.setLoggableLinkClickListener(xRayResult: XRayResult, position: Int) {
+        alpha = if (overlayHideController.isOverlayHidden[position]) 0.0f else 1.0f
         setOnClickListener {
             val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
             Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
             if (xRayResult.isViewVisibleForUser) {
-                it.alpha = if (it.alpha == 1.0f) 0.0f else 1.0f
+                overlayHideController.toggleHidden(position)
+                alpha = if (overlayHideController.isOverlayHidden[position]) 0.0f else 1.0f
             } else {
                 xRayDebugViewHolder.onEmptyViewClick(this, xRayResult)
             }
