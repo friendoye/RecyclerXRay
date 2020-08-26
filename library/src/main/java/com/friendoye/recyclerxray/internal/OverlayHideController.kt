@@ -17,6 +17,7 @@ internal class OverlayHideController(
 
     fun toggleHidden(position: Int) {
         _isOverlayHidden[position] = !_isOverlayHidden[position]
+        Log.i("DataChange", _isOverlayHidden.joinToString())
     }
 
     fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -74,6 +75,7 @@ internal class OverlayHideController(
             }
         }
         _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
+        Log.i("DataChange", _isOverlayHidden.joinToString())
         dataObserver?.let {
             ownerAdapter.registerAdapterDataObserver(it)
         }
