@@ -51,7 +51,7 @@ fun Class<out RecyclerView.ViewHolder>.getLoggableLinkToFileWithClass(): String?
     return null
 }
 
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
 internal fun <T> Class<T>.createInstance(): T? {
     val value = when (this) {
         Byte::class.java -> 0.toByte()

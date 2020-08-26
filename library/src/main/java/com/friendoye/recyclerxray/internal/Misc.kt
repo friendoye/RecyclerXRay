@@ -15,8 +15,8 @@ import java.util.Random
 import kotlin.math.sqrt
 
 internal val GOLDEN_RATIO_CONSTANT = (1.0 + sqrt(5.0)).toFloat() / 2
-internal val DEFAULT_LOG_TAG = "RecyclerXRay"
-internal val DEFAULT_INTERNAL_LOG_TAG = "XRayInternal"
+internal const val DEFAULT_LOG_TAG = "RecyclerXRay"
+internal const val DEFAULT_INTERNAL_LOG_TAG = "XRayInternal"
 
 internal fun provideDefaultColorGeneratorRandom() = Random(0xB00BB00B)
 
@@ -72,8 +72,8 @@ internal fun <T : RecyclerView.ViewHolder> T.rebindInfo(
 
 internal inline fun <T : RecyclerView.ViewHolder> T.originalItemViewContext(action: (T) -> Unit): T = apply {
     val xRayWrapperContainer = itemView
-    val originalItemView = (itemView.getTag(R.id.original_item_view_key) as? WeakReference<View>)
-        ?.get()
+    val originalItemView = (itemView.getTag(R.id.original_item_view_key) as? WeakReference<*>)
+        ?.get() as? View
     val field = RecyclerView.ViewHolder::class.java.getDeclaredField("itemView")
     field.isAccessible = true
     field.set(this, originalItemView)
@@ -83,8 +83,8 @@ internal inline fun <T : RecyclerView.ViewHolder> T.originalItemViewContext(acti
 
 internal inline val <T : RecyclerView.ViewHolder> T.originalItemView: View
     get() {
-        return (itemView.getTag(R.id.original_item_view_key) as? WeakReference<View>)
-            ?.get() ?: itemView
+        return (itemView.getTag(R.id.original_item_view_key) as? WeakReference<*>)
+            ?.get() as? View ?: itemView
     }
 
 internal inline val <T : RecyclerView.ViewHolder> T._xRayApiId: Long?
@@ -105,6 +105,7 @@ internal inline fun <reified T> View.findFirstView(): T? = findFirstView(T::clas
 
 internal fun <T> View.findFirstView(clazz: Class<T>): T? {
     if (clazz.isInstance(this)) {
+        @Suppress("UNCHECKED_CAST")
         return this as T
     } else if (this is ViewGroup) {
         return children.map { it.findFirstView(clazz) }

@@ -23,6 +23,26 @@ android {
         }
     }
 
+    lintOptions {
+        textReport true
+        textOutput 'stdout'
+
+        checkReleaseBuilds false
+        checkDependencies true
+        ignoreTestSources true
+
+        disable 'RtlEnabled'
+    }
+
+    kotlinOptions {
+        allWarningsAsErrors = true
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+
     configurations.all {
         resolutionStrategy {
             force("androidx.lifecycle:lifecycle-common:2.2.0")

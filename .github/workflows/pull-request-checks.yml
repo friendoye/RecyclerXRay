@@ -9,7 +9,7 @@ on:
 jobs:
   # Builds and checks .apk and .aar
   assemble:
-    name: Assemble
+    name: Assemble and checks
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -30,8 +30,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Assemble
-      run: ./gradlew assemble --build-cache --no-daemon --stacktrace --scan
+    - name: Assemble and checks
+      run: ./gradlew spotlessCheck assemble apiCheck lintDebug --build-cache --no-daemon --stacktrace --scan
 
   # Runs unit tests
   unit-tests:
@@ -57,11 +57,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Execute check with Gradle
-      #   run: ./gradlew :library:testDebug --build-cache --no-daemon --stacktrace
-      - name: Execute checks
-        run: ./gradlew check --build-cache --no-daemon --stacktrace
-
+      - name: Unit Tests
+        run: ./gradlew testDebug --build-cache --no-daemon --stacktrace
+      
       - name: Zip test reports
         run: find . -type d -regex ".*/build/reports/tests/.*DebugUnitTest" -exec zip -r reports.zip {} +
 

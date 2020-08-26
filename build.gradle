@@ -7,7 +7,6 @@ buildscript {
         mavenCentral()
         maven { url "https://maven.google.com" }
         maven { url "https://plugins.gradle.org/m2/" }
-        maven { url "https://kotlin.bintray.com/kotlinx" }
         jcenter()
     }
     dependencies {
@@ -18,7 +17,7 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.17"
         classpath 'com.karumi:shot:4.3.0'
         classpath "com.gradle:build-scan-plugin:2.4.2"
-        classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.1.1"
+        classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
     }
 }
 
@@ -94,11 +93,6 @@ subprojects {
 
                 testOptions {
                     animationsDisabled = true
-                }
-
-                lintOptions {
-                    checkDependencies true
-                    ignoreTestSources true
                 }
             }
         }

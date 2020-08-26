@@ -75,7 +75,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        overlayHideController.onDetachedFromRecyclerView(recyclerView)
+        overlayHideController.onDetachedFromRecyclerView()
         super.onDetachedFromRecyclerView(recyclerView)
     }
 
@@ -134,19 +134,20 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
                 innerAdapterWatcher.hasInnerAdapter(holder)
 
-        holder.originalItemViewContext { holder ->
-            super.onBindViewHolder(holder, position)
-            holder.bindXRayMode(
-                itemType = holder.itemViewType,
+        holder.originalItemViewContext { originalHolder ->
+            super.onBindViewHolder(originalHolder, position)
+            originalHolder.bindXRayMode(
+                itemType = originalHolder.itemViewType,
                 isInXRayMode = isInXRayModeProvider(),
                 showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
-                customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
+                customParamsFromAdapter = provideCustomParams(originalHolder.bindingAdapterPosition)
             )
         }
     }
 
+    @Suppress("ControlFlowWithEmptyBody")
     override fun onBindViewHolder(holder: T, position: Int, payloads: List<Any>) {
-        holder.originalItemViewContext { holder ->
+        holder.originalItemViewContext { originalHolder ->
             val xRayPayload = payloads.asSequence()
                 .filterIsInstance<XRayPayload>()
                 .filter { it.xRayApiId == parentXRayApiId }
@@ -155,7 +156,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 .filter { it !== xRayPayload }
                 .toList()
 
-            super.onBindViewHolder(holder, position, clearedPayload)
+            super.onBindViewHolder(originalHolder, position, clearedPayload)
         }
 
         // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
@@ -199,29 +200,34 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         customParamsFromAdapter: Map<String, Any?>?
     ) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
-            if (view.tag == "DEBUG") {
-                view.isVisible = isInXRayMode && !showInnerAdapterIndicator
-                val xRayResult = scanner.scan(
-                    this, itemType, customParamsFromAdapter, originalItemView
-                )
-                if (isInXRayMode) {
-                    view.isClickable = true
-                    xRayDebugViewHolder.bindView(view, xRayResult)
-                }
+            when {
+                view.tag == "DEBUG" -> {
+                    view.isVisible = isInXRayMode && !showInnerAdapterIndicator
+                    val xRayResult = scanner.scan(
+                        this, itemType, customParamsFromAdapter, originalItemView
+                    )
+                    if (isInXRayMode) {
+                        view.isClickable = true
+                        xRayDebugViewHolder.bindView(view, xRayResult)
+                    }
 
-                // TODO: WARNING: Temporary workaround. Remove it
-                val position = if (bindingAdapterPosition == NO_POSITION) {
-                    position
-                } else {
-                    bindingAdapterPosition
+                    // TODO: WARNING: Temporary workaround. Remove it
+                    @Suppress("DEPRECATION")
+                    val position = if (bindingAdapterPosition == NO_POSITION) {
+                        position
+                    } else {
+                        bindingAdapterPosition
+                    }
+                    view.setLoggableLinkClickListener(xRayResult, position)
                 }
-                view.setLoggableLinkClickListener(xRayResult, position)
-            } else if (view.id == R.id.inner_indicator_view_id) {
-                view.isVisible = isInXRayMode && showInnerAdapterIndicator
-            } else {
-                // Do not hide ViewHolder view,
-                // so we could preview it on item click
-                // view.isInvisible = isInXRayMode
+                view.id == R.id.inner_indicator_view_id -> {
+                    view.isVisible = isInXRayMode && showInnerAdapterIndicator
+                }
+                else -> {
+                    // Do not hide ViewHolder view,
+                    // so we could preview it on item click
+                    // view.isInvisible = isInXRayMode
+                }
             }
         }
     }

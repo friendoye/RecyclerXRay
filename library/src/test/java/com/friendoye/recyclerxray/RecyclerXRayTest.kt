@@ -30,7 +30,7 @@ class RecyclerXRayTest {
         val mockProvider = mockk<() -> RecyclerXRayApi>()
         XRayInitializer.init(mockProvider)
 
-        val result = LocalRecyclerXRay()
+        LocalRecyclerXRay()
 
         verify { mockProvider wasNot Called }
     }
@@ -39,7 +39,7 @@ class RecyclerXRayTest {
     fun `Do not use xRayApi provider during construction 2`() {
         val mockProvider = mockk<() -> RecyclerXRayApi>()
 
-        val result = LocalRecyclerXRay(mockProvider)
+        LocalRecyclerXRay(mockProvider)
 
         verify { mockProvider wasNot Called }
     }

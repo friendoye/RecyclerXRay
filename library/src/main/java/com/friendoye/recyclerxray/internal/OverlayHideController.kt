@@ -83,7 +83,7 @@ internal class OverlayHideController(
         }
     }
 
-    fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    fun onDetachedFromRecyclerView() {
         dataObserver?.let {
             ownerAdapter.unregisterAdapterDataObserver(it)
         }

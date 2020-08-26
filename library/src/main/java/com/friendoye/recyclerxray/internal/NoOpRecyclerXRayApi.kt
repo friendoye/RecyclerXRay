@@ -8,6 +8,7 @@ internal class NoOpRecyclerXRayApi(
     defaultSettings: XRaySettings
 ) : RecyclerXRayApi {
 
+    @Suppress("UNUSED_PARAMETER")
     override var settings: XRaySettings = defaultSettings
         set(value) {}
 

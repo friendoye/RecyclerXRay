@@ -1,0 +1,150 @@
+public final class com/friendoye/recyclerxray/AdbToggleReceiver : android/content/BroadcastReceiver, androidx/lifecycle/LifecycleObserver {
+	public fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun onReceive (Landroid/content/Context;Landroid/content/Intent;)V
+	public final fun register ()V
+	public final fun toggleSecrets ()V
+	public final fun unregister ()V
+}
+
+public class com/friendoye/recyclerxray/DefaultXRayDebugViewHolder : com/friendoye/recyclerxray/XRayDebugViewHolder {
+	public fun <init> ()V
+	public fun bindView (Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
+	public fun onEmptyViewClick (Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
+	protected fun prepareDebugText (Lcom/friendoye/recyclerxray/XRayResult;)Ljava/lang/String;
+	public fun provideView (Landroid/view/ViewGroup;)Landroid/view/View;
+}
+
+public class com/friendoye/recyclerxray/LocalRecyclerXRay {
+	public fun <init> ()V
+	public final fun getSettings ()Lcom/friendoye/recyclerxray/XRaySettings;
+	public final fun hideSecrets ()V
+	public final fun setSettings (Lcom/friendoye/recyclerxray/XRaySettings;)V
+	public final fun showSecrets ()V
+	public final fun toggleSecrets ()V
+	public final fun unwrap (Landroidx/recyclerview/widget/RecyclerView$Adapter;)Landroidx/recyclerview/widget/RecyclerView$Adapter;
+	public final fun wrap (Landroidx/recyclerview/widget/RecyclerView$Adapter;)Landroidx/recyclerview/widget/RecyclerView$Adapter;
+}
+
+public final class com/friendoye/recyclerxray/LoggableLinkUtilsKt {
+	public static final fun getLoggableLinkToFileWithClass (Ljava/lang/Class;)Ljava/lang/String;
+}
+
+public final class com/friendoye/recyclerxray/MultipleRecyclerXRayAttachedException : java/lang/IllegalStateException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public abstract interface class com/friendoye/recyclerxray/NestedXRaySettingsProvider {
+	public abstract fun provide (Landroidx/recyclerview/widget/RecyclerView$Adapter;)Lcom/friendoye/recyclerxray/XRaySettings;
+}
+
+public final class com/friendoye/recyclerxray/RecyclerAdapterNotFullyWrappedException : java/lang/IllegalStateException {
+	public fun <init> ()V
+}
+
+public final class com/friendoye/recyclerxray/RecyclerXRay : com/friendoye/recyclerxray/LocalRecyclerXRay {
+	public static final field INSTANCE Lcom/friendoye/recyclerxray/RecyclerXRay;
+}
+
+public final class com/friendoye/recyclerxray/RecyclerXRayIsNotInitializedException : java/lang/IllegalStateException {
+	public fun <init> ()V
+}
+
+public abstract interface class com/friendoye/recyclerxray/XRayCustomParamsAdapterProvider {
+	public abstract fun provideCustomParams (I)Ljava/util/Map;
+}
+
+public abstract interface class com/friendoye/recyclerxray/XRayCustomParamsViewHolderProvider {
+	public abstract fun provideCustomParams ()Ljava/util/Map;
+}
+
+public abstract interface class com/friendoye/recyclerxray/XRayDebugViewHolder {
+	public abstract fun bindView (Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
+	public abstract fun onEmptyViewClick (Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
+	public abstract fun provideView (Landroid/view/ViewGroup;)Landroid/view/View;
+}
+
+public final class com/friendoye/recyclerxray/XRayDebugViewHolder$DefaultImpls {
+	public static fun onEmptyViewClick (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
+}
+
+public final class com/friendoye/recyclerxray/XRayInitializer {
+	public static final field INSTANCE Lcom/friendoye/recyclerxray/XRayInitializer;
+	public final fun init ()V
+	public final fun init (Landroid/content/Context;)V
+	public final fun init (Landroid/content/Context;Lcom/friendoye/recyclerxray/XRaySettings;)V
+	public final fun init (Z)V
+	public final fun init (ZLcom/friendoye/recyclerxray/XRaySettings;)V
+	public static synthetic fun init$default (Lcom/friendoye/recyclerxray/XRayInitializer;Landroid/content/Context;Lcom/friendoye/recyclerxray/XRaySettings;ILjava/lang/Object;)V
+	public static synthetic fun init$default (Lcom/friendoye/recyclerxray/XRayInitializer;ZLcom/friendoye/recyclerxray/XRaySettings;ILjava/lang/Object;)V
+}
+
+public final class com/friendoye/recyclerxray/XRayResult {
+	public fun <init> (Ljava/lang/Class;IILjava/util/Map;III)V
+	public final fun component1 ()Ljava/lang/Class;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/util/Map;
+	public final fun component5 ()I
+	public final fun component6 ()I
+	public final fun component7 ()I
+	public final fun copy (Ljava/lang/Class;IILjava/util/Map;III)Lcom/friendoye/recyclerxray/XRayResult;
+	public static synthetic fun copy$default (Lcom/friendoye/recyclerxray/XRayResult;Ljava/lang/Class;IILjava/util/Map;IIIILjava/lang/Object;)Lcom/friendoye/recyclerxray/XRayResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColor ()I
+	public final fun getCustomParams ()Ljava/util/Map;
+	public final fun getViewHeight ()I
+	public final fun getViewHolderClass ()Ljava/lang/Class;
+	public final fun getViewHolderType ()I
+	public final fun getViewVisibility ()I
+	public final fun getViewWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/friendoye/recyclerxray/XRayResultExtKt {
+	public static final fun isViewVisibleForUser (Lcom/friendoye/recyclerxray/XRayResult;)Z
+}
+
+public final class com/friendoye/recyclerxray/XRaySettings {
+	public final fun component1 ()Lcom/friendoye/recyclerxray/XRayDebugViewHolder;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Z
+	public final fun component5 ()Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;
+	public final fun component6 ()Z
+	public final fun copy (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;Z)Lcom/friendoye/recyclerxray/XRaySettings;
+	public static synthetic fun copy$default (Lcom/friendoye/recyclerxray/XRaySettings;Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZILjava/lang/Object;)Lcom/friendoye/recyclerxray/XRaySettings;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefaultXRayDebugViewHolder ()Lcom/friendoye/recyclerxray/XRayDebugViewHolder;
+	public final fun getEnableNestedRecyclersSupport ()Z
+	public final fun getFailOnNotFullyWrappedAdapter ()Z
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getMinDebugViewSize ()Ljava/lang/Integer;
+	public final fun getNestedXRaySettingsProvider ()Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/friendoye/recyclerxray/XRaySettings$Builder {
+	public fun <init> ()V
+	public fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;Z)V
+	public synthetic fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun build ()Lcom/friendoye/recyclerxray/XRaySettings;
+	public final fun enableNestedRecyclersSupport (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun failOnNotFullyWrappedAdapter (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun withDefaultXRayDebugViewHolder (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun withLabel (Ljava/lang/String;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun withMinDebugViewSize (I)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun withNestedXRaySettingsProvider (Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+}
+
+public final class com/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding : androidx/viewbinding/ViewBinding {
+	public final field debugInfoTextView Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
+}
+
