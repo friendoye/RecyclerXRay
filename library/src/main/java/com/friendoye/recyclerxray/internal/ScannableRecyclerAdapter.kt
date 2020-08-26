@@ -173,11 +173,11 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 && innerAdapterWatcher.hasInnerAdapter(this)
 
         bindXRayMode(
-            // WARNING: Temporary workaround. Remove it
+            // TODO: WARNING: Temporary workaround. Remove it
             itemType = itemViewType, //getItemViewType(bindingAdapterPosition),
             isInXRayMode = isInXRayModeProvider(),
             showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
-            // WARNING: Temporary workaround. Remove it
+            // TODO: WARNING: Temporary workaround. Remove it
             customParamsFromAdapter = try {
                 provideCustomParams(bindingAdapterPosition)
             } catch (e: Throwable) {
@@ -200,7 +200,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                     xRayDebugViewHolder.bindView(view, xRayResult)
                 }
 
-                // WARNING: Temporary workaround. Remove it
+                // TODO: WARNING: Temporary workaround. Remove it
                 val position = if (bindingAdapterPosition == NO_POSITION) {
                     position
                 } else {
@@ -219,7 +219,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
     private fun View.setLoggableLinkClickListener(xRayResult: XRayResult, position: Int) {
         val isHidden = overlayHideController.isOverlayHidden.getOrNull(position)
-        // WARNING: Temporary workaround. Remove it
+        // TODO: WARNING: Temporary workaround. Remove it
         if (isHidden == null) {
             setOnClickListener(null)
             return
