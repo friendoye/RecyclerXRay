@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.friendoye.recyclerxray.*
 import com.friendoye.recyclerxray.testing.ExceptionShooter
 
@@ -200,11 +201,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 }
 
                 // WARNING: Temporary workaround. Remove it
-                try {
-                    view.setLoggableLinkClickListener(xRayResult, bindingAdapterPosition)
-                } catch (e: Exception) {
-                    // Do nothing...
+                val position = if (bindingAdapterPosition == NO_POSITION) {
+                    position
+                } else {
+                    bindingAdapterPosition
                 }
+                view.setLoggableLinkClickListener(xRayResult, position)
             } else if (view.id == R.id.inner_indicator_view_id) {
                 view.isVisible = isInXRayMode && showInnerAdapterIndicator
             } else {
@@ -216,7 +218,14 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     }
 
     private fun View.setLoggableLinkClickListener(xRayResult: XRayResult, position: Int) {
-        alpha = if (overlayHideController.isOverlayHidden[position]) 0.0f else 1.0f
+        val isHidden = overlayHideController.isOverlayHidden.getOrNull(position)
+        // WARNING: Temporary workaround. Remove it
+        if (isHidden == null) {
+            setOnClickListener(null)
+            return
+        }
+
+        alpha = if (isHidden) 0.0f else 1.0f
         setOnClickListener {
             val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
             Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
