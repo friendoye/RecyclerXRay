@@ -31,18 +31,34 @@ class XRayInitializerTest {
 
     @Test
     fun `Check init in no-op mode`() {
-        val mockApiProvider = mockk<() -> RecyclerXRayApi>()
-        XRayInitializer.NO_OP_PROVIDER = mockApiProvider
+        val mockApi = mockk<RecyclerXRayApi>()
+        val fakeApiProvider: (XRaySettings) -> RecyclerXRayApi = { mockApi }
+        XRayInitializer.NO_OP_PROVIDER = fakeApiProvider
 
         XRayInitializer.init(isNoOpMode = true)
 
         Assert.assertTrue(XRayInitializer.isInitialized)
-        Assert.assertEquals(XRayInitializer.xRayApiProvider, mockApiProvider)
+        Assert.assertEquals(XRayInitializer.xRayApiProvider(), mockApi)
     }
 
     @Test(expected = Exception::class)
     fun `Cannot init more than 1 time`() {
         XRayInitializer.init()
         XRayInitializer.init()
+    }
+
+    @Test()
+    fun `Check has default settings by default`() {
+        XRayInitializer.init(isNoOpMode = false)
+
+        Assert.assertNotNull(LocalRecyclerXRay().settings)
+    }
+
+    @Test()
+    fun `Check settings is configurable`() {
+        val mockSettings = mockk<XRaySettings>()
+        XRayInitializer.init(isNoOpMode = false, defaultXRaySettings = mockSettings)
+
+        Assert.assertEquals(LocalRecyclerXRay().settings, mockSettings)
     }
 }

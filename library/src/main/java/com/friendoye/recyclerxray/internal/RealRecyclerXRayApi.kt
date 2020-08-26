@@ -7,7 +7,9 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicLong
 
 
-internal class RealRecyclerXRayApi : RecyclerXRayApi {
+internal class RealRecyclerXRayApi(
+    defaultSettings: XRaySettings = XRaySettings.Builder().build()
+) : RecyclerXRayApi {
 
     companion object {
         internal var counter = AtomicLong(0)
@@ -20,7 +22,7 @@ internal class RealRecyclerXRayApi : RecyclerXRayApi {
     // TODO: Check possibility not to keep several refs to same adapter
     internal val adapters: MutableSet<WeakReference<RecyclerView.Adapter<*>>> = mutableSetOf()
     internal var isInXRayMode = false
-    override var settings: XRaySettings = XRaySettings.Builder().build()
+    override var settings: XRaySettings = defaultSettings
 
     override fun toggleSecrets() {
         if (isInXRayMode) {
