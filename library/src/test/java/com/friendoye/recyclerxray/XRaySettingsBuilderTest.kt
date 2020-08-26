@@ -92,4 +92,21 @@ class XRaySettingsBuilderTest {
             result.nestedXRaySettingsProvider, mockNestedXRaySettingsProvider
         )
     }
+
+    @Test
+    fun `failOnNotFullyWrappedAdapter is true by default`() {
+        val builder = XRaySettings.Builder()
+        val result = builder.build()
+        Assert.assertTrue(result.failOnNotFullyWrappedAdapter)
+    }
+
+    @Test
+    fun `failOnNotFullyWrappedAdapter is configurable`() {
+        val builder = XRaySettings.Builder()
+            .failOnNotFullyWrappedAdapter(false)
+        val result = builder.build()
+        Assert.assertEquals(
+            result.failOnNotFullyWrappedAdapter, false
+        )
+    }
 }

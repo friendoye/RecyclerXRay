@@ -12,15 +12,20 @@ data class XRaySettings internal constructor(
     @Dimension(unit = PX) val minDebugViewSize: Int?,
     val label: String?,
     val enableNestedRecyclersSupport: Boolean,
-    val nestedXRaySettingsProvider: NestedXRaySettingsProvider?
+    val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
+    val failOnNotFullyWrappedAdapter: Boolean
 ) {
 
+    /**
+     * Builder class for [XRaySettings].
+     */
     class Builder(
         internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder(),
         @Dimension(unit = PX) internal var minDebugViewSize: Int? = null,
         internal var label: String? = null,
         internal var enableNestedRecyclersSupport: Boolean = false,
-        internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null
+        internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null,
+        internal var failOnNotFullyWrappedAdapter: Boolean = true
     ) {
 
         /**
@@ -64,6 +69,14 @@ data class XRaySettings internal constructor(
         }
 
         /**
+         * Indicates, whether [LocalRecyclerXRay] should raise exception,
+         * if not all [RecyclerView.Adapter] in [ConcatAdapter] are wrapped by [LocalRecyclerXRay].
+         */
+        fun failOnNotFullyWrappedAdapter(shouldFail: Boolean) = apply {
+            failOnNotFullyWrappedAdapter = shouldFail
+        }
+
+        /**
          * Prepares [XRaySettings].
          */
         fun build(): XRaySettings = XRaySettings(
@@ -71,7 +84,8 @@ data class XRaySettings internal constructor(
             minDebugViewSize = minDebugViewSize,
             label = label,
             enableNestedRecyclersSupport = enableNestedRecyclersSupport,
-            nestedXRaySettingsProvider = nestedXRaySettingsProvider
+            nestedXRaySettingsProvider = nestedXRaySettingsProvider,
+            failOnNotFullyWrappedAdapter = failOnNotFullyWrappedAdapter
         )
     }
 }

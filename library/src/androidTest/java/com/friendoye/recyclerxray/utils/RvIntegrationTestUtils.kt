@@ -55,8 +55,10 @@ class RvIntegrationTestAdapter(
         return when (items[position]) {
             is IntegrationTestItemType.Visible -> 1
             is IntegrationTestItemType.LargeVisible -> 2
-            is IntegrationTestItemType.Ghost -> 3
-            is IntegrationTestItemType.InnerRecycler -> 4
+            is IntegrationTestItemType.SmallOne -> 3
+            is IntegrationTestItemType.SmallTwo -> 4
+            is IntegrationTestItemType.Ghost -> 5
+            is IntegrationTestItemType.InnerRecycler -> 6
         }
     }
 
@@ -64,8 +66,10 @@ class RvIntegrationTestAdapter(
         return when (viewType) {
             1 -> VisibleViewHolder.fromParent(parent)
             2 -> LargeVisibleViewHolder.fromParent(parent)
-            3 -> GhostViewHolder.fromParent(parent)
-            4 -> InnerRecyclerViewHolder.create(parent, innerWrapper)
+            3 -> SmallOneViewHolder.fromParent(parent)
+            4 -> SmallTwoViewHolder.fromParent(parent)
+            5 -> GhostViewHolder.fromParent(parent)
+            6 -> InnerRecyclerViewHolder.create(parent, innerWrapper)
             else -> throw IllegalStateException("Could not find ItemType for viewType = $viewType")
         }
     }
@@ -83,6 +87,8 @@ class RvIntegrationTestAdapter(
 sealed class IntegrationTestItemType {
     object Visible : IntegrationTestItemType()
     object LargeVisible : IntegrationTestItemType()
+    object SmallOne : IntegrationTestItemType()
+    object SmallTwo : IntegrationTestItemType()
     data class Ghost(val forceVisibility: Boolean = false) : IntegrationTestItemType()
     data class InnerRecycler(
         val changeAdapter: Boolean,
@@ -107,6 +113,26 @@ class LargeVisibleViewHolder private constructor(root: View) : RecyclerView.View
             val root = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_integration_large_visible_test_layout, parent, false)
             return LargeVisibleViewHolder(root)
+        }
+    }
+}
+
+class SmallOneViewHolder private constructor(root: View) : RecyclerView.ViewHolder(root) {
+    companion object {
+        fun fromParent(parent: ViewGroup): SmallOneViewHolder {
+            val root = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_integration_small_one_test_layout, parent, false)
+            return SmallOneViewHolder(root)
+        }
+    }
+}
+
+class SmallTwoViewHolder private constructor(root: View) : RecyclerView.ViewHolder(root) {
+    companion object {
+        fun fromParent(parent: ViewGroup): SmallTwoViewHolder {
+            val root = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_integration_small_two_test_layout, parent, false)
+            return SmallTwoViewHolder(root)
         }
     }
 }

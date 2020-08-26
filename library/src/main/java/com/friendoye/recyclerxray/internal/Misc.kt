@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.children
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import java.lang.ref.WeakReference
 import java.util.*
@@ -124,3 +125,24 @@ internal fun View.startGripAnimation() {
         }
     animator.start()
 }
+
+internal fun RecyclerView.Adapter<*>.checkIsWrappedCorrectly(): Boolean {
+    val recyclerAdapter = this
+    val isFullyWrappedOutside = recyclerAdapter is ScannableRecyclerAdapter
+    val isFullyWrappedInside = recyclerAdapter is ConcatAdapter &&
+            (recyclerAdapter.hasIsolateViewTypes || recyclerAdapter.adapters.all { it is ScannableRecyclerAdapter })
+
+    return isFullyWrappedOutside || isFullyWrappedInside
+}
+
+private val ConcatAdapter.hasIsolateViewTypes: Boolean
+    get() {
+        val controllerField = ConcatAdapter::class.java.getDeclaredField("mController")
+        controllerField.isAccessible = true
+        val controller = controllerField.get(this)
+        val viewTypeStorageField = controller::class.java.getDeclaredField("mViewTypeStorage")
+        viewTypeStorageField.isAccessible = true
+        val viewTypeStorage = viewTypeStorageField.get(controller)
+        val storageType = viewTypeStorage::class.java.simpleName
+        return storageType == "IsolatedViewTypeStorage"
+    }
