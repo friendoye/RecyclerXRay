@@ -1,6 +1,5 @@
 package com.friendoye.recyclerxray
 
-import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -8,9 +7,12 @@ import com.friendoye.recyclerxray.testing.ExceptionShooter
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.TestActivity
 import com.friendoye.recyclerxray.utils.createTestAdapter
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
-
 
 @RunWith(AndroidJUnit4::class)
 class MultipleRecyclerXRayTest {

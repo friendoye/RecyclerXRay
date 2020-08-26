@@ -61,14 +61,12 @@ subprojects {
 
                 format 'misc', {
                     target '**/*.gradle', '**/*.md', '**/.gitignore'
-                    endWithNewline()
                     indentWithSpaces()
                     trimTrailingWhitespace()
                 }
 
                 format 'xml', {
                     target '**/*.xml'
-                    endWithNewline()
                     indentWithSpaces()
                     trimTrailingWhitespace()
                 }

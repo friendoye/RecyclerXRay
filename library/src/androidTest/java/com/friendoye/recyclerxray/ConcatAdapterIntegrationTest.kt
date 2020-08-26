@@ -3,10 +3,15 @@ package com.friendoye.recyclerxray
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.friendoye.recyclerxray.utils.*
-import com.friendoye.recyclerxray.utils.IntegrationTestItemType.*
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
+import com.friendoye.recyclerxray.utils.TestActivity
+import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
+import com.friendoye.recyclerxray.utils.dip
+import com.friendoye.recyclerxray.utils.ensureAllViewHoldersBind
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
 import org.junit.Before

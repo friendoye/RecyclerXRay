@@ -1,8 +1,6 @@
 package com.friendoye.recyclerxray.internal
 
 import android.animation.AnimatorInflater
-import com.friendoye.recyclerxray.R
-
 import android.graphics.Color
 import android.util.Log
 import android.view.View
@@ -11,8 +9,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.children
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.friendoye.recyclerxray.R
 import java.lang.ref.WeakReference
-import java.util.*
+import java.util.Random
 import kotlin.math.sqrt
 
 internal val GOLDEN_RATIO_CONSTANT = (1.0 + sqrt(5.0)).toFloat() / 2
@@ -32,8 +31,8 @@ internal fun Random.generateColorSequence(): Sequence<Int> {
         hue %= 1
         Color.HSVToColor(floatArrayOf(
             360 * hue, // hue
-            0.5f,      // saturation
-            0.95f      // value
+            0.5f, // saturation
+            0.95f // value
         ))
     }
 }
@@ -118,7 +117,7 @@ internal fun <T> View.findFirstView(clazz: Class<T>): T? {
 
 internal fun View.startGripAnimation() {
     val animator = AnimatorInflater
-        .loadAnimator(context,R.animator.grip_animator)
+        .loadAnimator(context, R.animator.grip_animator)
         .apply {
             setTarget(this@startGripAnimation)
             interpolator = AccelerateDecelerateInterpolator()

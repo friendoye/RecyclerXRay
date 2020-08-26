@@ -10,7 +10,6 @@ import com.friendoye.recyclerxray.XRayDebugViewHolder
 import com.friendoye.recyclerxray.XRayResult
 import com.friendoye.recyclerxray.test.R
 
-
 fun createAdapterWithCustomParams(
     viewHoldersParams: List<Map<String, Any?>?>,
     adapterParams: (Int) -> Map<String, Any?>?
@@ -65,13 +64,11 @@ class CustomParamsTestAdapter constructor(
     override fun getItemCount(): Int = viewHolderProviders.size
 }
 
-
 class CustomParamsTestViewHolder constructor(
     view: View,
     private val paramsProviderDelegate: XRayCustomParamsViewHolderProvider
 ) : RecyclerView.ViewHolder(view),
     XRayCustomParamsViewHolderProvider by paramsProviderDelegate
-
 
 class ResultRecordableXRayDebugViewHolder<K : Any>(
     private val keyProvider: (XRayResult) -> K,
@@ -81,7 +78,7 @@ class ResultRecordableXRayDebugViewHolder<K : Any>(
     val resultsMap = mutableMapOf<K, XRayResult>()
 
     override fun provideView(parent: ViewGroup): View {
-        return View(parent.context) //?
+        return View(parent.context) // ?
     }
 
     override fun bindView(debugView: View, result: XRayResult) {

@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.RecyclerXRayIsNotInitializedException
 import com.friendoye.recyclerxray.XRaySettings
 
-
 internal object NotInitializedRecyclerXRayApi : RecyclerXRayApi {
 
     override var settings: XRaySettings

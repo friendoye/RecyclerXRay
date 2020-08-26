@@ -3,7 +3,6 @@ package com.friendoye.recyclerxray.internal
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRaySettings
 
-
 @Suppress("SetterBackingFieldAssignment", "UNCHECKED_CAST")
 internal class NoOpRecyclerXRayApi(
     defaultSettings: XRaySettings

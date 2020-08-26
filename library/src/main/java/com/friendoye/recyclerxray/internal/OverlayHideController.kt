@@ -1,7 +1,6 @@
 package com.friendoye.recyclerxray.internal
 
 import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 internal class OverlayHideController(
@@ -38,7 +37,6 @@ internal class OverlayHideController(
                     }
                     logOverlayHiddenFlagsState()
                 }
-                
             }
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
@@ -71,15 +69,15 @@ internal class OverlayHideController(
                 Log.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onItemRangeMoved($fromPosition, $toPosition, $itemCount)")
                 val areHidden = (0..itemCount).map { _isOverlayHidden[fromPosition] }
                 _isOverlayHidden.addAll(toPosition, areHidden)
-                repeat (itemCount) { _isOverlayHidden.removeAt(fromPosition) }
+                repeat(itemCount) { _isOverlayHidden.removeAt(fromPosition) }
                 logOverlayHiddenFlagsState()
             }
         }
-        
+
         Log.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onAttachedToRecyclerView()")
         _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
         logOverlayHiddenFlagsState()
-        
+
         dataObserver?.let {
             ownerAdapter.registerAdapterDataObserver(it)
         }
@@ -91,7 +89,7 @@ internal class OverlayHideController(
         }
         dataObserver = null
     }
-    
+
     private fun logOverlayHiddenFlagsState() {
         Log.d(DEFAULT_INTERNAL_LOG_TAG, _isOverlayHidden.joinToString())
     }

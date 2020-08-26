@@ -3,7 +3,7 @@ package com.friendoye.recyclerxray
 import com.friendoye.recyclerxray.internal.NotInitializedRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RealRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RecyclerXRayApi
-import io.mockk.*
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test

@@ -2,11 +2,15 @@ package com.friendoye.recyclerxray
 
 import androidx.test.core.app.launchActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.*
-import org.junit.runner.RunWith
-import com.friendoye.recyclerxray.utils.*
+import com.friendoye.recyclerxray.utils.ResultRecordableXRayDebugViewHolder
+import com.friendoye.recyclerxray.utils.TestActivity
+import com.friendoye.recyclerxray.utils.createAdapterWithCustomParams
 import java.util.concurrent.CountDownLatch
-
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class XRayCustomParamsProvidersTest {

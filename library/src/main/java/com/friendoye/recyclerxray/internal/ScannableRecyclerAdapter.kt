@@ -8,13 +8,19 @@ import androidx.annotation.Dimension
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
-import com.friendoye.recyclerxray.*
+import com.friendoye.recyclerxray.MultipleRecyclerXRayAttachedException
+import com.friendoye.recyclerxray.NestedXRaySettingsProvider
+import com.friendoye.recyclerxray.R
+import com.friendoye.recyclerxray.RecyclerAdapterNotFullyWrappedException
+import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
+import com.friendoye.recyclerxray.XRayDebugViewHolder
+import com.friendoye.recyclerxray.XRayResult
+import com.friendoye.recyclerxray.getLoggableLinkToFileWithClass
+import com.friendoye.recyclerxray.isViewVisibleForUser
 import com.friendoye.recyclerxray.testing.ExceptionShooter
-
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
@@ -125,8 +131,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         // To ensure correct bindings, rebind VH info before view bindings.
         holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
 
-        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
-                && innerAdapterWatcher.hasInnerAdapter(holder)
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
+                innerAdapterWatcher.hasInnerAdapter(holder)
 
         holder.originalItemViewContext { holder ->
             super.onBindViewHolder(holder, position)
@@ -156,8 +162,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         // To ensure correct bindings, rebind VH info before view bindings.
         holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
 
-        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
-                && innerAdapterWatcher.hasInnerAdapter(holder)
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
+                innerAdapterWatcher.hasInnerAdapter(holder)
 
         holder.bindXRayMode(
             itemType = holder.itemViewType,
@@ -169,12 +175,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
     // TODO: Unstable API
     private fun T.bindXRayMode() {
-        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport
-                && innerAdapterWatcher.hasInnerAdapter(this)
+        val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
+                innerAdapterWatcher.hasInnerAdapter(this)
 
         bindXRayMode(
             // TODO: WARNING: Temporary workaround. Remove it
-            itemType = itemViewType, //getItemViewType(bindingAdapterPosition),
+            itemType = itemViewType, // getItemViewType(bindingAdapterPosition),
             isInXRayMode = isInXRayModeProvider(),
             showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
             // TODO: WARNING: Temporary workaround. Remove it
@@ -186,9 +192,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         )
     }
 
-    private fun T.bindXRayMode(itemType: Int, isInXRayMode: Boolean,
-                               showInnerAdapterIndicator: Boolean,
-                               customParamsFromAdapter: Map<String, Any?>?) {
+    private fun T.bindXRayMode(
+        itemType: Int,
+        isInXRayMode: Boolean,
+        showInnerAdapterIndicator: Boolean,
+        customParamsFromAdapter: Map<String, Any?>?
+    ) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
             if (view.tag == "DEBUG") {
                 view.isVisible = isInXRayMode && !showInnerAdapterIndicator

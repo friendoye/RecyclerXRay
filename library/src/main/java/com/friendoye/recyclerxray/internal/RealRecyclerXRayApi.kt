@@ -2,10 +2,9 @@ package com.friendoye.recyclerxray.internal
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.*
+import com.friendoye.recyclerxray.XRaySettings
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicLong
-
 
 internal class RealRecyclerXRayApi(
     defaultSettings: XRaySettings = XRaySettings.Builder().build()

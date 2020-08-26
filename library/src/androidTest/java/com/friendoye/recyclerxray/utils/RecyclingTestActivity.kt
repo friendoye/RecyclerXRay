@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

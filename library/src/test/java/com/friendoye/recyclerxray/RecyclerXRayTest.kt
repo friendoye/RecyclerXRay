@@ -1,10 +1,11 @@
 package com.friendoye.recyclerxray
 
 import com.friendoye.recyclerxray.internal.RecyclerXRayApi
-import io.mockk.*
+import io.mockk.Called
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.After
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 
 class RecyclerXRayTest {

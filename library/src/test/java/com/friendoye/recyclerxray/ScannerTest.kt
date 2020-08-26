@@ -2,13 +2,17 @@ package com.friendoye.recyclerxray
 
 import android.view.View
 import com.friendoye.recyclerxray.internal.Scanner
-import com.friendoye.recyclerxray.stubs.*
+import com.friendoye.recyclerxray.stubs.TestViewHolder1
+import com.friendoye.recyclerxray.stubs.TestViewHolder2
+import com.friendoye.recyclerxray.stubs.TestViewHolder3
+import com.friendoye.recyclerxray.stubs.TestViewHolder4
+import com.friendoye.recyclerxray.stubs.XRayCustomParamsDelegateViewHolder
 import io.mockk.mockk
+import java.util.Random
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class ScannerTest {
@@ -62,7 +66,7 @@ class ScannerTest {
     @Test
     fun `Custom params are correctly merged`() {
         val scanner = Scanner()
-        
+
         val customParamsViewHolder = XRayCustomParamsDelegateViewHolder(
             paramsProviderDelegate = object : XRayCustomParamsViewHolderProvider {
                 override fun provideCustomParams(): Map<String, Any?>? {

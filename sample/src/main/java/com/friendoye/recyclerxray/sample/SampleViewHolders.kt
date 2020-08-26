@@ -3,14 +3,15 @@ package com.friendoye.recyclerxray.sample
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
-import com.friendoye.recyclerxray.sample.databinding.*
-
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleEmptyBinding
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleHorizontalRecyclerBinding
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleLargeBinding
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleSmallBinding
+import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
 
 @SuppressLint("SetTextI18n")
 class SmallViewHolder private constructor(

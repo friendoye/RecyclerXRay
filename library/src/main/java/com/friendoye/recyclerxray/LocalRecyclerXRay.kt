@@ -20,7 +20,7 @@ open class LocalRecyclerXRay internal constructor(
     xRayApiProvider: () -> RecyclerXRayApi
 ) {
 
-    constructor(): this(XRayInitializer.xRayApiProvider)
+    constructor() : this(XRayInitializer.xRayApiProvider)
 
     internal val xRayApi: RecyclerXRayApi by lazy(
         mode = LazyThreadSafetyMode.NONE,
@@ -59,7 +59,8 @@ open class LocalRecyclerXRay internal constructor(
     ): RecyclerView.Adapter<VH> = xRayApi.wrap(adapter)
 
     internal fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
-        adapter: T, settings: XRaySettings
+        adapter: T,
+        settings: XRaySettings
     ): RecyclerView.Adapter<VH> = xRayApi.wrap(adapter, settings)
 
     /**
@@ -70,5 +71,4 @@ open class LocalRecyclerXRay internal constructor(
     fun <T : RecyclerView.Adapter<out RecyclerView.ViewHolder>> unwrap(
         adapter: RecyclerView.Adapter<*>
     ): T = xRayApi.unwrap(adapter)
-
 }

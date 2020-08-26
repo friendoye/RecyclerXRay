@@ -14,9 +14,11 @@ internal class HolderViewWrapper(
     @Dimension(unit = Dimension.PX) private val minDebugViewSize: Int?
 ) {
 
-    fun wrap(holderWrapperView: View,
-             holderItemParams: ViewGroup.LayoutParams?,
-             @RecyclerView.Orientation recyclerOrientation: Int): ConstraintLayout {
+    fun wrap(
+        holderWrapperView: View,
+        holderItemParams: ViewGroup.LayoutParams?,
+        @RecyclerView.Orientation recyclerOrientation: Int
+    ): ConstraintLayout {
         val context = holderWrapperView.context
         val xRayContainer = ConstraintLayout(context).apply {
             id = R.id.parent_constraint_layout_id
@@ -55,15 +57,18 @@ internal class HolderViewWrapper(
         return xRayContainer
     }
 
-    private fun createMatchViewConstraint(childId: Int, parentId: Int,
-                                          @RecyclerView.Orientation recyclerOrientation: Int) = ConstraintSet().apply {
-        connect(childId, ConstraintSet.LEFT,   parentId, ConstraintSet.LEFT)
-        connect(childId, ConstraintSet.RIGHT,  parentId, ConstraintSet.RIGHT)
-        connect(childId, ConstraintSet.TOP,    parentId, ConstraintSet.TOP)
+    private fun createMatchViewConstraint(
+        childId: Int,
+        parentId: Int,
+        @RecyclerView.Orientation recyclerOrientation: Int
+    ) = ConstraintSet().apply {
+        connect(childId, ConstraintSet.LEFT, parentId, ConstraintSet.LEFT)
+        connect(childId, ConstraintSet.RIGHT, parentId, ConstraintSet.RIGHT)
+        connect(childId, ConstraintSet.TOP, parentId, ConstraintSet.TOP)
         connect(childId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
         minDebugViewSize?.let {
             when (recyclerOrientation) {
-                RecyclerView.VERTICAL   -> constrainMinHeight(childId, it)
+                RecyclerView.VERTICAL -> constrainMinHeight(childId, it)
                 RecyclerView.HORIZONTAL -> constrainMinWidth(childId, it)
             }
         }
