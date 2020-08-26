@@ -25,7 +25,7 @@ internal class OverlayHideController(
             override fun onChanged() {
                 Log.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onChanged()")
                 recyclerView.handler.postAtFrontOfQueue {
-                    _isOverlayHidden = (0..ownerAdapter.itemCount).map { false }.toMutableList()
+                    _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
                     logOverlayHiddenFlagsState()
                 }
             }
@@ -33,7 +33,7 @@ internal class OverlayHideController(
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 Log.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onItemRangeChanged($positionStart, $itemCount)")
                 if (!isInXRayModeProvider()) {
-                    (0..itemCount).map { index ->
+                    (0 until itemCount).map { index ->
                         _isOverlayHidden[positionStart + index] = false
                     }
                     logOverlayHiddenFlagsState()
@@ -44,7 +44,7 @@ internal class OverlayHideController(
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
                 Log.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onItemRangeChanged($positionStart, $itemCount, $payload)")
                 if (!isInXRayModeProvider()) {
-                    (0..itemCount).map { index ->
+                    (0 until itemCount).map { index ->
                         _isOverlayHidden[positionStart + index] = false
                     }
                     logOverlayHiddenFlagsState()
