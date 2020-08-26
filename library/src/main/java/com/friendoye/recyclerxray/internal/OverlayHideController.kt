@@ -73,7 +73,7 @@ internal class OverlayHideController(
                 Log.i("DataChange", _isOverlayHidden.joinToString())
             }
         }
-        _isOverlayHidden = (0..ownerAdapter.itemCount).map { false }.toMutableList()
+        _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
         dataObserver?.let {
             ownerAdapter.registerAdapterDataObserver(it)
         }
