@@ -9,7 +9,7 @@ jobs:
   assemble:
     name: Assemble
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
     name: Checks
     needs: assemble
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v2
@@ -54,7 +54,7 @@ jobs:
     name: Instrumentation tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
 
     strategy:
       fail-fast: false
@@ -90,7 +90,7 @@ jobs:
     name: Screenshot tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v2
