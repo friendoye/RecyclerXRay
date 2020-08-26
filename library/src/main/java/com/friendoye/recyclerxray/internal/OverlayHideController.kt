@@ -10,7 +10,7 @@ internal class OverlayHideController(
 ) {
 
     private var _isOverlayHidden: MutableList<Boolean> = mutableListOf()
-    public val isOverlayHidden: List<Boolean>
+    val isOverlayHidden: List<Boolean>
         get() = _isOverlayHidden
 
     private var dataObserver: RecyclerView.AdapterDataObserver? = null
