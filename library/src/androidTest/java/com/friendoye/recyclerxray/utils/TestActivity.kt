@@ -3,6 +3,7 @@ package com.friendoye.recyclerxray.utils
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ComponentActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,11 @@ class TestActivity : ComponentActivity() {
             layoutManager = layoutManagerProvider(rootView)
             itemAnimator = null
             addItemDecoration(
-                DividerItemDecoration(this@TestActivity, RecyclerView.VERTICAL)
+                DividerItemDecoration(this@TestActivity, RecyclerView.VERTICAL).apply {
+                    setDrawable(
+                        ContextCompat.getDrawable(this@TestActivity, R.drawable.drawable_vert_divider)!!
+                    )
+                }
             )
         }
     }
