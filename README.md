@@ -64,14 +64,19 @@ override fun onCreate() {
 }
 ```
 
-If you need want to control no-op mode manually, use this version:
+If you need more fine-grained control, you can use the following method:
 
 ```kotlin
 // SampleApplication.kt
 
 override fun onCreate() {
     super.onCreate()
-    XRayInitializer.init(isNoOpMode = true)
+    XRayInitializer.init(
+        isNoOpMode = true, // to control no-op mode
+        defaultXRaySettings = XRaySettings
+            .Builder()
+            .build()       // to set different default settings for each LocalRecyclerXRay
+    )
 }
 ```
 

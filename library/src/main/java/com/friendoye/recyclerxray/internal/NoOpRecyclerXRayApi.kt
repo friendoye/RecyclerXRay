@@ -5,9 +5,11 @@ import com.friendoye.recyclerxray.XRaySettings
 
 
 @Suppress("SetterBackingFieldAssignment", "UNCHECKED_CAST")
-internal object NoOpRecyclerXRayApi : RecyclerXRayApi {
+internal class NoOpRecyclerXRayApi(
+    defaultSettings: XRaySettings
+) : RecyclerXRayApi {
 
-    override var settings: XRaySettings = XRaySettings.Builder().build()
+    override var settings: XRaySettings = defaultSettings
         set(value) {}
 
     override fun toggleSecrets() {
