@@ -3,9 +3,11 @@ name: pull-request-checks
 on:
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - '**.md'
 
 jobs:
-  # Build .apk to check
+  # Builds and checks .apk and .aar
   assemble:
     name: Assemble
     runs-on: ubuntu-latest
@@ -13,31 +15,52 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: gradle/wrapper-validation-action@v1
     - uses: actions/setup-java@v1
       with:
         java-version: 1.8
 
-    - name: Assemble library
-      run: ./gradlew :library:assembleDebug --build-cache --no-daemon --stacktrace
+    - name: Generate cache key
+      run: ./checksum.sh checksum.txt
 
-    - name: Assemble sample
-      run: ./gradlew :sample:assembleDebug --build-cache --no-daemon --stacktrace
+    - uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
-  # Executes checks (unit tests, linter and etc.)
-  checks:
-    name: Checks
+    - name: Assemble
+      run: ./gradlew assemble --build-cache --no-daemon --stacktrace --scan
+
+  # Runs unit tests
+  unit-tests:
+    name: Unit tests
     needs: assemble
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
 
-      - name: Execute check with Gradle
-        run: ./gradlew :library:testDebug --build-cache --no-daemon --stacktrace
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # - name: Execute check with Gradle
+      #   run: ./gradlew :library:testDebug --build-cache --no-daemon --stacktrace
+      - name: Execute checks
+        run: ./gradlew check --build-cache --no-daemon --stacktrace
 
       - name: Zip test reports
         run: find . -type d -regex ".*/build/reports/tests/.*DebugUnitTest" -exec zip -r reports.zip {} +
@@ -67,9 +90,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -94,9 +128,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Screenshot Tests
         uses: reactivecircus/android-emulator-runner@v2
