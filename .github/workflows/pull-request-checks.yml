@@ -84,7 +84,7 @@ jobs:
     name: Instrumentation tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     strategy:
       fail-fast: true
@@ -138,7 +138,7 @@ jobs:
     name: Screenshot tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v2
