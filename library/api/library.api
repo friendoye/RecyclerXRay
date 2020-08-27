@@ -139,12 +139,3 @@ public final class com/friendoye/recyclerxray/XRaySettings$Builder {
 	public final fun withNestedXRaySettingsProvider (Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 }
 
-public final class com/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding : androidx/viewbinding/ViewBinding {
-	public final field debugInfoTextView Landroid/widget/TextView;
-	public static fun bind (Landroid/view/View;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
-}
-
