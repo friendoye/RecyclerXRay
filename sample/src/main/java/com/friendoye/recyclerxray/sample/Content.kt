@@ -2,8 +2,11 @@ package com.friendoye.recyclerxray.sample
 
 import com.friendoye.recyclerxray.sample.InnerItemType.Box
 import com.friendoye.recyclerxray.sample.InnerItemType.Circle
-import com.friendoye.recyclerxray.sample.ItemType.*
-
+import com.friendoye.recyclerxray.sample.ItemType.Empty
+import com.friendoye.recyclerxray.sample.ItemType.HorizontalRecycler
+import com.friendoye.recyclerxray.sample.ItemType.Large
+import com.friendoye.recyclerxray.sample.ItemType.Small
+import com.friendoye.recyclerxray.sample.ItemType.Widest
 
 val SAMPLE_DATA_FULL = listOf(
     Small(1), Small(2), Small(3),

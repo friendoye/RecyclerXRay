@@ -136,8 +136,8 @@ class RealRecyclerXRayApiTest {
     fun `wrap()-unwrap() returns same adapter`() {
         val recyclerApi = RealRecyclerXRayApi()
 
-        val result: RecyclerView.Adapter<RecyclerView.ViewHolder>
-                = recyclerApi.unwrap(recyclerApi.wrap(adapter))
+        val result: RecyclerView.Adapter<RecyclerView.ViewHolder> =
+                recyclerApi.unwrap(recyclerApi.wrap(adapter))
 
         Assert.assertEquals(result, adapter)
     }

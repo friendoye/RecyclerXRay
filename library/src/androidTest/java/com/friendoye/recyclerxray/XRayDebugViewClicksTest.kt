@@ -2,15 +2,21 @@ package com.friendoye.recyclerxray
 
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.rule.ActivityTestRule
-import com.friendoye.recyclerxray.utils.*
-import com.friendoye.recyclerxray.utils.IntegrationTestItemType.*
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.SmallOne
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.SmallTwo
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
+import com.friendoye.recyclerxray.utils.RecyclingTestActivity
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
+import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
+import com.friendoye.recyclerxray.utils.createTestAdapter
+import com.friendoye.recyclerxray.utils.recyclingTestScreen
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
 
 class XRayDebugViewClicksTest : ScreenshotTest {
 
@@ -95,7 +101,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
                 .build()
         }
         val fullItems = listOf(SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems = listOf(SmallOne,/* SmallOne, SmallOne,*/ SmallTwo,/* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
+        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
         val testAdapter = createTestAdapter(
             *fullItems.toTypedArray(),
             useDiffUtils = true
@@ -131,7 +137,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
                 .build()
         }
         val fullItems1 = listOf(SmallOne, SmallOne, SmallOne, SmallTwo)
-        val partialItems1 = listOf(SmallOne,/* SmallOne, SmallOne,*/ SmallTwo)
+        val partialItems1 = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo)
         val fullItems2 = listOf(SmallTwo, SmallOne, SmallOne, SmallTwo)
         val partialItems2 = listOf(/* SmallTwo,*/ SmallOne, SmallOne/*, SmallTwo*/)
         val testAdapter1 = createTestAdapter(*fullItems1.toTypedArray(), useDiffUtils = true)
@@ -174,7 +180,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
                 .build()
         }
         val fullItems = listOf(SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems = listOf(SmallOne,/* SmallOne, SmallOne,*/ SmallTwo,/* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
+        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
         val testAdapter = createTestAdapter(
             *partialItems.toTypedArray(),
             useDiffUtils = false
@@ -197,5 +203,4 @@ class XRayDebugViewClicksTest : ScreenshotTest {
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
-
 }

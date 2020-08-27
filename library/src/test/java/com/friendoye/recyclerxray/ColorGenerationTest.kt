@@ -48,9 +48,9 @@ class ColorGenerationTest {
             }
             .sorted().toMutableList()
         val closestHueDistance = generatedHues
-            .apply { add(360.0f + first()) } // Add first element to the end,
-                                             // so we can compute HUE distance
-                                             // between extremes.
+            // Add first element to the end, so we can compute
+            // HUE distance between extremes.
+            .apply { add(360.0f + first()) }
             .zipWithNext { hue1, hue2 -> hue2 - hue1 }
             .min() ?: throw IllegalStateException("Couldn't find min hue distance!")
 

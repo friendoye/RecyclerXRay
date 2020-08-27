@@ -2,7 +2,6 @@ package com.friendoye.recyclerxray.sample
 
 import androidx.recyclerview.widget.DiffUtil
 
-
 open class DiffCalculator<T>(
     var oldItems: List<T>? = null,
     var newItems: List<T>? = null
@@ -24,13 +23,13 @@ open class DiffCalculator<T>(
         return checkEquality(oldItemPosition, newItemPosition)
     }
 
-    protected  fun checkEquality(oldItemPosition: Int, newItemPosition: Int): Boolean {
+    protected fun checkEquality(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = getOldItem(oldItemPosition)
         val newItem = getNewItem(newItemPosition)
         return checkEquality(oldItem, newItem)
     }
 
-    protected  fun getOldItem(position: Int): T? {
+    protected fun getOldItem(position: Int): T? {
         return oldItems?.get(position)
     }
 
@@ -38,7 +37,7 @@ open class DiffCalculator<T>(
         return newItems?.get(position)
     }
 
-    protected  fun checkEquality(oldItem: T?, newItem: T?): Boolean {
+    protected fun checkEquality(oldItem: T?, newItem: T?): Boolean {
         return oldItem == newItem
     }
 }

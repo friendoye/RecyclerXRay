@@ -7,7 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.*
+import com.friendoye.recyclerxray.AdbToggleReceiver
+import com.friendoye.recyclerxray.DefaultXRayDebugViewHolder
+import com.friendoye.recyclerxray.LocalRecyclerXRay
+import com.friendoye.recyclerxray.NestedXRaySettingsProvider
+import com.friendoye.recyclerxray.RecyclerXRay
+import com.friendoye.recyclerxray.XRayResult
+import com.friendoye.recyclerxray.XRaySettings
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
 
@@ -44,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private val adbToggleReceiverForAll = AdbToggleReceiver(this, intentAction = "xray-toggle-all", recyclerXRays = listOf(RecyclerXRay, localRecyclerXRay))
     private val adbToggleReceiverForGlobal = AdbToggleReceiver(this, intentAction = "xray-toggle-global")
-    private val adbToggleReceiverForLocal = AdbToggleReceiver( this, intentAction = "xray-toggle-local", recyclerXRays = listOf(localRecyclerXRay))
+    private val adbToggleReceiverForLocal = AdbToggleReceiver(this, intentAction = "xray-toggle-local", recyclerXRays = listOf(localRecyclerXRay))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -7,7 +7,6 @@ import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
 import com.friendoye.recyclerxray.sample.databinding.ItemInnerBoxBinding
 import com.friendoye.recyclerxray.sample.databinding.ItemInnerCircleBinding
 
-
 class BoxViewHolder private constructor(
     private val binding: ItemInnerBoxBinding
 ) : RecyclerView.ViewHolder(binding.root), Bindable<InnerItemType.Box>,
@@ -33,7 +32,7 @@ class BoxViewHolder private constructor(
 class CircleViewHolder private constructor(
     private val binding: ItemInnerCircleBinding
 ) : RecyclerView.ViewHolder(binding.root), Bindable<InnerItemType.Circle>,
-    XRayCustomParamsViewHolderProvider{
+    XRayCustomParamsViewHolderProvider {
 
     override fun bind(item: InnerItemType.Circle) {
         // Do nothing

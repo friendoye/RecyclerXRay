@@ -6,6 +6,7 @@ buildscript {
         google()
         mavenCentral()
         maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
     }
     dependencies {
@@ -15,7 +16,20 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.17"
         classpath 'com.karumi:shot:4.3.0'
+        classpath "com.gradle:build-scan-plugin:2.4.2"
+        classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
+        classpath "com.dicedmelon.gradle:jacoco-android:0.1.4"
     }
+}
+
+plugins {
+    id 'com.diffplug.gradle.spotless' version '3.28.0'
+}
+
+apply plugin: 'binary-compatibility-validator'
+
+apiValidation {
+    ignoredProjects += ["sample"]
 }
 
 allprojects {
@@ -31,10 +45,65 @@ subprojects {
     ext {
         artifactVersion = '0.3.0'
     }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    apply plugin: 'com.diffplug.gradle.spotless'
+
+    afterEvaluate { project ->
+        if (!project.hasProperty('ignoreLint') || !project.ignoreLint) {
+            spotless {
+                kotlin {
+                    target "**/*.kt"
+                    ktlint('0.35.0')
+                    endWithNewline()
+                    indentWithSpaces()
+                    trimTrailingWhitespace()
+                }
+
+                format 'misc', {
+                    target '**/*.gradle', '**/*.md', '**/.gitignore'
+                    indentWithSpaces()
+                    trimTrailingWhitespace()
+                }
+
+                format 'xml', {
+                    target '**/*.xml'
+                    indentWithSpaces()
+                    trimTrailingWhitespace()
+                }
+            }
+        }
+
+        if (project.hasProperty('android')) {
+            android {
+                viewBinding {
+                    enabled = true
+                }
+
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+
+                kotlinOptions {
+                    jvmTarget = "1.8"
+                    // Adding this flag causes removing of Intrinsics.checkParameterIsNotNull()
+                    // checks in generated Java bytecode, which eases our logic of
+                    // retrieving loggable links to VH files
+                    freeCompilerArgs += ["-Xno-param-assertions"]
+                }
+
+                testOptions {
+                    animationsDisabled = true
+                }
+            }
+        }
+    }
 }
 
 apply plugin: 'android-reporting'
+apply plugin: 'com.gradle.build-scan'
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}

@@ -31,8 +31,10 @@ object XRayInitializer {
      * If debuggable - real implementation, not debuggable - no-op implementation.
      */
     @JvmOverloads
-    fun init(context: Context,
-             defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()) {
+    fun init(
+        context: Context,
+        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()
+    ) {
         val app = context.applicationContext as Application
         val isAppDebuggable = (app.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
         init(isNoOpMode = !isAppDebuggable, defaultXRaySettings = defaultXRaySettings)
@@ -42,8 +44,10 @@ object XRayInitializer {
      * Sets real or no-op implementation for all [LocalRecyclerXRay].
      */
     @JvmOverloads
-    fun init(isNoOpMode: Boolean = false,
-             defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()) {
+    fun init(
+        isNoOpMode: Boolean = false,
+        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()
+    ) {
         if (isInitialized) {
             throw IllegalStateException("RecyclerXRay is already initialized.")
         }

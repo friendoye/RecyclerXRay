@@ -1,12 +1,10 @@
 package com.friendoye.recyclerxray.sample
 
-import android.content.ClipData
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
 import com.friendoye.recyclerxray.sample.ItemType.Companion.getOrdinal
-
 
 class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider {
@@ -20,8 +18,8 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
 
                     // To animate change of horizontal RecyclerView content,
                     // we treat all ItemType.HorizontalRecycler items as the same.
-                    if (oldItem is ItemType.HorizontalRecycler
-                        && newItem is ItemType.HorizontalRecycler) {
+                    if (oldItem is ItemType.HorizontalRecycler &&
+                        newItem is ItemType.HorizontalRecycler) {
                         return true
                     } else {
                         return super.areItemsTheSame(oldItemPosition, newItemPosition)

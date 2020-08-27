@@ -1,6 +1,6 @@
 package com.friendoye.recyclerxray.stubs
 
-class FirstCustomClass()
+class FirstCustomClass
 
 data class SecondCustomClass(
     val integer: Int,

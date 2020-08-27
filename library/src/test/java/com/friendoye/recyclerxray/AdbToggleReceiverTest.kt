@@ -20,7 +20,7 @@ class AdbToggleReceiverTest {
     lateinit var lifecycle: LifecycleRegistry
     lateinit var adbToggleReceiver: AdbToggleReceiver
 
-    val testContext: Context  = ApplicationProvider.getApplicationContext()
+    val testContext: Context = ApplicationProvider.getApplicationContext()
     val recyclerXRayMock = mockk<RecyclerXRay>(relaxUnitFun = true)
 
     @Before

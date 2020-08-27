@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.friendoye.recyclerxray.internal.startGripAnimation
-import kotlinx.android.synthetic.main.xray_item_debug_layout.view.*
+import kotlinx.android.synthetic.main.xray_item_debug_layout.view.debug_info_text_view
 
 /**
  * Default implementation of [XRayDebugViewHolder]. Used by default for all [LocalRecyclerXRay]'s.
