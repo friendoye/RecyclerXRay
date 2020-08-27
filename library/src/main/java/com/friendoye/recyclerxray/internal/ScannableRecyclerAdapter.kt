@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import com.friendoye.recyclerxray.LoggableLinkProvider
 import com.friendoye.recyclerxray.MultipleRecyclerXRayAttachedException
 import com.friendoye.recyclerxray.NestedXRaySettingsProvider
 import com.friendoye.recyclerxray.R
@@ -18,7 +19,6 @@ import com.friendoye.recyclerxray.RecyclerAdapterNotFullyWrappedException
 import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
 import com.friendoye.recyclerxray.XRayDebugViewHolder
 import com.friendoye.recyclerxray.XRayResult
-import com.friendoye.recyclerxray.getLoggableLinkToFileWithClass
 import com.friendoye.recyclerxray.isViewVisibleForUser
 import com.friendoye.recyclerxray.testing.ExceptionShooter
 
@@ -33,6 +33,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     private val enableNestedRecyclersSupport: Boolean,
     private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
     private val failOnNotFullyWrappedAdapter: Boolean,
+    private val loggableLinkProvider: LoggableLinkProvider,
     private val scanner: Scanner = Scanner()
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
@@ -242,7 +243,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         alpha = if (isHidden) 0.0f else 1.0f
         setOnClickListener {
-            val loggableLinkToFile = xRayResult.viewHolderClass.getLoggableLinkToFileWithClass()
+            val loggableLinkToFile = loggableLinkProvider
+                .getLoggableLinkToFileWithClass(xRayResult.viewHolderClass)
             Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
             if (xRayResult.isViewVisibleForUser) {
                 overlayHideController.toggleHidden(position)

@@ -1,5 +1,6 @@
 # RecyclerXRay
 
+![Github Actions](https://github.com/friendoye/RecyclerXRay/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/friendoye/RecyclerXRay/branch/master/graph/badge.svg)](https://codecov.io/gh/friendoye/RecyclerXRay)
 
 `RecyclerXRay` is a debug tool for visual inspection of complex `RecyclerView` layouts. Also it helps you navigate to specific `ViewHolder` faster.
@@ -165,6 +166,8 @@ RecyclerXRay.settings = XRaySettings.Builder()
         .withLabel("test_label")              // Will be used in logs/exceptions to indicate debug
                                               // name for given RecyclerXRay.
         .enableNestedRecyclersSupport(false)  // Enable nested RecyclerView inspecion support
-        .withNestedXRaySettingsProvider(null) // Provide custom XRaySetting for given nested adapter. 
+        .withNestedXRaySettingsProvider(null) // Provide custom XRaySetting for given nested adapter.
+        .withExtraLoggableLinkProviders(...)  // Add extra LoggableLinkProvider's for better integration
+                                              // with other libraries/frameworks.
         .build()
 ```
