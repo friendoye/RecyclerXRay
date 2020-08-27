@@ -17,7 +17,7 @@ class SimpleRunCheckTest {
         get() = activityTestRule.activity
 
     @Test
-    fun useAppContext() {
+    fun simpleUiCheck() {
         activityTestRule.runOnUiThread {
             currentActivity.isFullDataInAdapter = true
         }
