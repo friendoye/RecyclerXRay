@@ -91,6 +91,7 @@ jobs:
       matrix:
         api-level:
           - 15
+          - 19
           - 21
           - 25
           - 29
