@@ -1,6 +1,8 @@
 name: pull-request-checks
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
     branches: [ master ]
     paths-ignore:
@@ -57,18 +59,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Unit Tests
-        run: ./gradlew testDebug --build-cache --no-daemon --stacktrace
+      - name: Unit Tests with coverage
+        run: ./gradlew jacocoTestDebugUnitTestReport --build-cache --no-daemon --stacktrace
       
       - name: Zip test reports
         run: find . -type d -regex ".*/build/reports/tests/.*DebugUnitTest" -exec zip -r reports.zip {} +
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: unit-tests-reports
           path: reports.zip
+
+      - name: Upload tests coverage
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-tests-coverage
+          path: library/build/reports/jacoco
 
   # Runs instrumentation tests
   instrumentation-tests:
@@ -78,12 +87,12 @@ jobs:
     timeout-minutes: 15
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         api-level:
+          - 15
           - 21
-          - 23
-          - 24
+          - 25
           - 29
 
     steps:
@@ -107,15 +116,22 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          arch: x86_64
-          script: ./gradlew connectedDebugAndroidTest mergeAndroidReports --build-cache --no-daemon --stacktrace
+          arch: x86
+          script: ./gradlew connectedCheck mergeAndroidReports --build-cache --no-daemon --stacktrace
 
       - name: Upload tests reports
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: 'android-tests-${{ matrix.api-level }}-reports'
           path: build/reports/androidTests
+
+      - name: Upload tests coverage
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'android-tests-${{ matrix.api-level }}-coverage'
+          path: library/build/reports/coverage
 
   # Runs screenshot tests
   screenshot-tests:
@@ -150,7 +166,31 @@ jobs:
 
       - name: Upload tests reports
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: 'screenshot-tests-reports'
           path: library/build/reports/shot
+
+  # Upload coverage 
+  upload-coverage:
+    name: Upload coverage
+    needs: [unit-tests, instrumentation-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Download unit tests coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: unit-tests-coverage
+
+      - name: Download android tests coverage
+        uses: actions/download-artifact@v2
+        with:
+          name: android-tests-21-coverage
+
+      - uses: codecov/codecov-action@v1
+        with:
+          directory: .
