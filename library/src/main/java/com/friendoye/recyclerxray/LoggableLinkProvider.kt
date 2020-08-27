@@ -2,7 +2,6 @@ package com.friendoye.recyclerxray
 
 import androidx.recyclerview.widget.RecyclerView
 
-
 /**
  * Helper interface for extraction of Android Studio compatible link to file,
  * that could be, for example, logged via Logcat. Android Studio parses
