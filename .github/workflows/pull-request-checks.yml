@@ -9,7 +9,7 @@ on:
 jobs:
   # Builds and checks .apk and .aar
   assemble:
-    name: Assemble and checks
+    name: Assemble and check
     runs-on: ubuntu-latest
     timeout-minutes: 5
 

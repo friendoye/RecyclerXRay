@@ -5,7 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
-import com.friendoye.recyclerxray.R
+import com.friendoye.recyclerxray.test.R
 
 class RecyclingTestRobot {
 
