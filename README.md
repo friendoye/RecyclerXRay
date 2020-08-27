@@ -1,5 +1,6 @@
 # RecyclerXRay
 
+![Github Actions](https://github.com/friendoye/RecyclerXRay/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/friendoye/RecyclerXRay/branch/master/graph/badge.svg)](https://codecov.io/gh/friendoye/RecyclerXRay)
 
 `RecyclerXRay` is a debug tool for visual inspection of complex `RecyclerView` layouts. Also it helps you navigate to specific `ViewHolder` faster.
