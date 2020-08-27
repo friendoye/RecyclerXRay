@@ -84,7 +84,10 @@ internal class RealRecyclerXRayApi(
             this::isInXRayMode,
             settings.enableNestedRecyclersSupport,
             settings.nestedXRaySettingsProvider,
-            settings.failOnNotFullyWrappedAdapter
+            settings.failOnNotFullyWrappedAdapter,
+            CompositeLoggableLinkProvider(
+                settings.extraLinkProviders + DefaultLoggableLinkProvider()
+            )
         )
     }
 

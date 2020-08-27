@@ -8,6 +8,7 @@ class XRaySettingsBuilderTest {
 
     val mockXRayDebugViewHolder: XRayDebugViewHolder = mockk()
     val mockNestedXRaySettingsProvider: NestedXRaySettingsProvider = mockk()
+    val mockLoggableLinkProvider: LoggableLinkProvider = mockk()
 
     @Test
     fun `Create without any parameter`() {
@@ -107,6 +108,26 @@ class XRaySettingsBuilderTest {
         val result = builder.build()
         Assert.assertEquals(
             result.failOnNotFullyWrappedAdapter, false
+        )
+    }
+
+    @Test
+    fun `extraLinkProviders is empty by default`() {
+        val builder = XRaySettings.Builder()
+        val result = builder.build()
+        Assert.assertEquals(
+            result.extraLinkProviders,
+            emptyList<LoggableLinkProvider>()
+        )
+    }
+
+    @Test
+    fun `extraLinkProviders is configurable`() {
+        val builder = XRaySettings.Builder()
+            .withExtraLoggableLinkProviders(listOf(mockLoggableLinkProvider))
+        val result = builder.build()
+        Assert.assertEquals(
+            result.extraLinkProviders, listOf(mockLoggableLinkProvider)
         )
     }
 }

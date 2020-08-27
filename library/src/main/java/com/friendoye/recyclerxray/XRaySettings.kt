@@ -13,7 +13,8 @@ data class XRaySettings internal constructor(
     val label: String?,
     val enableNestedRecyclersSupport: Boolean,
     val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
-    val failOnNotFullyWrappedAdapter: Boolean
+    val failOnNotFullyWrappedAdapter: Boolean,
+    val extraLinkProviders: List<LoggableLinkProvider>
 ) {
 
     /**
@@ -25,7 +26,8 @@ data class XRaySettings internal constructor(
         internal var label: String? = null,
         internal var enableNestedRecyclersSupport: Boolean = false,
         internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null,
-        internal var failOnNotFullyWrappedAdapter: Boolean = true
+        internal var failOnNotFullyWrappedAdapter: Boolean = true,
+        internal var extraLinkProviders: List<LoggableLinkProvider> = listOf()
     ) {
 
         /**
@@ -77,6 +79,14 @@ data class XRaySettings internal constructor(
         }
 
         /**
+         * List of [LoggableLinkProvider], that will be used during loggable link retrieving
+         * for specific [RecyclerView.ViewHolder].
+         */
+        fun withExtraLoggableLinkProviders(linkProviders: List<LoggableLinkProvider>) = apply {
+            this.extraLinkProviders = linkProviders
+        }
+
+        /**
          * Prepares [XRaySettings].
          */
         fun build(): XRaySettings = XRaySettings(
@@ -85,7 +95,8 @@ data class XRaySettings internal constructor(
             label = label,
             enableNestedRecyclersSupport = enableNestedRecyclersSupport,
             nestedXRaySettingsProvider = nestedXRaySettingsProvider,
-            failOnNotFullyWrappedAdapter = failOnNotFullyWrappedAdapter
+            failOnNotFullyWrappedAdapter = failOnNotFullyWrappedAdapter,
+            extraLinkProviders = extraLinkProviders
         )
     }
 }
