@@ -26,8 +26,8 @@ public class com/friendoye/recyclerxray/LocalRecyclerXRay {
 	public final fun wrap (Landroidx/recyclerview/widget/RecyclerView$Adapter;)Landroidx/recyclerview/widget/RecyclerView$Adapter;
 }
 
-public final class com/friendoye/recyclerxray/LoggableLinkUtilsKt {
-	public static final fun getLoggableLinkToFileWithClass (Ljava/lang/Class;)Ljava/lang/String;
+public abstract interface class com/friendoye/recyclerxray/LoggableLinkProvider {
+	public abstract fun getLoggableLinkToFileWithClass (Ljava/lang/Class;)Ljava/lang/String;
 }
 
 public final class com/friendoye/recyclerxray/MultipleRecyclerXRayAttachedException : java/lang/IllegalStateException {
@@ -113,11 +113,13 @@ public final class com/friendoye/recyclerxray/XRaySettings {
 	public final fun component4 ()Z
 	public final fun component5 ()Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;
 	public final fun component6 ()Z
-	public final fun copy (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;Z)Lcom/friendoye/recyclerxray/XRaySettings;
-	public static synthetic fun copy$default (Lcom/friendoye/recyclerxray/XRaySettings;Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZILjava/lang/Object;)Lcom/friendoye/recyclerxray/XRaySettings;
+	public final fun component7 ()Ljava/util/List;
+	public final fun copy (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;)Lcom/friendoye/recyclerxray/XRaySettings;
+	public static synthetic fun copy$default (Lcom/friendoye/recyclerxray/XRaySettings;Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;ILjava/lang/Object;)Lcom/friendoye/recyclerxray/XRaySettings;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDefaultXRayDebugViewHolder ()Lcom/friendoye/recyclerxray/XRayDebugViewHolder;
 	public final fun getEnableNestedRecyclersSupport ()Z
+	public final fun getExtraLinkProviders ()Ljava/util/List;
 	public final fun getFailOnNotFullyWrappedAdapter ()Z
 	public final fun getLabel ()Ljava/lang/String;
 	public final fun getMinDebugViewSize ()Ljava/lang/Integer;
@@ -128,12 +130,13 @@ public final class com/friendoye/recyclerxray/XRaySettings {
 
 public final class com/friendoye/recyclerxray/XRaySettings$Builder {
 	public fun <init> ()V
-	public fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;Z)V
-	public synthetic fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;)V
+	public synthetic fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun build ()Lcom/friendoye/recyclerxray/XRaySettings;
 	public final fun enableNestedRecyclersSupport (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun failOnNotFullyWrappedAdapter (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withDefaultXRayDebugViewHolder (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+	public final fun withExtraLoggableLinkProviders (Ljava/util/List;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withLabel (Ljava/lang/String;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withMinDebugViewSize (I)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withNestedXRaySettingsProvider (Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
