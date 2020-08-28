@@ -2,8 +2,6 @@ package com.friendoye.recyclerxray
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import com.friendoye.recyclerxray.testing.ExceptionShooter
-import com.friendoye.recyclerxray.testing.ExceptionShooter.TestExceptionShooter
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
@@ -15,8 +13,6 @@ import com.friendoye.recyclerxray.utils.createTestAdapterWithDiffUtil
 import com.friendoye.recyclerxray.utils.dip
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
-import org.junit.AfterClass
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -58,10 +58,10 @@ class XRayDebugViewClicksTest {
         }
 
         Assert.assertEquals(
+            "VisibleViewHolder(RvIntegrationTestUtils.kt:102)",
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:99)" }
-                .size,
-            1
+                .filter { it.message.startsWith("VisibleViewHolder") }
+                .joinToString(separator = "\n") { it.message }
         )
     }
 
@@ -83,18 +83,24 @@ class XRayDebugViewClicksTest {
         }
 
         Assert.assertEquals(
+            """
+                |LargeVisibleViewHolder(RvIntegrationTestUtils.kt:112)
+                |LargeVisibleViewHolder(RvIntegrationTestUtils.kt:112)
+            """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "LargeVisibleViewHolder(RvIntegrationTestUtils.kt:109)" }
-                .size,
-            2
+                .filter { it.message.startsWith("LargeVisibleViewHolder") }
+                .joinToString(separator = "\n") { it.message }
         )
 
         Assert.assertEquals(
+            """
+                |VisibleViewHolder(RvIntegrationTestUtils.kt:102)
+                |VisibleViewHolder(RvIntegrationTestUtils.kt:102)
+            """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:99)" }
-                .size,
-            2
-        )
+                .filter { it.message.startsWith("VisibleViewHolder") }
+                .joinToString(separator = "\n") { it.message }
+            )
     }
 
     @Test
@@ -122,10 +128,10 @@ class XRayDebugViewClicksTest {
         }
 
         Assert.assertEquals(
+            "GhostViewHolder(RvIntegrationTestUtils.kt:142)",
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "GhostViewHolder(RvIntegrationTestUtils.kt:139)" }
-                .size,
-            1
+                .filter { it.message.startsWith("GhostViewHolder") }
+                .joinToString(separator = "\n") { it.message }
         )
 
         Assert.assertTrue(wasEmptyViewClicked)

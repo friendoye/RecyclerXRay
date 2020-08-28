@@ -1,12 +1,12 @@
 package com.friendoye.recyclerxray
 
 import com.friendoye.recyclerxray.internal.NotInitializedRecyclerXRayApi
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
 class NotInitializedRecyclerXRayApiTest(private val publicApiMethod: Method, private val methodName: String?) {
