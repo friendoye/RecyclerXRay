@@ -1,8 +1,8 @@
 package com.friendoye.recyclerxray.internal
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRaySettings
+import com.friendoye.recyclerxray.testing.InternalLog
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicLong
 
@@ -66,7 +66,7 @@ internal class RealRecyclerXRayApi(
         settings: XRaySettings
     ): RecyclerView.Adapter<VH> {
         if (adapter is ScannableRecyclerAdapter<*> && adapter.parentXRayApiId == id) {
-            Log.i(
+            InternalLog.i(
                 DEFAULT_LOG_TAG,
                 "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)"
             )

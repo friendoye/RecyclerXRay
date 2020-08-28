@@ -1,8 +1,8 @@
 package com.friendoye.recyclerxray.internal
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.NestedXRaySettingsProvider
+import com.friendoye.recyclerxray.testing.InternalLog
 
 internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
     private val xRayApi: RealRecyclerXRayApi,
@@ -21,11 +21,11 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
             }
 
             if (holder.innerAdapter != null) {
-                Log.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
+                InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "New adapter: ${holder.innerAdapter}")
             }
             recycler?.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
                 if (holder.innerAdapter != recycler.adapter) {
-                    Log.d(DEFAULT_INTERNAL_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
+                    InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "${holder.innerAdapter} -> ${recycler.adapter}")
                     val newAdapter = tryWrapNestedAdapter(recycler.adapter)
                     if (recycler.adapter != newAdapter) {
                         recycler.adapter = newAdapter

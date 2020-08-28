@@ -2,7 +2,6 @@ package com.friendoye.recyclerxray.internal
 
 import android.animation.AnimatorInflater
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -10,6 +9,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.R
+import com.friendoye.recyclerxray.testing.InternalLog
 import java.lang.ref.WeakReference
 import java.util.Random
 import kotlin.math.sqrt
@@ -66,7 +66,7 @@ internal fun <T : RecyclerView.ViewHolder> T.rebindInfo(
         xRayWrapperContainer.setTag(R.id.x_ray_api_id, xRayApiId)
         xRayWrapperContainer.setTag(R.id.x_ray_debug_label, xRayDebugLabel)
     } else {
-        Log.d(DEFAULT_INTERNAL_LOG_TAG, "Couldn't rebind info, because $this is not wrapped...")
+        InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "Couldn't rebind info, because $this is not wrapped...")
     }
 }
 
