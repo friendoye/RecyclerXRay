@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray
 
+import android.view.View
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.testing.InternalLog
@@ -12,6 +13,7 @@ import com.friendoye.recyclerxray.utils.RecyclingTestActivity
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
+import com.friendoye.recyclerxray.utils.dip
 import com.friendoye.recyclerxray.utils.recyclingTestScreen
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
@@ -92,6 +94,40 @@ class XRayDebugViewClicksTest : ScreenshotTest {
                 .size,
             2
         )
+    }
+
+    @Test
+    fun clickOnEmptyDebugView_singleTime_printLinkToLogs() {
+        var wasEmptyViewClicked = false
+        val recyclerXRay = LocalRecyclerXRay().apply {
+            settings = XRaySettings.Builder()
+                .withMinDebugViewSize(currentActivity.dip(100))
+                .withDefaultXRayDebugViewHolder(object : DefaultXRayDebugViewHolder() {
+                    override fun onEmptyViewClick(debugView: View, result: XRayResult) {
+                        wasEmptyViewClicked = true
+                    }
+                })
+                .build()
+        }
+        val testAdapter = createTestAdapter(LargeVisible, Visible, LargeVisible, Ghost(), Visible, Visible, LargeVisible)
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.toggleSecrets()
+        }
+
+        recyclingTestScreen {
+            clickOnItem(position = 3)
+        }
+
+        Assert.assertEquals(
+            InternalLog.testLogger.accumulatedLogs
+                .filter { it.message == "GhostViewHolder(RvIntegrationTestUtils.kt:138)" }
+                .size,
+            1
+        )
+
+        Assert.assertTrue(wasEmptyViewClicked)
     }
 }
 
