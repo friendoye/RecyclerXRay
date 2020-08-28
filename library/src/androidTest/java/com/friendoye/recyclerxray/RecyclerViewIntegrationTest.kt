@@ -17,7 +17,21 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class RecyclerViewIntegrationTest : ScreenshotTest {
+class RealRecyclerViewIntegrationTest : RecyclerViewIntegrationTest() {
+    override fun initXRay() {
+        XRayInitializer.init(isNoOpMode = false)
+    }
+}
+
+class NoOpRecyclerViewIntegrationTest : RecyclerViewIntegrationTest() {
+    override fun initXRay() {
+        XRayInitializer.init(isNoOpMode = true)
+    }
+}
+
+abstract class RecyclerViewIntegrationTest : ScreenshotTest {
+
+    abstract fun initXRay()
 
     @get:Rule
     var activityTestRule = ActivityTestRule(TestActivity::class.java)
@@ -30,7 +44,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     @Before
     fun setup() {
         val context = InstrumentationRegistry.getInstrumentation().context
-        XRayInitializer.init(isNoOpMode = false)
+        initXRay()
         recyclerXRay = LocalRecyclerXRay()
         recyclerXRay.settings = XRaySettings.Builder()
             .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
@@ -65,7 +79,7 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
     }
 
     @Test
-    fun checkXRayIsOff() {
+    fun checkXRayIsOff_viaHideSecrets() {
         activityTestRule.runOnUiThread {
             val testAdapter = createTestAdapter(Visible, Visible, Visible)
             currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
@@ -74,6 +88,21 @@ class RecyclerViewIntegrationTest : ScreenshotTest {
 
         activityTestRule.runOnUiThread {
             recyclerXRay.hideSecrets()
+        }
+
+        compareRecyclerScreenshot(currentActivity.testRecycler)
+    }
+
+    @Test
+    fun checkXRayIsOff_viaToggleSecrets() {
+        activityTestRule.runOnUiThread {
+            val testAdapter = createTestAdapter(Visible, Visible, Visible)
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.showSecrets()
+        }
+
+        activityTestRule.runOnUiThread {
+            recyclerXRay.toggleSecrets()
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)

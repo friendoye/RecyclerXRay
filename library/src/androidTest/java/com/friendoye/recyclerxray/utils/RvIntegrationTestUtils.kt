@@ -3,6 +3,7 @@ package com.friendoye.recyclerxray.utils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -138,7 +139,7 @@ class SmallTwoViewHolder private constructor(root: View) : RecyclerView.ViewHold
 class GhostViewHolder private constructor(root: View) : RecyclerView.ViewHolder(root) {
     fun bind(item: IntegrationTestItemType.Ghost) = itemView.apply {
         layoutParams = layoutParams.apply {
-            width = if (item.forceVisibility) context.dip(150) else 0
+            height = if (item.forceVisibility) context.dip(150) else LayoutParams.WRAP_CONTENT
         }
     }
 

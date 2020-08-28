@@ -58,7 +58,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
 
         Assert.assertEquals(
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:98)" }
+                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:99)" }
                 .size,
             1
         )
@@ -83,14 +83,14 @@ class XRayDebugViewClicksTest : ScreenshotTest {
 
         Assert.assertEquals(
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "LargeVisibleViewHolder(RvIntegrationTestUtils.kt:108)" }
+                .filter { it.message == "LargeVisibleViewHolder(RvIntegrationTestUtils.kt:109)" }
                 .size,
             2
         )
 
         Assert.assertEquals(
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:98)" }
+                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:99)" }
                 .size,
             2
         )
@@ -122,7 +122,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
 
         Assert.assertEquals(
             InternalLog.testLogger.accumulatedLogs
-                .filter { it.message == "GhostViewHolder(RvIntegrationTestUtils.kt:138)" }
+                .filter { it.message == "GhostViewHolder(RvIntegrationTestUtils.kt:139)" }
                 .size,
             1
         )
@@ -180,6 +180,28 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             repeat(2) {
                 clickOnItem(position = 0)
             }
+        }
+
+        compareRecyclerScreenshot(currentActivity.testRecycler)
+    }
+
+    @Test
+    fun clickOnEmptyDebugViewShowsEmptyDebugView() {
+        val recyclerXRay = LocalRecyclerXRay().apply {
+            settings = XRaySettings.Builder()
+                .withMinDebugViewSize(currentActivity.dip(100))
+                .build()
+        }
+
+        val testAdapter = createTestAdapter(LargeVisible, Visible, LargeVisible, Ghost(), Visible, Visible, LargeVisible)
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.toggleSecrets()
+        }
+
+        recyclingTestScreen {
+            clickOnItem(position = 3)
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
