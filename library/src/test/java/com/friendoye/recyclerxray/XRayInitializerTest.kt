@@ -1,5 +1,7 @@
 package com.friendoye.recyclerxray
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.friendoye.recyclerxray.internal.NotInitializedRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RealRecyclerXRayApi
 import com.friendoye.recyclerxray.internal.RecyclerXRayApi
@@ -7,6 +9,7 @@ import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
 
 class XRayInitializerTest {
 
@@ -47,14 +50,14 @@ class XRayInitializerTest {
         XRayInitializer.init()
     }
 
-    @Test()
+    @Test
     fun `Check has default settings by default`() {
         XRayInitializer.init(isNoOpMode = false)
 
         Assert.assertNotNull(LocalRecyclerXRay().settings)
     }
 
-    @Test()
+    @Test
     fun `Check settings is configurable`() {
         val mockSettings = mockk<XRaySettings>()
         XRayInitializer.init(isNoOpMode = false, defaultXRaySettings = mockSettings)
