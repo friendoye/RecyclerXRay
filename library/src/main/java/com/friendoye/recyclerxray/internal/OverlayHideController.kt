@@ -8,6 +8,7 @@ internal class OverlayHideController(
     private val isInXRayModeProvider: () -> Boolean
 ) {
 
+    private var isInited: Boolean = false
     private var _isOverlayHidden: MutableList<Boolean> = mutableListOf()
     val isOverlayHidden: List<Boolean>
         get() = _isOverlayHidden
@@ -31,16 +32,15 @@ internal class OverlayHideController(
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                 InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onItemRangeChanged($positionStart, $itemCount)")
-                if (!isInXRayModeProvider()) {
-                    (0 until itemCount).map { index ->
-                        _isOverlayHidden[positionStart + index] = false
-                    }
-                    logOverlayHiddenFlagsState()
-                }
+                internalOnItemRangeChanged(positionStart, itemCount)
             }
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
                 InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onItemRangeChanged($positionStart, $itemCount, $payload)")
+                internalOnItemRangeChanged(positionStart, itemCount)
+            }
+
+            private fun internalOnItemRangeChanged(positionStart: Int, itemCount: Int) {
                 if (!isInXRayModeProvider()) {
                     (0 until itemCount).map { index ->
                         _isOverlayHidden[positionStart + index] = false
@@ -75,8 +75,11 @@ internal class OverlayHideController(
         }
 
         InternalLog.d(DEFAULT_INTERNAL_LOG_TAG, "OverlayHideController: onAttachedToRecyclerView()")
-        _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
-        logOverlayHiddenFlagsState()
+        if (!isInited) {
+            _isOverlayHidden = (0 until ownerAdapter.itemCount).map { false }.toMutableList()
+            logOverlayHiddenFlagsState()
+            isInited = true
+        }
 
         dataObserver?.let {
             ownerAdapter.registerAdapterDataObserver(it)

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.testing.InternalLog
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
+import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Indexed
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.SmallOne
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.SmallTwo
@@ -22,7 +23,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class XRayDebugViewClicksTest : ScreenshotTest {
+class XRayDebugViewClicksTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(RecyclingTestActivity::class.java)
@@ -235,8 +236,8 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
                 .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
                 .build()
         }
-        val fullItems = listOf(SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
+        val fullItems = listOf(Indexed(1), Indexed(2), SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
+        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/, Indexed(1), Indexed(2))
         val testAdapter = createTestAdapter(
             *fullItems.toTypedArray(),
             useDiffUtils = true
@@ -334,6 +335,40 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
 
         activityTestRule.runOnUiThread {
             testAdapter.items = fullItems
+        }
+
+        compareRecyclerScreenshot(currentActivity.testRecycler)
+    }
+
+    @Test
+    fun correctRebind_whenAdapterWasReattachedToRecycler() {
+        val recyclerXRay = LocalRecyclerXRay().apply {
+            settings = XRaySettings.Builder()
+                .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
+                .build()
+        }
+        val testAdapter = createTestAdapter(
+            SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo,
+            useDiffUtils = false
+        )
+        val wrappedAdapter = recyclerXRay.wrap(testAdapter)
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = wrappedAdapter
+            recyclerXRay.toggleSecrets()
+        }
+
+        testScreen {
+            clickOnItem(position = 0)
+            clickOnItem(position = 4)
+        }
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = createTestAdapter()
+        }
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = wrappedAdapter
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)

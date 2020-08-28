@@ -58,6 +58,7 @@ class RvIntegrationTestAdapter(
             is IntegrationTestItemType.SmallTwo -> 4
             is IntegrationTestItemType.Ghost -> 5
             is IntegrationTestItemType.InnerRecycler -> 6
+            is IntegrationTestItemType.Indexed -> 7
         }
     }
 
@@ -69,6 +70,7 @@ class RvIntegrationTestAdapter(
             4 -> SmallTwoViewHolder.fromParent(parent)
             5 -> GhostViewHolder.fromParent(parent)
             6 -> InnerRecyclerViewHolder.create(parent, innerWrapper)
+            7 -> SmallTwoViewHolder.fromParent(parent)
             else -> throw IllegalStateException("Could not find ItemType for viewType = $viewType")
         }
     }
@@ -94,6 +96,7 @@ sealed class IntegrationTestItemType {
         val useDiffUtils: Boolean,
         val items: List<InnerTestItemType>
     ) : IntegrationTestItemType()
+    data class Indexed(val index: Int) : IntegrationTestItemType()
 }
 
 class VisibleViewHolder private constructor(root: View) : RecyclerView.ViewHolder(root) {
@@ -192,6 +195,16 @@ class InnerRecyclerViewHolder private constructor(
             val root = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_integration_inner_adapter_test_layout, parent, false)
             return InnerRecyclerViewHolder(root, innerWrapper)
+        }
+    }
+}
+
+class IndexedViewHolder private constructor(root: View) : RecyclerView.ViewHolder(root) {
+    companion object {
+        fun fromParent(parent: ViewGroup): IndexedViewHolder {
+            val root = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_integration_indexed_test_layout, parent, false)
+            return IndexedViewHolder(root)
         }
     }
 }
