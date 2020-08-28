@@ -2,6 +2,7 @@ package com.friendoye.recyclerxray
 
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.rule.ActivityTestRule
+import com.friendoye.recyclerxray.testing.InternalLog
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.SmallOne
@@ -14,11 +15,87 @@ import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.friendoye.recyclerxray.utils.recyclingTestScreen
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class XRayDebugViewClicksTest : ScreenshotTest {
+
+    @get:Rule
+    var activityTestRule = ActivityTestRule(RecyclingTestActivity::class.java)
+
+    val currentActivity: RecyclingTestActivity
+        get() = activityTestRule.activity
+
+    @Before
+    fun setup() {
+        XRayInitializer.init(isNoOpMode = false)
+        InternalLog.current = InternalLog.TestInternalLog()
+    }
+
+    @After
+    fun teardown() {
+        InternalLog.testLogger.reset()
+        XRayInitializer.reset()
+    }
+
+    @Test
+    fun clickOnDebugView_singleTime_printLinkToLogs() {
+        val recyclerXRay = LocalRecyclerXRay()
+        val testAdapter = createTestAdapter(LargeVisible, Visible, LargeVisible, Ghost(), Visible, Visible, LargeVisible)
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.toggleSecrets()
+        }
+
+        recyclingTestScreen {
+            clickOnItem(position = 1)
+        }
+
+        Assert.assertEquals(
+            InternalLog.testLogger.accumulatedLogs
+                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:98)" }
+                .size,
+            1
+        )
+    }
+
+    @Test
+    fun clickOnDebugView_multipleTimes_multiplePrintLinkToLogs() {
+        val recyclerXRay = LocalRecyclerXRay()
+        val testAdapter = createTestAdapter(LargeVisible, Visible, LargeVisible, Ghost(), Visible, Visible, LargeVisible)
+
+        activityTestRule.runOnUiThread {
+            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            recyclerXRay.toggleSecrets()
+        }
+
+        recyclingTestScreen {
+            clickOnItem(position = 0)
+            clickOnItem(position = 1)
+            clickOnItem(position = 2)
+            clickOnItem(position = 1)
+        }
+
+        Assert.assertEquals(
+            InternalLog.testLogger.accumulatedLogs
+                .filter { it.message == "LargeVisibleViewHolder(RvIntegrationTestUtils.kt:108)" }
+                .size,
+            2
+        )
+
+        Assert.assertEquals(
+            InternalLog.testLogger.accumulatedLogs
+                .filter { it.message == "VisibleViewHolder(RvIntegrationTestUtils.kt:98)" }
+                .size,
+            2
+        )
+    }
+}
+
+class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
 
     @get:Rule
     var activityTestRule = ActivityTestRule(RecyclingTestActivity::class.java)
