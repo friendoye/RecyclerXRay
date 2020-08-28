@@ -200,7 +200,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
                 .build()
         }
 
-        val testAdapter = createTestAdapter(LargeVisible, Visible, LargeVisible, Ghost(), Visible, Visible, LargeVisible)
+        val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible, LargeVisible, Visible, Visible, LargeVisible)
 
         activityTestRule.runOnUiThread {
             currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
@@ -208,7 +208,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
         }
 
         testScreen {
-            clickOnItem(position = 3)
+            clickOnItem(position = 1)
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
