@@ -14,7 +14,7 @@ import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.friendoye.recyclerxray.utils.dip
-import com.friendoye.recyclerxray.utils.recyclingTestScreen
+import com.friendoye.recyclerxray.utils.testScreen
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
 import org.junit.Assert
@@ -52,7 +52,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 1)
         }
 
@@ -74,7 +74,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 0)
             clickOnItem(position = 1)
             clickOnItem(position = 2)
@@ -116,7 +116,7 @@ class XRayDebugViewClicksTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 3)
         }
 
@@ -159,7 +159,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 0)
         }
 
@@ -176,7 +176,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             repeat(2) {
                 clickOnItem(position = 0)
             }
@@ -200,7 +200,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 3)
         }
 
@@ -219,7 +219,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 0)
             scrollToItem(position = testAdapter.items.lastIndex)
             scrollToItem(position = 0)
@@ -247,7 +247,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 0)
             clickOnItem(position = 2)
             clickOnItem(position = 3)
@@ -288,7 +288,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             (0..7).forEach { index ->
                 clickOnItem(position = index)
             }
@@ -326,7 +326,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             recyclerXRay.toggleSecrets()
         }
 
-        recyclingTestScreen {
+        testScreen {
             clickOnItem(position = 0)
             clickOnItem(position = 1)
             clickOnItem(position = 2)
