@@ -7,7 +7,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import com.friendoye.recyclerxray.test.R
 
-class RecyclingTestRobot {
+class TestRobot {
 
     fun clickOnItem(position: Int) {
         onView(ViewMatchers.withId(R.id.test_recycler_view))
@@ -29,7 +29,7 @@ class RecyclingTestRobot {
     }
 }
 
-inline fun recyclingTestScreen(block: RecyclingTestRobot.() -> Unit) {
-    val robot = RecyclingTestRobot()
+inline fun testScreen(block: TestRobot.() -> Unit) {
+    val robot = TestRobot()
     robot.block()
 }

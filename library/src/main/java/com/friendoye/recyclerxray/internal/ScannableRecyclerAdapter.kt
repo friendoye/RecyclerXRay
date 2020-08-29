@@ -1,6 +1,5 @@
 package com.friendoye.recyclerxray.internal
 
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -21,6 +20,7 @@ import com.friendoye.recyclerxray.XRayDebugViewHolder
 import com.friendoye.recyclerxray.XRayResult
 import com.friendoye.recyclerxray.isViewVisibleForUser
 import com.friendoye.recyclerxray.testing.ExceptionShooter
+import com.friendoye.recyclerxray.testing.InternalLog
 
 internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     decoratedAdapter: RecyclerView.Adapter<T>,
@@ -245,7 +245,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         setOnClickListener {
             val loggableLinkToFile = loggableLinkProvider
                 .getLoggableLinkToFileWithClass(xRayResult.viewHolderClass)
-            Log.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
+            InternalLog.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
             if (xRayResult.isViewVisibleForUser) {
                 overlayHideController.toggleHidden(position)
                 alpha = if (overlayHideController.isOverlayHidden[position]) 0.0f else 1.0f

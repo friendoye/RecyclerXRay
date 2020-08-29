@@ -16,6 +16,6 @@ class MultipleRecyclerXRayAttachedException(message: String) : IllegalStateExcep
  * Exception to indicate, that some [RecyclerView.Adapter] in [ConcatAdapter] wasn't wrapped
  * by [LocalRecyclerXRay]. Should be triggered, only if
  */
-class RecyclerAdapterNotFullyWrappedException() : IllegalStateException(
+class RecyclerAdapterNotFullyWrappedException : IllegalStateException(
     "RecyclerView's adapter is not fully wrapped. Did you wrap() each adapter in ConcatAdapter?"
 )

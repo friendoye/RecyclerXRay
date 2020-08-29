@@ -84,10 +84,10 @@ jobs:
     name: Instrumentation tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         api-level:
           - 15
@@ -139,7 +139,7 @@ jobs:
     name: Screenshot tests
     needs: assemble
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v2

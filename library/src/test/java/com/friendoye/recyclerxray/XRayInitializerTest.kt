@@ -47,14 +47,14 @@ class XRayInitializerTest {
         XRayInitializer.init()
     }
 
-    @Test()
+    @Test
     fun `Check has default settings by default`() {
         XRayInitializer.init(isNoOpMode = false)
 
         Assert.assertNotNull(LocalRecyclerXRay().settings)
     }
 
-    @Test()
+    @Test
     fun `Check settings is configurable`() {
         val mockSettings = mockk<XRaySettings>()
         XRayInitializer.init(isNoOpMode = false, defaultXRaySettings = mockSettings)

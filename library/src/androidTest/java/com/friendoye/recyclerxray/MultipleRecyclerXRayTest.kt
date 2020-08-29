@@ -8,6 +8,7 @@ import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.TestActivity
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import org.junit.After
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -17,6 +18,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class MultipleRecyclerXRayTest {
 
+    companion object {
+        @AfterClass
+        @JvmStatic
+        fun finally() {
+            ExceptionShooter.current = ExceptionShooter.RealExceptionShooter
+        }
+    }
+
     @get:Rule
     var activityTestRule = ActivityTestRule(TestActivity::class.java)
 
@@ -25,8 +34,8 @@ class MultipleRecyclerXRayTest {
 
     @Before
     fun setup() {
-        XRayInitializer.init(isNoOpMode = false)
         ExceptionShooter.current = ExceptionShooter.TestExceptionShooter()
+        XRayInitializer.init(isNoOpMode = false)
     }
 
     @After

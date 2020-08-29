@@ -3,6 +3,7 @@ package com.friendoye.recyclerxray
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import com.friendoye.recyclerxray.testing.ExceptionShooter
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
@@ -14,6 +15,7 @@ import com.friendoye.recyclerxray.utils.dip
 import com.friendoye.recyclerxray.utils.ensureAllViewHoldersBind
 import com.karumi.shot.ScreenshotTest
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -132,5 +134,31 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
+    }
+
+    @Test
+    fun failToAttachAdapter_notAllInnerAdaptersWrapped() {
+        val shooter = ExceptionShooter.TestExceptionShooter()
+
+        activityTestRule.runOnUiThread {
+            val testAdapter = ConcatAdapter(
+                ConcatAdapter.Config.Builder()
+                    .setIsolateViewTypes(false)
+                    .build(),
+                listOf(
+                    createTestAdapter(LargeVisible, Ghost(), Visible, Visible),
+                    firstXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
+                )
+            )
+
+            try {
+                currentActivity.testRecycler.adapter = testAdapter
+            } catch (e: Throwable) {
+                shooter.fire(e)
+            }
+        }
+
+        Assert.assertTrue(shooter.accumulatedExceptions
+            .first() is RecyclerAdapterNotFullyWrappedException)
     }
 }
