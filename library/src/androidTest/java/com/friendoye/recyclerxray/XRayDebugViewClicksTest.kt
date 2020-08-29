@@ -58,7 +58,7 @@ class XRayDebugViewClicksTest {
         }
 
         Assert.assertEquals(
-            "VisibleViewHolder(RvIntegrationTestUtils.kt:102)",
+            "VisibleViewHolder(RvIntegrationTestItemViewHolders.kt:10)",
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("VisibleViewHolder") }
                 .joinToString(separator = "\n") { it.message }
@@ -84,8 +84,8 @@ class XRayDebugViewClicksTest {
 
         Assert.assertEquals(
             """
-                |LargeVisibleViewHolder(RvIntegrationTestUtils.kt:112)
-                |LargeVisibleViewHolder(RvIntegrationTestUtils.kt:112)
+                |LargeVisibleViewHolder(RvIntegrationTestItemViewHolders.kt:20)
+                |LargeVisibleViewHolder(RvIntegrationTestItemViewHolders.kt:20)
             """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("LargeVisibleViewHolder") }
@@ -94,8 +94,8 @@ class XRayDebugViewClicksTest {
 
         Assert.assertEquals(
             """
-                |VisibleViewHolder(RvIntegrationTestUtils.kt:102)
-                |VisibleViewHolder(RvIntegrationTestUtils.kt:102)
+                |VisibleViewHolder(RvIntegrationTestItemViewHolders.kt:10)
+                |VisibleViewHolder(RvIntegrationTestItemViewHolders.kt:10)
             """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("VisibleViewHolder") }
@@ -128,7 +128,7 @@ class XRayDebugViewClicksTest {
         }
 
         Assert.assertEquals(
-            "GhostViewHolder(RvIntegrationTestUtils.kt:142)",
+            "GhostViewHolder(RvIntegrationTestItemViewHolders.kt:50)",
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("GhostViewHolder") }
                 .joinToString(separator = "\n") { it.message }

@@ -8,7 +8,7 @@ import androidx.test.rule.ActivityTestRule
 fun Context.dip(value: Int): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
 fun Context.dip(value: Float): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
 
-class DiffCalculator<T>(
+open class DiffCalculator<T>(
     var oldItems: List<T>? = null,
     var newItems: List<T>? = null
 ) : DiffUtil.Callback() {
@@ -35,15 +35,15 @@ class DiffCalculator<T>(
         return checkEquality(oldItem, newItem)
     }
 
-    private fun getOldItem(position: Int): T? {
+    protected fun getOldItem(position: Int): T? {
         return oldItems?.get(position)
     }
 
-    private fun getNewItem(position: Int): T? {
+    protected fun getNewItem(position: Int): T? {
         return newItems?.get(position)
     }
 
-    private fun checkEquality(oldItem: T?, newItem: T?): Boolean {
+    protected fun checkEquality(oldItem: T?, newItem: T?): Boolean {
         return oldItem == newItem
     }
 }

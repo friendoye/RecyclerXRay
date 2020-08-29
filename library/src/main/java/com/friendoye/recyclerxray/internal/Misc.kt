@@ -96,8 +96,11 @@ internal inline val <T : RecyclerView.ViewHolder> T._xRayDebugLabel: String?
 internal val <T : RecyclerView.ViewHolder> T.innerRecycler: RecyclerView?
     get() = originalItemView.findFirstView<RecyclerView>()
 
-internal val <T : RecyclerView.ViewHolder> T.innerAdapter: RecyclerView.Adapter<*>?
-    get() = innerRecycler?.adapter
+internal var <T : RecyclerView.ViewHolder> T.savedInnerAdapter: RecyclerView.Adapter<*>?
+    get() = itemView.getTag(R.id.x_ray_inner_adapter_ref) as? RecyclerView.Adapter<*>
+    set(value) {
+        itemView.setTag(R.id.x_ray_inner_adapter_ref, value)
+    }
 
 internal fun <T> T.asWeakRef(): WeakReference<T> = WeakReference(this)
 
