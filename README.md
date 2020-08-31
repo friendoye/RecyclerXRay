@@ -27,6 +27,7 @@ During visual inspection of `RecyclerView`, `RecyclerXRay` allows the following 
 
 <img src="https://i.imgur.com/Pj59bvq.gif" width="800px"/>
 
+* Show `ViewHolder`s, that currently are not visible for user (i.e. `itemView.width == 0` or `itemView.height == 0`);
 * Nested `RecyclerView.Adapter` inspection;
 * [Experimental] Support of `ConcatAdapter`;
 * ... and more!
@@ -193,7 +194,7 @@ If you want to set other debug layout during inspection, you should:
 1) Implement `XRayDebugViewHolder` interface in custom class;
 2) Provide an instance of this class to `XRaySettings`:
 
-```
+```kotlin
 val customDebugVH = CustomXRayDebugViewHolder()
 
 RecyclerXRay.settings = XRaySettings.Builder()
@@ -205,7 +206,7 @@ RecyclerXRay.settings = XRaySettings.Builder()
 
 If you want to supply extra information to `XRayDebugViewHolder` about specific `ViewHolder`, you can implement `XRayCustomParamsViewHolderProvider` interface on your `ViewHolder`:
 
-```
+```kotlin
 //SampleViewHolder.kt
 
 class SampleViewHolder private constructor(
@@ -222,7 +223,7 @@ class SampleViewHolder private constructor(
 
 Or you can implement `XRayCustomParamsAdapterProvider` on your `RecycerView.Adapter`:
 
-```
+```kotlin
 //SampleAdapter.kt
 
 class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), XRayCustomParamsAdapterProvider {
