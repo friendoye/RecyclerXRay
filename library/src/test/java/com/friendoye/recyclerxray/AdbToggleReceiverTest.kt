@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import androidx.test.core.app.ApplicationProvider
+import com.friendoye.recyclerxray.utils.idleLooper
 import io.mockk.Called
 import io.mockk.confirmVerified
 import io.mockk.mockk
@@ -37,6 +38,7 @@ class AdbToggleReceiverTest {
     @Test
     fun `Doesn't toggle mode by after creation`() {
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify { recyclerXRayMock wasNot Called }
         confirmVerified()
@@ -46,6 +48,7 @@ class AdbToggleReceiverTest {
     fun `After onCreate() doesn't toggle mode`() {
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify { recyclerXRayMock wasNot Called }
         confirmVerified()
@@ -55,6 +58,7 @@ class AdbToggleReceiverTest {
     fun `After onStart() toggles mode`() {
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
         confirmVerified()
@@ -66,6 +70,7 @@ class AdbToggleReceiverTest {
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
         confirmVerified()
@@ -75,6 +80,7 @@ class AdbToggleReceiverTest {
     fun `After register() toggles mode`() {
         adbToggleReceiver.register()
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
         confirmVerified()
@@ -84,8 +90,10 @@ class AdbToggleReceiverTest {
     fun `After unregister() doesn't toggle mode`() {
         adbToggleReceiver.register()
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
         adbToggleReceiver.unregister()
         testContext.sendBroadcast(Intent("test-toggle-x-ray"))
+        idleLooper()
 
         verify(exactly = 1) { recyclerXRayMock.toggleSecrets() }
         confirmVerified()
