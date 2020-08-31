@@ -130,8 +130,6 @@ public final class com/friendoye/recyclerxray/XRaySettings {
 
 public final class com/friendoye/recyclerxray/XRaySettings$Builder {
 	public fun <init> ()V
-	public fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;)V
-	public synthetic fun <init> (Lcom/friendoye/recyclerxray/XRayDebugViewHolder;Ljava/lang/Integer;Ljava/lang/String;ZLcom/friendoye/recyclerxray/NestedXRaySettingsProvider;ZLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun build ()Lcom/friendoye/recyclerxray/XRaySettings;
 	public final fun enableNestedRecyclersSupport (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun failOnNotFullyWrappedAdapter (Z)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
