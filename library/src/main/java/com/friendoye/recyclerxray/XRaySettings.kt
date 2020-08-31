@@ -20,15 +20,15 @@ data class XRaySettings internal constructor(
     /**
      * Builder class for [XRaySettings].
      */
-    class Builder(
-        internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder(),
-        @Dimension(unit = PX) internal var minDebugViewSize: Int? = null,
-        internal var label: String? = null,
-        internal var enableNestedRecyclersSupport: Boolean = false,
-        internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null,
-        internal var failOnNotFullyWrappedAdapter: Boolean = true,
+    class Builder {
+
+        internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder()
+        @Dimension(unit = PX) internal var minDebugViewSize: Int? = null
+        internal var label: String? = null
+        internal var enableNestedRecyclersSupport: Boolean = false
+        internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null
+        internal var failOnNotFullyWrappedAdapter: Boolean = true
         internal var extraLinkProviders: List<LoggableLinkProvider> = listOf()
-    ) {
 
         /**
          * Specifies [XRayDebugViewHolder], that will be used for creating and binding
