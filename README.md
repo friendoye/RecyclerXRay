@@ -183,6 +183,7 @@ RecyclerXRay.settings = XRaySettings.Builder()
         .build()
 ```
 
+
 ## Advanced topics
 
 ### Custom debug layout
