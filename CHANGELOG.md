@@ -1,0 +1,1 @@
+# See [Releases](https://github.com/friendoye/RecyclerXRay/releases)

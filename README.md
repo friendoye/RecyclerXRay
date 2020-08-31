@@ -3,25 +3,33 @@
 ![Github Actions](https://github.com/friendoye/RecyclerXRay/workflows/ci/badge.svg)
 [![codecov](https://codecov.io/gh/friendoye/RecyclerXRay/branch/master/graph/badge.svg)](https://codecov.io/gh/friendoye/RecyclerXRay)
 
-`RecyclerXRay` is a debug tool for visual inspection of complex `RecyclerView` layouts. Also it helps you navigate to specific `ViewHolder` faster.
+`RecyclerXRay` is a debug tool for fast navigation to `ViewHolder`'s source code and visual inspection of complex `RecyclerView` layouts.
 
 <img src="https://i.imgur.com/x3Uw8sd.gif" width="300px"/>
 
 ### Motivation
 
-Finding specific `ViewHolder` in a complex and big `RecyclerView` layout may be hard.  
-Finding specific `ViewHolder` for an invisible item view might be even harder.  
+Imagine onboarding on new project. This project has a lot of screens, navigation between screens are configured dynamically (via server responses). Each screen is `RecyclerView`-based and have a lot of different `ViewHolder`s. Some of `ViewHolder`s may contain another `RecyclerView`.
+
+Finding specific `ViewHolder` in such setup may be hard.
+Finding specific `ViewHolder` for an invisible item view or for inner `RecyclerView` might be even harder.
 Doing it over and over again, you may find yourself wondering: *Is there any way to find my ViewHolders faster?*
+
+`RecyclerXRay` library tries to answer this question.
 
 ### Features
 
-During visual inspection of `RecyclerView.Adapter`, `RecyclerXRay` allows the following things:
+During visual inspection of `RecyclerView`, `RecyclerXRay` allows the following things:
 
-* Show all debug information from `XRayResult` (`ViewHolder`'s class, view type, custom params, etc.);
+* Show all debug information about `ViewHolder` (`ViewHolder`'s class, view type, custom params, etc.);
 * Show preview of `ViewHolder` original item view on item click;
 * Log clickable link to file, where given `ViewHolder` is placed, on item click (clicking on this link in Android Studio will navigate you to `ViewHolder`!):
 
 <img src="https://i.imgur.com/Pj59bvq.gif" width="800px"/>
+
+* Nested `RecyclerView.Adapter` inspection;
+* [Experimental] Support of `ConcatAdapter`;
+* ... and more!
 
 ## Setup
 
@@ -76,9 +84,8 @@ override fun onCreate() {
     super.onCreate()
     XRayInitializer.init(
         isNoOpMode = true, // to control no-op mode
-        defaultXRaySettings = XRaySettings
-            .Builder()
-            .build()       // to set different default settings for each LocalRecyclerXRay
+        defaultXRaySettings = ... // to set different default settings 
+                                  // for each LocalRecyclerXRay
     )
 }
 ```
@@ -105,6 +112,8 @@ If you want more fine-grained control over different `RecyclerView.Adapter`'s (f
 val localRecyclerXRay = LocalRecyclerXRay()
 val wrappedAdapter = localRecyclerXRay.wrap(adapter)
 recyclerView.adapter = wrappedAdapter
+
+localRecyclerXRay.toggleSecrets()
 ```
 
 ### Adb Toggling
@@ -141,7 +150,10 @@ Sometimes `RecyclerView` is nested inside one of your `RecyclerView`. If you wan
 val localRecyclerXRay = LocalRecyclerXRay()
 localRecyclerXRay.settings = XRaySettings.Builder()
         // ...
-        .enableNestedRecyclersSupport(true) // enable nested support
+        // enable nested support
+        .enableNestedRecyclersSupport(true)
+        // provide XRaySetting for given nested adapter 
+        // if `null` is returned, there will be no inspection for given adapter
         .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
             override fun provide(
                 nestedAdapter: RecyclerView.Adapter<*>,
@@ -149,8 +161,7 @@ localRecyclerXRay.settings = XRaySettings.Builder()
             ): XRaySettings? {
                 return XRaySettings.Builder().build()
             }
-        }) // provide XRaySetting for given nested adapter 
-           // if `null` is returned, there will be no inspection for given adapter
+        })
         .build()
 ```
 
@@ -171,3 +182,68 @@ RecyclerXRay.settings = XRaySettings.Builder()
                                               // with other libraries/frameworks.
         .build()
 ```
+
+
+## Advanced topics
+
+### Custom debug layout
+
+If you want to set other debug layout during inspection, you should:
+
+1) Implement `XRayDebugViewHolder` interface in custom class;
+2) Provide an instance of this class to `XRaySettings`:
+
+```
+val customDebugVH = CustomXRayDebugViewHolder()
+
+RecyclerXRay.settings = XRaySettings.Builder()
+        .withDefaultXRayDebugViewHoldercustomDebugVH)
+        .build()
+```
+
+### Custom parameters
+
+If you want to supply extra information to `XRayDebugViewHolder` about specific `ViewHolder`, you can implement `XRayCustomParamsViewHolderProvider` interface on your `ViewHolder`:
+
+```
+//SampleViewHolder.kt
+
+class SampleViewHolder private constructor(
+    private val binding: SampleBinding
+) : RecyclerView.ViewHolder(binding.root), XRayCustomParamsViewHolderProvider {
+
+    // ...
+
+    override fun provideCustomParams(): Map<String, Any?>? {
+        return mapOf("Type" to "Sample")
+    }
+}
+```
+
+Or you can implement `XRayCustomParamsAdapterProvider` on your `RecycerView.Adapter`:
+
+```
+//SampleAdapter.kt
+
+class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), XRayCustomParamsAdapterProvider {
+
+    // ...
+
+    
+    override fun provideCustomParams(position: Int): Map<String, Any?>? {
+        return mapOf("Index" to position)
+    }
+}
+```
+
+### [Experimental] ConcatAdapter support
+
+Right now there is an experimental support of brand new [`ConcatAdapter`](https://developer.android.com/reference/androidx/recyclerview/widget/MergeAdapter) from AndroidX library. `ConcatAdapter`, as for time of writing, is still in alpha, so be careful, if you want to use it in production.
+
+You can check out `:sample` module for more information.
+
+### [Experimental] LoggableLinkProvider
+
+In order to be able (in theory) make possible integration with 3rd parties `RecycleView` utility libraries (e.g. [Epoxy](https://github.com/airbnb/epoxy), [Groupie](https://github.com/lisawray/groupie)), so we could navigate to its specific abstraction faster, `LoggableLinkProvider` interface was introduced. 
+
+`RecyclerXRay` library has built-in `DefaultLoggableLinkProvider`, so you shouldn't worry about providing it.
