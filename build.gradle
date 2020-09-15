@@ -76,8 +76,8 @@ subprojects {
 
         if (project.hasProperty('android')) {
             android {
-                viewBinding {
-                    enabled = true
+                buildFeatures {
+                    viewBinding true
                 }
 
                 compileOptions {
