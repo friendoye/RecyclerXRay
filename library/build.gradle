@@ -55,15 +55,6 @@ android {
     libraryVariants.all {
         it.generateBuildConfig.enabled = false
     }
-
-    configurations.all {
-        resolutionStrategy {
-            force("androidx.lifecycle:lifecycle-common:2.2.0")
-            force("androidx.collection:collection:1.1.0")
-            force("androidx.lifecycle:lifecycle-runtime:2.0.0")
-            force("androidx.arch.core:core-common:2.1.0")
-        }
-    }
 }
 
 dependencies {
