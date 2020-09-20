@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'shot'
-apply plugin: 'jacoco-android'
+apply plugin: 'com.hiya.jacoco-android'
 
 android {
     compileSdkVersion 29
@@ -32,6 +32,7 @@ android {
             jacoco {
                 // To accumulate coverage from Robolectric
                 includeNoLocationClasses = true
+                excludes += ['jdk.internal.*']
             }
         }
     }

@@ -17,9 +17,8 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
         classpath 'com.karumi:shot:4.4.0'
-        //classpath "com.gradle:gradle-enterprise-gradle-plugin:3.4.1"
         classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.2.3"
-        classpath "com.dicedmelon.gradle:jacoco-android:0.1.5-SNAPSHOT"
+        classpath "com.hiya:jacoco-android:0.2"
     }
 }
 
