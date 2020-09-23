@@ -1,8 +1,9 @@
 package com.friendoye.recyclerxray.sample
 
+import androidx.lifecycle.Lifecycle
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,37 +12,37 @@ import org.junit.runner.RunWith
 class SimpleRunCheckTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(MainActivity::class.java)
-
-    val currentActivity: MainActivity
-        get() = activityTestRule.activity
+    var activityTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
     fun simpleUiCheck() {
-        activityTestRule.runOnUiThread {
-            currentActivity.isFullDataInAdapter = true
-        }
+        activityTestRule.scenario.apply {
+            moveToState(Lifecycle.State.RESUMED)
+            onActivity { activity ->
+                activity.isFullDataInAdapter = true
+            }
 
-        activityTestRule.runOnUiThread {
-            currentActivity.toggleAllSecrets()
-        }
+            onActivity { activity ->
+                activity.toggleAllSecrets()
+            }
 
-        activityTestRule.runOnUiThread {
-            currentActivity.binding.sampleRecyclerViewView
-                .smoothScrollBy(0, currentActivity.dip(500))
-        }
+            onActivity { activity ->
+                activity.binding.sampleRecyclerViewView
+                    .smoothScrollBy(0, activity.dip(500))
+            }
 
-        activityTestRule.runOnUiThread {
-            currentActivity.isFullDataInAdapter = false
-        }
+            onActivity { activity ->
+                activity.isFullDataInAdapter = false
+            }
 
-        activityTestRule.runOnUiThread {
-            currentActivity.binding.sampleRecyclerViewView
-                .smoothScrollBy(0, -currentActivity.dip(500))
-        }
+            onActivity { activity ->
+                activity.binding.sampleRecyclerViewView
+                    .smoothScrollBy(0, -activity.dip(500))
+            }
 
-        activityTestRule.runOnUiThread {
-            currentActivity.toggleAllSecrets()
+            onActivity { activity ->
+                activity.toggleAllSecrets()
+            }
         }
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()

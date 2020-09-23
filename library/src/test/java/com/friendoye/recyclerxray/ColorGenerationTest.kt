@@ -52,7 +52,7 @@ class ColorGenerationTest {
             // HUE distance between extremes.
             .apply { add(360.0f + first()) }
             .zipWithNext { hue1, hue2 -> hue2 - hue1 }
-            .min() ?: throw IllegalStateException("Couldn't find min hue distance!")
+            .minOrNull() ?: throw IllegalStateException("Couldn't find min hue distance!")
 
         println("Avg hue distance: $averageHueDistance")
         println("Min closest hue distance: $closestHueDistance")

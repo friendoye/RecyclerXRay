@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.friendoye.recyclerxray.sample"
@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     androidTestImplementation "androidx.test:runner:1.3.0"
-    androidTestImplementation "androidx.test:rules:1.2.0"
+    androidTestImplementation "androidx.test:rules:1.3.0"
     androidTestImplementation "androidx.test:core:1.3.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"
     androidTestImplementation "androidx.test.ext:junit-ktx:1.1.2"

@@ -3,11 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'shot'
-apply plugin: 'jacoco-android'
+apply plugin: 'com.hiya.jacoco-android'
+
+jacoco {
+    toolVersion = "0.8.4"
+}
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 15
@@ -32,6 +36,7 @@ android {
             jacoco {
                 // To accumulate coverage from Robolectric
                 includeNoLocationClasses = true
+                excludes = ['jdk.internal.*']
             }
         }
     }
@@ -58,10 +63,10 @@ android {
 
     configurations.all {
         resolutionStrategy {
+            force("androidx.lifecycle:lifecycle-runtime:2.2.0")
             force("androidx.lifecycle:lifecycle-common:2.2.0")
-            force("androidx.collection:collection:1.1.0")
-            force("androidx.lifecycle:lifecycle-runtime:2.0.0")
             force("androidx.arch.core:core-common:2.1.0")
+            force("androidx.collection:collection:1.1.0")
         }
     }
 }
