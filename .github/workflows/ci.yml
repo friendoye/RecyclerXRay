@@ -60,8 +60,8 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Unit Tests with coverage
-        run: ./gradlew jacocoTestDebugUnitTestReport --build-cache --no-daemon --stacktrace
-      
+        run: ./gradlew jacocoTestReport --build-cache --no-daemon --stacktrace
+
       - name: Zip test reports
         run: find . -type d -regex ".*/build/reports/tests/.*DebugUnitTest" -exec zip -r reports.zip {} +
 
@@ -77,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: unit-tests-coverage
-          path: library/build/reports/jacoco
+          path: library/build/jacoco
 
   # Runs instrumentation tests
   instrumentation-tests:
