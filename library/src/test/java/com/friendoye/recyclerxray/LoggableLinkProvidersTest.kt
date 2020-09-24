@@ -67,7 +67,8 @@ class CompositeLoggableLinkProviderTest {
 
     private fun ((Class<*>) -> String?).asLinkProvider(): LoggableLinkProvider {
         return object : LoggableLinkProvider {
-            override fun getLoggableLinkToFileWithClass(clazz: Class<out RecyclerView.ViewHolder>): String? {
+            override fun getLoggableLinkToFileWithClass(viewHolder: RecyclerView.ViewHolder,
+                                                        clazz: Class<out RecyclerView.ViewHolder>): String? {
                 return this@asLinkProvider.invoke(clazz)
             }
         }

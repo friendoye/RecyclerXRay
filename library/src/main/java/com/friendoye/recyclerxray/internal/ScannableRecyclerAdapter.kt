@@ -219,7 +219,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                     } else {
                         bindingAdapterPosition
                     }
-                    view.setLoggableLinkClickListener(xRayResult, position)
+                    view.setLoggableLinkClickListener(this, xRayResult, position)
                 }
                 view.id == R.id.inner_indicator_view_id -> {
                     view.isVisible = isInXRayMode && showInnerAdapterIndicator
@@ -233,7 +233,8 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
     }
 
-    private fun View.setLoggableLinkClickListener(xRayResult: XRayResult, position: Int) {
+    private fun View.setLoggableLinkClickListener(viewHolder: T,
+                                                  xRayResult: XRayResult, position: Int) {
         val isHidden = overlayHideController.isOverlayHidden.getOrNull(position)
         // TODO: WARNING: Temporary workaround. Remove it
         if (isHidden == null) {
@@ -244,7 +245,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         alpha = if (isHidden) 0.0f else 1.0f
         setOnClickListener {
             val loggableLinkToFile = loggableLinkProvider
-                .getLoggableLinkToFileWithClass(xRayResult.viewHolderClass)
+                .getLoggableLinkToFileWithClass(viewHolder, xRayResult.viewHolderClass)
             InternalLog.i(DEFAULT_LOG_TAG, loggableLinkToFile ?: "...")
             if (xRayResult.isViewVisibleForUser) {
                 overlayHideController.toggleHidden(position)
