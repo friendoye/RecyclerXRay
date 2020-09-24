@@ -125,7 +125,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'android-tests-${{ matrix.api-level }}-reports'
-          path: build/reports/androidTest-results
+          path: build/androidTest-results
 
       - name: Upload tests coverage
         if: ${{ matrix.api-level == 21 }}
