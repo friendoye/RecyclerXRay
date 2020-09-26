@@ -127,6 +127,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
     }
 
+    override fun onViewRecycled(holder: T) {
+        holder.originalItemViewContext { originalHolder ->
+            super.onViewRecycled(originalHolder)
+        }
+    }
+
     override fun onBindViewHolder(holder: T, position: Int) {
         // ViewHolder might be reuse across several Adapters when used in ConcatAdapter.
         // To ensure correct bindings, rebind VH info before view bindings.
