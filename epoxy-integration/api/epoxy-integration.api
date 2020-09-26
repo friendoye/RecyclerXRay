@@ -1,0 +1,5 @@
+public final class com/friendoye/recyclerxray/EpoxyLinkProvider : com/friendoye/recyclerxray/LoggableLinkProvider {
+	public fun <init> ()V
+	public fun getLoggableLinkToFileWithClass (Landroidx/recyclerview/widget/RecyclerView$ViewHolder;Ljava/lang/Class;)Ljava/lang/String;
+}
+

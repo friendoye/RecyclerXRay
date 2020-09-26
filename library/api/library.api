@@ -27,7 +27,7 @@ public class com/friendoye/recyclerxray/LocalRecyclerXRay {
 }
 
 public abstract interface class com/friendoye/recyclerxray/LoggableLinkProvider {
-	public abstract fun getLoggableLinkToFileWithClass (Ljava/lang/Class;)Ljava/lang/String;
+	public abstract fun getLoggableLinkToFileWithClass (Landroidx/recyclerview/widget/RecyclerView$ViewHolder;Ljava/lang/Class;)Ljava/lang/String;
 }
 
 public final class com/friendoye/recyclerxray/MultipleRecyclerXRayAttachedException : java/lang/IllegalStateException {
