@@ -7,6 +7,7 @@ import com.friendoye.recyclerxray.stubs.CustomArgsViewHolder
 import com.friendoye.recyclerxray.stubs.DefaultViewHolder
 import com.friendoye.recyclerxray.stubs.PrimitiveArgsViewHolder
 import com.friendoye.recyclerxray.stubs.ViewBindingViewHolder
+import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 
@@ -38,7 +39,7 @@ class DefaultLoggableLinkProviderTest {
 
     private fun Class<out RecyclerView.ViewHolder>.getLoggableLinkToFileWithClass(): String? {
         val linkProvider = DefaultLoggableLinkProvider()
-        return linkProvider.getLoggableLinkToFileWithClass(this)
+        return linkProvider.getLoggableLinkToFileWithClass(mockk(), this)
     }
 }
 
@@ -51,7 +52,7 @@ class CompositeLoggableLinkProviderTest {
             { _: Class<*> -> "I love links way to much!" }.asLinkProvider(),
             { _: Class<*> -> null }.asLinkProvider()
         ))
-        val link = linkProvider.getLoggableLinkToFileWithClass(DefaultViewHolder::class.java)
+        val link = linkProvider.getLoggableLinkToFileWithClass(mockk(), DefaultViewHolder::class.java)
         Assert.assertEquals(link, "I love links way to much!")
     }
 
@@ -61,13 +62,16 @@ class CompositeLoggableLinkProviderTest {
             { _: Class<*> -> null }.asLinkProvider(),
             { _: Class<*> -> null }.asLinkProvider()
         ))
-        val link = linkProvider.getLoggableLinkToFileWithClass(DefaultViewHolder::class.java)
+        val link = linkProvider.getLoggableLinkToFileWithClass(mockk(), DefaultViewHolder::class.java)
         Assert.assertNull(link)
     }
 
     private fun ((Class<*>) -> String?).asLinkProvider(): LoggableLinkProvider {
         return object : LoggableLinkProvider {
-            override fun getLoggableLinkToFileWithClass(clazz: Class<out RecyclerView.ViewHolder>): String? {
+            override fun getLoggableLinkToFileWithClass(
+                viewHolder: RecyclerView.ViewHolder,
+                clazz: Class<out RecyclerView.ViewHolder>
+            ): String? {
                 return this@asLinkProvider.invoke(clazz)
             }
         }

@@ -25,5 +25,8 @@ import androidx.recyclerview.widget.RecyclerView
  *     }
  */
 interface LoggableLinkProvider {
-    fun getLoggableLinkToFileWithClass(clazz: Class<out RecyclerView.ViewHolder>): String?
+    fun getLoggableLinkToFileWithClass(
+        viewHolder: RecyclerView.ViewHolder,
+        clazz: Class<out RecyclerView.ViewHolder>
+    ): String?
 }

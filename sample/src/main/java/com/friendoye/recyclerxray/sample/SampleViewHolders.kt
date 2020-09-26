@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleEmptyBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleHorizontalRecyclerBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleLargeBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleSmallBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemSampleWidestBinding
+import com.friendoye.recyclerxray.sample.shared.ItemType
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleEmptyBinding
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleHorizontalRecyclerBinding
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleLargeBinding
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleSmallBinding
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleWidestBinding
 
 @SuppressLint("SetTextI18n")
 class SmallViewHolder private constructor(

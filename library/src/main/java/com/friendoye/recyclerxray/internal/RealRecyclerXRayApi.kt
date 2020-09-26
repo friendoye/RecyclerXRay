@@ -94,9 +94,17 @@ internal class RealRecyclerXRayApi(
     private fun updateAdapters() {
         adapters.forEach { weakAdapter ->
             weakAdapter.get()?.let { adapter ->
-                adapter.notifyItemRangeChanged(0, adapter.itemCount,
-                    XRayPayload(id)
-                )
+                try {
+                    adapter.notifyItemRangeChanged(0, adapter.itemCount,
+                        XRayPayload(id)
+                    )
+                } catch (e: Exception) {
+                    InternalLog.e(
+                        DEFAULT_INTERNAL_LOG_TAG,
+                        "Something went wrong during updateAdapters(), buf we didn't fail ...",
+                        e
+                    )
+                }
             }
         }
     }

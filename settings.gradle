@@ -10,5 +10,12 @@ gradleEnterprise {
 }
 
 rootProject.name='RecyclerXRay'
+// Library artifacts
 include ':library'
+include ':groupie-integration'
+include ':epoxy-integration'
+// Samples
+include ':sample-shared'
 include ':sample'
+include ':sample-groupie'
+include ':sample-epoxy'

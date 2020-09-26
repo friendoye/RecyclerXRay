@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.hiya.jacoco-android'
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            jacoco {
+                // To accumulate coverage from Robolectric
+                includeNoLocationClasses = true
+                excludes = ['jdk.internal.*']
+            }
+        }
+    }
+
+    kotlinOptions {
+        allWarningsAsErrors = true
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+}
+
+dependencies {
+    implementation project(":library")
+
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha05'
+
+    implementation "com.airbnb.android:epoxy:4.1.0"
+}
+
+ext {
+    bintrayName = 'recyclerxray-epoxy-integration'
+
+    libraryName = 'RecyclerXRay: Epoxy Integration'
+    artifact = 'recyclerxray-epoxy-integration'
+    libraryVersion = artifactVersion
+
+    libraryDescription = 'Utils for Epoxy integration with RecyclerXRay.'
+}
+
+apply from: '../deploy.gradle'

@@ -29,7 +29,7 @@ plugins {
 apply plugin: 'binary-compatibility-validator'
 
 apiValidation {
-    ignoredProjects += ["sample"]
+    ignoredProjects += ["sample-shared", "sample", "sample-groupie", "sample-epoxy"]
 }
 
 allprojects {

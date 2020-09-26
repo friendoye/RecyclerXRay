@@ -15,6 +15,17 @@ import com.friendoye.recyclerxray.RecyclerXRay
 import com.friendoye.recyclerxray.XRayResult
 import com.friendoye.recyclerxray.XRaySettings
 import com.friendoye.recyclerxray.sample.databinding.ActivityMainBinding
+import com.friendoye.recyclerxray.sample.shared.INNER_DATA_ADAPTER_CHANGE_FULL
+import com.friendoye.recyclerxray.sample.shared.INNER_DATA_ADAPTER_CHANGE_PARTIAL
+import com.friendoye.recyclerxray.sample.shared.INNER_DATA_FULL
+import com.friendoye.recyclerxray.sample.shared.INNER_DATA_PARTIAL
+import com.friendoye.recyclerxray.sample.shared.ItemType
+import com.friendoye.recyclerxray.sample.shared.LOCAL_SAMPLE_DATA_FULL
+import com.friendoye.recyclerxray.sample.shared.LOCAL_SAMPLE_DATA_PARTIAL
+import com.friendoye.recyclerxray.sample.shared.SAMPLE_DATA_FULL
+import com.friendoye.recyclerxray.sample.shared.SAMPLE_DATA_PARTIAL
+import com.friendoye.recyclerxray.sample.shared.dip
+import com.friendoye.recyclerxray.sample.shared.type
 import kotlin.properties.Delegates
 
 private val localRecyclerXRay = LocalRecyclerXRay()
@@ -28,14 +39,18 @@ class MainActivity : AppCompatActivity() {
                 sampleAdapter.items = SAMPLE_DATA_FULL
                 horizontalRecyclerAdapter.items = INNER_DATA_FULL
                 localSampleAdapter.items = LOCAL_SAMPLE_DATA_FULL
-                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_FULL
+                horizontalRecyclerWithAdapterChangeAdapter.items =
+                    INNER_DATA_ADAPTER_CHANGE_FULL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_exit_deep_purple_a200_36dp)
             } else {
                 sampleAdapter.items = SAMPLE_DATA_PARTIAL
-                horizontalRecyclerAdapter.items = INNER_DATA_PARTIAL
-                localSampleAdapter.items = LOCAL_SAMPLE_DATA_PARTIAL
-                horizontalRecyclerWithAdapterChangeAdapter.items = INNER_DATA_ADAPTER_CHANGE_PARTIAL
+                horizontalRecyclerAdapter.items =
+                    INNER_DATA_PARTIAL
+                localSampleAdapter.items =
+                    LOCAL_SAMPLE_DATA_PARTIAL
+                horizontalRecyclerWithAdapterChangeAdapter.items =
+                    INNER_DATA_ADAPTER_CHANGE_PARTIAL
                 binding.floatingActionButton
                     .setImageResource(R.drawable.baseline_fullscreen_deep_purple_a200_36dp)
             }
