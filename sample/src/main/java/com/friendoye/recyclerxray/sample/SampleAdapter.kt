@@ -4,7 +4,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
-import com.friendoye.recyclerxray.sample.ItemType.Companion.getOrdinal
+import com.friendoye.recyclerxray.sample.shared.DiffCalculator
+import com.friendoye.recyclerxray.sample.shared.ItemType
+import com.friendoye.recyclerxray.sample.shared.ItemType.Companion.getOrdinal
+import com.friendoye.recyclerxray.sample.shared.type
 
 class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider {

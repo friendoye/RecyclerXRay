@@ -3,7 +3,10 @@ package com.friendoye.recyclerxray.sample
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.friendoye.recyclerxray.sample.InnerItemType.Companion.getOrdinal
+import com.friendoye.recyclerxray.sample.shared.DiffCalculator
+import com.friendoye.recyclerxray.sample.shared.InnerItemType
+import com.friendoye.recyclerxray.sample.shared.InnerItemType.Companion.getOrdinal
+import com.friendoye.recyclerxray.sample.shared.type
 
 class InnerHorizontalAdapter(
     givenItems: List<InnerItemType> = emptyList()

@@ -56,8 +56,12 @@ internal sealed class InternalLog {
             accumulatedLogs = emptyList()
         }
 
-        data class Entry(val level: Level, val tag: String, val message: String,
-                         val throwable: Throwable? = null) {
+        data class Entry(
+            val level: Level,
+            val tag: String,
+            val message: String,
+            val throwable: Throwable? = null
+        ) {
             enum class Level {
                 INFO,
                 DEBUG,

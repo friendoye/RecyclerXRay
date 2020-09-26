@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.XRayCustomParamsViewHolderProvider
-import com.friendoye.recyclerxray.sample.databinding.ItemInnerBoxBinding
-import com.friendoye.recyclerxray.sample.databinding.ItemInnerCircleBinding
+import com.friendoye.recyclerxray.sample.shared.InnerItemType
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemInnerBoxBinding
+import com.friendoye.recyclerxray.sample.shared.databinding.ItemInnerCircleBinding
 
 class BoxViewHolder private constructor(
     private val binding: ItemInnerBoxBinding

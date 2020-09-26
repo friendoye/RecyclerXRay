@@ -233,8 +233,11 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
     }
 
-    private fun View.setLoggableLinkClickListener(viewHolder: T,
-                                                  xRayResult: XRayResult, position: Int) {
+    private fun View.setLoggableLinkClickListener(
+        viewHolder: T,
+        xRayResult: XRayResult,
+        position: Int
+    ) {
         val isHidden = overlayHideController.isOverlayHidden.getOrNull(position)
         // TODO: WARNING: Temporary workaround. Remove it
         if (isHidden == null) {

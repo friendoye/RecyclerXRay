@@ -12,3 +12,8 @@ gradleEnterprise {
 rootProject.name='RecyclerXRay'
 include ':library'
 include ':sample'
+include ':sample-groupie'
+include ':sample-epoxy'
+include ':groupie-integration'
+include ':epoxy-integration'
+include ':sample-shared'
