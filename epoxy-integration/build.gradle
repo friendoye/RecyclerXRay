@@ -53,3 +53,15 @@ dependencies {
 
     implementation "com.airbnb.android:epoxy:4.1.0"
 }
+
+ext {
+    bintrayName = 'recyclerxray-epoxy-integration'
+
+    libraryName = 'RecyclerXRay: Epoxy Integration'
+    artifact = 'recyclerxray-epoxy-integration'
+    libraryVersion = artifactVersion
+
+    libraryDescription = 'Utils for Epoxy integration with RecyclerXRay.'
+}
+
+apply from: '../deploy.gradle'

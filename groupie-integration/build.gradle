@@ -54,3 +54,15 @@ dependencies {
     implementation "com.xwray:groupie:2.8.1"
     implementation "com.xwray:groupie-kotlin-android-extensions:2.8.1"
 }
+
+ext {
+    bintrayName = 'recyclerxray-groupie-integration'
+
+    libraryName = 'RecyclerXRay: Groupie Integration'
+    artifact = 'recyclerxray-groupie-integration'
+    libraryVersion = artifactVersion
+
+    libraryDescription = 'Utils for Groupie integration with RecyclerXRay.'
+}
+
+apply from: '../deploy.gradle'
