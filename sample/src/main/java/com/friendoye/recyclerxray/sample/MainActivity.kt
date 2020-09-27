@@ -72,6 +72,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val adapterWatcher = GlobalAdapterWatcher()
+        adapterWatcher.startWatching(binding.root)
+
         isFullDataInAdapter = true
         binding.floatingActionButton.setOnClickListener {
             isFullDataInAdapter = !isFullDataInAdapter
@@ -80,24 +83,34 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerXRays()
 
         binding.sampleRecyclerViewView.apply {
-            layoutManager = GridLayoutManager(context, 3).apply {
+            layoutManager = object : GridLayoutManager(context, 3) {
+                override fun onAdapterChanged(
+                    oldAdapter: RecyclerView.Adapter<*>?,
+                    newAdapter: RecyclerView.Adapter<*>?
+                ) {
+                    adapterWatcher.onAdapterChanged(oldAdapter, newAdapter)
+                    super.onAdapterChanged(oldAdapter, newAdapter)
+                }
+            }.apply {
                 spanSizeLookup = SampleAdapterSpanLookup {
                     adapter as? ConcatAdapter ?: RecyclerXRay.unwrap(adapter!!)
                 }
             }
             // Test RecyclerXRay
+            // TODO: What to do if every child adapter is wrapped and we
+            // started global RV watching?
             adapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    RecyclerXRay.wrap(sampleAdapter),
-                    RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter),
-                    localRecyclerXRay.wrap(localSampleAdapter),
-                    RecyclerXRay.wrap(horizontalRecyclerAdapter)
+                    sampleAdapter,
+                    horizontalRecyclerWithAdapterChangeAdapter,
+                    localSampleAdapter,
+                    horizontalRecyclerAdapter
                 )
             )
-            sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
+            //sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
         }
     }
 

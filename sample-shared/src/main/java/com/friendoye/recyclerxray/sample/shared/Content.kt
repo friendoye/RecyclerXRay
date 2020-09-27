@@ -8,7 +8,7 @@ import com.friendoye.recyclerxray.sample.shared.ItemType.Large
 import com.friendoye.recyclerxray.sample.shared.ItemType.Small
 import com.friendoye.recyclerxray.sample.shared.ItemType.Widest
 
-val SAMPLE_DATA_FULL = listOf(
+public val SAMPLE_DATA_FULL = listOf(
     Small(1), Small(2), Small(3),
     Large("One"), Small(4),
     Empty,
@@ -16,7 +16,7 @@ val SAMPLE_DATA_FULL = listOf(
     Empty
 )
 
-val SAMPLE_DATA_PARTIAL = listOf(
+public val SAMPLE_DATA_PARTIAL = listOf(
     Small(1), // Small(2), Small(3),
     Large("One"), // Small(4),
     Empty,
@@ -24,7 +24,7 @@ val SAMPLE_DATA_PARTIAL = listOf(
     // Empty
 )
 
-val LOCAL_SAMPLE_DATA_FULL = listOf(
+public val LOCAL_SAMPLE_DATA_FULL = listOf(
     Small(5), Large("Two"),
     Small(6), Small(7), Small(8),
     Widest,
@@ -32,7 +32,7 @@ val LOCAL_SAMPLE_DATA_FULL = listOf(
     Large("Three"), Small(12)
 )
 
-val LOCAL_SAMPLE_DATA_PARTIAL = listOf(
+public val LOCAL_SAMPLE_DATA_PARTIAL = listOf(
     /*Small(5),*/ Large("Two"),
     Small(6), // Small(7), Small(8),
     Widest,
@@ -40,22 +40,22 @@ val LOCAL_SAMPLE_DATA_PARTIAL = listOf(
     Large("Three") // , Small(12)
 )
 
-val INNER_DATA_FULL = listOf(
+public val INNER_DATA_FULL = listOf(
     HorizontalRecycler(
         listOf(Box, Circle, Circle, Box, Box, Circle, Box)
     )
 )
 
-val INNER_DATA_PARTIAL = INNER_DATA_FULL
+public val INNER_DATA_PARTIAL = INNER_DATA_FULL
 
-val INNER_DATA_ADAPTER_CHANGE_FULL = listOf(
+public val INNER_DATA_ADAPTER_CHANGE_FULL = listOf(
     HorizontalRecycler(
         listOf(Box, Circle, Box, Box, Box, Circle, Box),
         changeAdapter = true
     )
 )
 
-val INNER_DATA_ADAPTER_CHANGE_PARTIAL = listOf(
+public val INNER_DATA_ADAPTER_CHANGE_PARTIAL = listOf(
     HorizontalRecycler(
         listOf(Box, Circle, Box, Circle),
         changeAdapter = true
