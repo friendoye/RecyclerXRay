@@ -248,3 +248,25 @@ You can check out `:sample` module for more information.
 In order to be able (in theory) make possible integration with 3rd parties `RecycleView` utility libraries (e.g. [Epoxy](https://github.com/airbnb/epoxy), [Groupie](https://github.com/lisawray/groupie)), so we could navigate to its specific abstraction faster, `LoggableLinkProvider` interface was introduced. 
 
 `RecyclerXRay` library has built-in `DefaultLoggableLinkProvider`, so you shouldn't worry about providing it.
+
+If you want to add links support for some `Epoxy` or `Groupie`, you should add integration library to your dependencies:
+
+```groovy
+dependencies {
+    implementation 'com.friendoye:recyclerxray-epoxy-integration:$version' // Epoxy
+    implementation 'com.friendoye:recyclerxray-groupie-integration:$version' // Groupie
+}
+```
+
+And add corresponding `EpoxyLinkProvider` or `GroupieLinkProvider` to `XRaySetting`:
+
+```kotlin
+RecyclerXRay.settings = XRaySettings.Builder()
+        // ...
+        .withExtraLoggableLinkProviders(
+            listOf(EpoxyLinkProvider())
+        )
+        .build()
+```
+
+You can check out `:sample-epoxy` or `:sample-groupie` module for more information.
