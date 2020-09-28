@@ -5,6 +5,9 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import java.lang.Exception
 
+/**
+ * Helper [LoggableLinkProvider] implementation for [Groupie] library.
+ */
 class GroupieLinkProvider : LoggableLinkProvider {
 
     override fun getLoggableLinkToFileWithClass(

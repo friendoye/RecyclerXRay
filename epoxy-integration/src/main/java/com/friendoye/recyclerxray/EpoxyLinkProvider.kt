@@ -5,6 +5,9 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyViewHolder
 import java.lang.Exception
 
+/**
+ * Helper [LoggableLinkProvider] implementation for [Epoxy] library.
+ */
 class EpoxyLinkProvider : LoggableLinkProvider {
 
     override fun getLoggableLinkToFileWithClass(
