@@ -31,5 +31,5 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
     // WARNING: Bumping this version could cause :sample androidTests
     // failing on API 19
-    api 'com.google.android.material:material:1.0.0'
+    api 'com.google.android.material:material:1.2.1'
 }
