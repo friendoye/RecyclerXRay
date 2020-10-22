@@ -177,7 +177,7 @@ RecyclerXRay.settings = XRaySettings.Builder()
                                               // RecyclerView.ViewHolder itemViews
         .withLabel("test_label")              // Will be used in logs/exceptions to indicate debug
                                               // name for given RecyclerXRay.
-        .enableNestedRecyclersSupport(false)  // Enable nested RecyclerView inspecion support
+        .enableNestedRecyclersSupport(false)  // Enable nested RecyclerView inspection support
         .withNestedXRaySettingsProvider(null) // Provide custom XRaySetting for given nested adapter.
         .withExtraLoggableLinkProviders(...)  // Add extra LoggableLinkProvider's for better integration
                                               // with other libraries/frameworks.
