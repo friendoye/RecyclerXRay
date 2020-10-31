@@ -2,6 +2,7 @@ package com.friendoye.recyclerxray
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.platform.app.InstrumentationRegistry
 import com.friendoye.recyclerxray.utils.InnerTestItemType.Box
 import com.friendoye.recyclerxray.utils.InnerTestItemType.Circle
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.InnerRecycler
@@ -266,6 +267,8 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 )
             }
         }
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
