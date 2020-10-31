@@ -68,6 +68,10 @@ android {
             force("androidx.arch.core:core-common:2.1.0")
             force("androidx.collection:collection:1.1.0")
         }
+        exclude group: 'androidx.compose.ui'
+        exclude group: 'androidx.compose.animation'
+        exclude group: 'androidx.compose.runtime'
+        exclude group: 'androidx.compose.foundation'
     }
 }
 
