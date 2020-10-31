@@ -51,7 +51,7 @@ open class DiffCalculator<T>(
     }
 }
 
-inline fun <T : Activity> ActivityScenario<T>.ensureAllViewHoldersBind(recyclerView: RecyclerView) {
+fun <T : Activity> ActivityScenario<T>.ensureAllViewHoldersBind(recyclerView: RecyclerView) {
     onActivity {
         recyclerView.scrollToPosition(
             recyclerView.adapter?.itemCount?.minus(1)?.coerceAtLeast(0)

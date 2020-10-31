@@ -338,7 +338,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
             clickOnItem(position = 2)
         }
 
-        activityTestRule.scenario.onActivity { activity ->
+        activityTestRule.scenario.onActivity {
             testAdapter.items = fullItems
         }
 
