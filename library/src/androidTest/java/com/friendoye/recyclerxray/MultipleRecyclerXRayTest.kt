@@ -1,8 +1,8 @@
 package com.friendoye.recyclerxray
 
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.testing.ExceptionShooter
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.TestActivity
@@ -27,10 +27,7 @@ class MultipleRecyclerXRayTest {
     }
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(TestActivity::class.java)
-
-    val currentActivity: TestActivity
-        get() = activityTestRule.activity
+    var activityTestRule = ActivityScenarioRule(TestActivity::class.java)
 
     @Before
     fun setup() {
@@ -53,9 +50,11 @@ class MultipleRecyclerXRayTest {
             settings = settings.copy(label = "secondXRay")
         }
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = createTestAdapter(Visible, Visible, Visible)
-            currentActivity.testRecycler.adapter = firstXRay.wrap(secondXRay.wrap(testAdapter))
+            onActivity { activity ->
+                activity.testRecycler.adapter = firstXRay.wrap(secondXRay.wrap(testAdapter))
+            }
         }
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()

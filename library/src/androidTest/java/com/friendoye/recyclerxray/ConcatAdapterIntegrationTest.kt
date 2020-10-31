@@ -1,14 +1,15 @@
 package com.friendoye.recyclerxray
 
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.testing.ExceptionShooter
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.TestActivity
+import com.friendoye.recyclerxray.utils.activity
 import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.friendoye.recyclerxray.utils.dip
@@ -23,7 +24,7 @@ import org.junit.Test
 class ConcatAdapterIntegrationTest : ScreenshotTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(TestActivity::class.java)
+    var activityTestRule = ActivityScenarioRule(TestActivity::class.java)
 
     val currentActivity: TestActivity
         get() = activityTestRule.activity
@@ -55,7 +56,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
 
     @Test
     fun sharedViewTypes_wrapIndividualAdapter_firstRecyclerXRayToggle() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -65,16 +66,19 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
-            currentActivity.testRecycler.adapter = testAdapter
-            firstXRay.toggleSecrets()
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = testAdapter
+                firstXRay.toggleSecrets()
+            }
         }
 
-        compareRecyclerScreenshot(currentActivity.testRecycler)
+        compareRecyclerScreenshot(activityTestRule.activity.testRecycler)
     }
 
     @Test
     fun sharedViewTypes_wrapIndividualAdapter_secondRecyclerXRayToggle() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -84,22 +88,25 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
-            currentActivity.testRecycler.adapter = testAdapter
-        }
 
-        // TODO: Find out why we should post toggleSecrets()
-        activityTestRule.runOnUiThread {
-            secondXRay.toggleSecrets()
-        }
+            onActivity { activity ->
+                activity.testRecycler.adapter = testAdapter
+            }
 
-        activityTestRule.ensureAllViewHoldersBind(currentActivity.testRecycler)
+            // TODO: Find out why we should post toggleSecrets()
+            onActivity {
+                secondXRay.toggleSecrets()
+            }
+
+            ensureAllViewHoldersBind(currentActivity.testRecycler)
+        }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 
     @Test
     fun sharedViewTypes_wrapIndividualAdapter_allRecyclerXRayToggles() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -109,9 +116,12 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
                 )
             )
-            currentActivity.testRecycler.adapter = testAdapter
-            firstXRay.toggleSecrets()
-            secondXRay.toggleSecrets()
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = testAdapter
+                firstXRay.toggleSecrets()
+                secondXRay.toggleSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -119,7 +129,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
 
     @Test
     fun sharedViewTypes_wrapConcatAdapter_toggle() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -129,8 +139,11 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     createTestAdapter(Visible, Ghost(), Visible, LargeVisible)
                 )
             )
-            currentActivity.testRecycler.adapter = firstXRay.wrap(testAdapter)
-            firstXRay.toggleSecrets()
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = firstXRay.wrap(testAdapter)
+                firstXRay.toggleSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -140,7 +153,7 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
     fun failToAttachAdapter_notAllInnerAdaptersWrapped() {
         val shooter = ExceptionShooter.TestExceptionShooter()
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = ConcatAdapter(
                 ConcatAdapter.Config.Builder()
                     .setIsolateViewTypes(false)
@@ -151,10 +164,12 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                 )
             )
 
-            try {
-                currentActivity.testRecycler.adapter = testAdapter
-            } catch (e: Throwable) {
-                shooter.fire(e)
+            onActivity { activity ->
+                try {
+                    activity.testRecycler.adapter = testAdapter
+                } catch (e: Throwable) {
+                    shooter.fire(e)
+                }
             }
         }
 

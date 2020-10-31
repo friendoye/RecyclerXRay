@@ -1,12 +1,13 @@
 package com.friendoye.recyclerxray
 
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.rule.ActivityTestRule
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Ghost
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.LargeVisible
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.TestActivity
+import com.friendoye.recyclerxray.utils.activity
 import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.friendoye.recyclerxray.utils.dip
@@ -19,7 +20,7 @@ import org.junit.Test
 class NoOpRecyclerXRayTest : ScreenshotTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(TestActivity::class.java)
+    var activityTestRule = ActivityScenarioRule(TestActivity::class.java)
 
     val currentActivity: TestActivity
         get() = activityTestRule.activity
@@ -44,9 +45,9 @@ class NoOpRecyclerXRayTest : ScreenshotTest {
 
     @Test
     fun wrapDoesNotChangeLayout() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.onActivity { activity ->
             val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
-            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            activity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -54,9 +55,9 @@ class NoOpRecyclerXRayTest : ScreenshotTest {
 
     @Test
     fun checkXRayIsOn() {
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.onActivity { activity ->
             val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
-            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+            activity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
             recyclerXRay.showSecrets()
         }
 
@@ -65,14 +66,16 @@ class NoOpRecyclerXRayTest : ScreenshotTest {
 
     @Test
     fun checkXRayIsOff_viaHideSecrets() {
-        activityTestRule.runOnUiThread {
-            val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
-            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
-            recyclerXRay.showSecrets()
-        }
+        activityTestRule.scenario.apply {
+            onActivity { activity ->
+                val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
+                activity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+                recyclerXRay.showSecrets()
+            }
 
-        activityTestRule.runOnUiThread {
-            recyclerXRay.hideSecrets()
+            onActivity {
+                recyclerXRay.hideSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -80,14 +83,16 @@ class NoOpRecyclerXRayTest : ScreenshotTest {
 
     @Test
     fun checkXRayIsOff_viaToggleSecrets() {
-        activityTestRule.runOnUiThread {
-            val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
-            currentActivity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
-            recyclerXRay.showSecrets()
-        }
+        activityTestRule.scenario.apply {
+            onActivity { activity ->
+                val testAdapter = createTestAdapter(Visible, Ghost(), LargeVisible)
+                activity.testRecycler.adapter = recyclerXRay.wrap(testAdapter)
+                recyclerXRay.showSecrets()
+            }
 
-        activityTestRule.runOnUiThread {
-            recyclerXRay.toggleSecrets()
+            onActivity {
+                recyclerXRay.toggleSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
