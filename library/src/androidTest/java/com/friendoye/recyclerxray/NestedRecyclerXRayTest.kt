@@ -1,5 +1,6 @@
 package com.friendoye.recyclerxray
 
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -240,6 +241,8 @@ class NestedRecyclerXRayTest : ScreenshotTest {
         lateinit var testAdapter: RvIntegrationTestAdapter
 
         activityTestRule.scenario.apply {
+            moveToState(Lifecycle.State.RESUMED)
+
             testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
