@@ -47,6 +47,66 @@ class NestedRecyclerXRayTest : ScreenshotTest {
     }
 
     @Test
+    fun settingsEnabled_hasNestedProvider_innerDataHasChanged_showInspection() {
+        val localRecyclerXRay = LocalRecyclerXRay().apply {
+            settings = baseSettingsBuilder
+                .enableNestedRecyclersSupport(true)
+                .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
+                    override fun provide(
+                        nestedAdapter: RecyclerView.Adapter<*>
+                    ): XRaySettings? {
+                        return XRaySettings.Builder().build()
+                    }
+                })
+                .build()
+        }
+        lateinit var testAdapter: RvIntegrationTestAdapter
+
+        activityTestRule.scenario.apply {
+            moveToState(Lifecycle.State.RESUMED)
+
+            testAdapter = createTestAdapter(
+                Visible,
+                InnerRecycler(
+                    changeAdapter = false, useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle)
+                ),
+                Visible,
+                useDiffUtils = true
+            )
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+                localRecyclerXRay.showSecrets()
+            }
+
+            onActivity {
+                testAdapter.items = listOf(
+                    LargeVisible,
+                    InnerRecycler(
+                        changeAdapter = false, useDiffUtils = true,
+                        items = listOf(Circle)
+                    ),
+                    LargeVisible,
+                    Visible
+                )
+            }
+
+            // Note: Without manual onLayout()
+            // our RecyclerView doesn't have enough
+            // time to update its content on
+            // CI during screenshot test running.
+            onActivity { activity ->
+                activity.testRecycler.requestLayout()
+            }
+        }
+
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+
+        compareRecyclerScreenshot(currentActivity.testRecycler)
+    }
+
+    @Test
     fun settingDisabled_doNoShowInspection() {
         val localRecyclerXRay = LocalRecyclerXRay().apply {
             settings = baseSettingsBuilder
@@ -220,66 +280,6 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 )
             }
         }
-
-        compareRecyclerScreenshot(currentActivity.testRecycler)
-    }
-
-    @Test
-    fun settingsEnabled_hasNestedProvider_innerDataHasChanged_showInspection() {
-        val localRecyclerXRay = LocalRecyclerXRay().apply {
-            settings = baseSettingsBuilder
-                .enableNestedRecyclersSupport(true)
-                .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
-                    override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>
-                    ): XRaySettings? {
-                        return XRaySettings.Builder().build()
-                    }
-                })
-                .build()
-        }
-        lateinit var testAdapter: RvIntegrationTestAdapter
-
-        activityTestRule.scenario.apply {
-            moveToState(Lifecycle.State.RESUMED)
-
-            testAdapter = createTestAdapter(
-                Visible,
-                InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
-                ),
-                Visible,
-                useDiffUtils = true
-            )
-
-            onActivity { activity ->
-                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-                localRecyclerXRay.showSecrets()
-            }
-
-            onActivity {
-                testAdapter.items = listOf(
-                    LargeVisible,
-                    InnerRecycler(
-                        changeAdapter = false, useDiffUtils = true,
-                        items = listOf(Circle)
-                    ),
-                    LargeVisible,
-                    Visible
-                )
-            }
-
-            // Note: Without manual onLayout()
-            // our RecyclerView doesn't have enough
-            // time to update its content on
-            // CI during screenshot test running.
-            onActivity { activity ->
-                activity.testRecycler.requestLayout()
-            }
-        }
-
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
