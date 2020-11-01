@@ -266,6 +266,14 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                     Visible
                 )
             }
+
+            // Note: Without manual onLayout()
+            // our RecyclerView doesn't have enough
+            // time to update its content on
+            // CI during screenshot test running.
+            onActivity { activity ->
+                activity.testRecycler.requestLayout()
+            }
         }
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
