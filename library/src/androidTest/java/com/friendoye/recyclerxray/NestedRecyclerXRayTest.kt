@@ -270,9 +270,6 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             }
         }
 
-        // InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        // Thread.sleep(5_000)
-
         compareRecyclerScreenshot(currentActivity.testRecycler)
     }
 }
