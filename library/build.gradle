@@ -39,6 +39,7 @@ android {
                 excludes = ['jdk.internal.*']
             }
         }
+        animationsDisabled = true
     }
 
     lintOptions {
