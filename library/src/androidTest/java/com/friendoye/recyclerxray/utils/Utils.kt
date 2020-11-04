@@ -1,9 +1,12 @@
 package com.friendoye.recyclerxray.utils
 
+import android.app.Activity
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.rule.ActivityTestRule
+import androidx.test.core.app.ActivityScenario
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.karumi.shot.waitForActivity
 
 fun Context.dip(value: Int): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
 fun Context.dip(value: Float): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
@@ -48,15 +51,18 @@ open class DiffCalculator<T>(
     }
 }
 
-fun ActivityTestRule<*>.ensureAllViewHoldersBind(recyclerView: RecyclerView) {
-    runOnUiThread {
+fun <T : Activity> ActivityScenario<T>.ensureAllViewHoldersBind(recyclerView: RecyclerView) {
+    onActivity {
         recyclerView.scrollToPosition(
             recyclerView.adapter?.itemCount?.minus(1)?.coerceAtLeast(0)
                 ?: 0
         )
     }
 
-    runOnUiThread {
+    onActivity {
         recyclerView.scrollToPosition(0)
     }
 }
+
+val <T : Activity> ActivityScenarioRule<T>.activity: T
+    get() = scenario.waitForActivity()

@@ -1,7 +1,8 @@
 package com.friendoye.recyclerxray
 
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.friendoye.recyclerxray.utils.InnerTestItemType.Box
 import com.friendoye.recyclerxray.utils.InnerTestItemType.Circle
 import com.friendoye.recyclerxray.utils.IntegrationTestItemType.InnerRecycler
@@ -10,6 +11,7 @@ import com.friendoye.recyclerxray.utils.IntegrationTestItemType.Visible
 import com.friendoye.recyclerxray.utils.RvIntegrationTestAdapter
 import com.friendoye.recyclerxray.utils.RvIntegrationXRayDebugViewHolder
 import com.friendoye.recyclerxray.utils.TestActivity
+import com.friendoye.recyclerxray.utils.activity
 import com.friendoye.recyclerxray.utils.compareRecyclerScreenshot
 import com.friendoye.recyclerxray.utils.createTestAdapter
 import com.friendoye.recyclerxray.utils.dip
@@ -23,7 +25,7 @@ import org.junit.Test
 class NestedRecyclerXRayTest : ScreenshotTest {
 
     @get:Rule
-    var activityTestRule = ActivityTestRule(TestActivity::class.java)
+    var activityTestRule = ActivityScenarioRule(TestActivity::class.java)
 
     val currentActivity: TestActivity
         get() = activityTestRule.activity
@@ -52,7 +54,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .build()
         }
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -61,8 +63,11 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 ),
                 Visible
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-            localRecyclerXRay.showSecrets()
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+                localRecyclerXRay.showSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -77,7 +82,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .build()
         }
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -87,11 +92,14 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 Visible,
                 innerWrapper = { localRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) }
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-        }
 
-        activityTestRule.runOnUiThread {
-            localRecyclerXRay.showSecrets()
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+            }
+
+            onActivity {
+                localRecyclerXRay.showSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -110,7 +118,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             settings = baseSettingsBuilder.build()
         }
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -120,11 +128,14 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 Visible,
                 innerWrapper = { innerRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) }
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-        }
 
-        activityTestRule.runOnUiThread {
-            localRecyclerXRay.showSecrets()
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+            }
+
+            onActivity {
+                localRecyclerXRay.showSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -145,7 +156,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .build()
         }
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -154,8 +165,11 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 ),
                 Visible
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-            localRecyclerXRay.showSecrets()
+
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+                localRecyclerXRay.showSecrets()
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -177,7 +191,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
         }
         lateinit var testAdapter: RvIntegrationTestAdapter
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
             testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -187,20 +201,23 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 Visible,
                 useDiffUtils = true
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-            localRecyclerXRay.showSecrets()
-        }
 
-        activityTestRule.runOnUiThread {
-            testAdapter.items = listOf(
-                LargeVisible,
-                InnerRecycler(
-                    changeAdapter = true, useDiffUtils = true,
-                    items = listOf(Circle)
-                ),
-                LargeVisible,
-                Visible
-            )
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+                localRecyclerXRay.showSecrets()
+            }
+
+            onActivity {
+                testAdapter.items = listOf(
+                    LargeVisible,
+                    InnerRecycler(
+                        changeAdapter = true, useDiffUtils = true,
+                        items = listOf(Circle)
+                    ),
+                    LargeVisible,
+                    Visible
+                )
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)
@@ -222,7 +239,9 @@ class NestedRecyclerXRayTest : ScreenshotTest {
         }
         lateinit var testAdapter: RvIntegrationTestAdapter
 
-        activityTestRule.runOnUiThread {
+        activityTestRule.scenario.apply {
+            moveToState(Lifecycle.State.RESUMED)
+
             testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
@@ -232,20 +251,23 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 Visible,
                 useDiffUtils = true
             )
-            currentActivity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
-            localRecyclerXRay.showSecrets()
-        }
 
-        activityTestRule.runOnUiThread {
-            testAdapter.items = listOf(
-                LargeVisible,
-                InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Circle)
-                ),
-                LargeVisible,
-                Visible
-            )
+            onActivity { activity ->
+                activity.testRecycler.adapter = localRecyclerXRay.wrap(testAdapter)
+                localRecyclerXRay.showSecrets()
+            }
+
+            onActivity {
+                testAdapter.items = listOf(
+                    LargeVisible,
+                    InnerRecycler(
+                        changeAdapter = false, useDiffUtils = true,
+                        items = listOf(Circle)
+                    ),
+                    LargeVisible,
+                    Visible
+                )
+            }
         }
 
         compareRecyclerScreenshot(currentActivity.testRecycler)

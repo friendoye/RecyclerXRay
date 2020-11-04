@@ -70,6 +70,10 @@ class InnerRecyclerViewHolder private constructor(
     private val recycler: RecyclerView
         get() = (itemView as ViewGroup).getChildAt(0) as RecyclerView
 
+    init {
+        recycler.itemAnimator = null
+    }
+
     private var currentAdapter = createInnerTestAdapter()
 
     init {
