@@ -29,7 +29,5 @@ dependencies {
     api 'androidx.core:core-ktx:1.3.1'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
     api 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
-    // WARNING: Bumping this version could cause :sample androidTests
-    // failing on API 19
     api 'com.google.android.material:material:1.2.1'
 }
