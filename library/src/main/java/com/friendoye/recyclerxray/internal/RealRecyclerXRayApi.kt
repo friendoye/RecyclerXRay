@@ -66,10 +66,10 @@ internal class RealRecyclerXRayApi(
         settings: XRaySettings
     ): RecyclerView.Adapter<VH> {
         if (adapter is ScannableRecyclerAdapter<*> && adapter.parentXRayApiId == id) {
-            InternalLog.i(
-                DEFAULT_LOG_TAG,
-                "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)"
-            )
+            //InternalLog.i(
+            //    DEFAULT_LOG_TAG,
+            //    "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)"
+            //)
             return adapter
         }
 
