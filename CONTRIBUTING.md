@@ -22,6 +22,8 @@ Before submiting PR, please, make sure that all checks and tests are passing:
 ./gradlew clean check
 # Run Unit tests
 ./gradlew clean test
+# Run mutation tests
+./gradlew :library:pitestDebug
 # Run Android tests
 ./gradlew connectedCheck
 # Run Screenshot tests

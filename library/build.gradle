@@ -12,25 +12,16 @@ jacoco {
 
 pitest {
     targetClasses = ['com.friendoye.recyclerxray.*']
-    threads = 1
+    threads = 4
     outputFormats = ['XML', 'HTML']
-    excludeMockableAndroidJar = true
     timestampedReports = false
     verbose = true
-    skipFailingTests = true
-    excludedClasses = [
-            'com.friendoye.recyclerxray.XRaySettings.Builder',
-            'com.friendoye.recyclerxray.XRaySettings',
+    mutators = [
+            'DEFAULTS',
+            'NON_VOID_METHOD_CALLS',
+            //'NULL_RETURNS',
     ]
-    excludedTestClasses = [
-//            'com.friendoye.recyclerxray.XRaySettingsBuilderTest',
-//            'com.friendoye.recyclerxray.ColorGenerationTest',
-//            'com.friendoye.recyclerxray.AdbToggleReceiverTest',
-//            'com.friendoye.recyclerxray.RecyclerXRayTest',
-//            'com.friendoye.recyclerxray.XRayInitializerTest',
-//            'com.friendoye.recyclerxray.DefaultLoggableLinkProviderTest',
-//            'com.friendoye.recyclerxray.CompositeLoggableLinkProviderTest',
-    ]
+    timeoutConstInMillis = 20_000
 }
 
 android {
