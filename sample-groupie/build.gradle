@@ -28,7 +28,7 @@ dependencies {
     implementation project(":sample-shared")
     implementation project(":groupie-integration")
 
-    implementation "com.xwray:groupie:2.8.1"
+    implementation "com.xwray:groupie:2.9.0"
     implementation "com.xwray:groupie-kotlin-android-extensions:2.8.1"
     //api "com.xwray:groupie-viewbinding:2.8.1"
 
