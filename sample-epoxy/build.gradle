@@ -32,7 +32,7 @@ dependencies {
     implementation project(":sample-shared")
     implementation project(":epoxy-integration")
 
-    implementation "com.airbnb.android:epoxy:4.1.0"
+    implementation "com.airbnb.android:epoxy:4.5.0"
     // Add the annotation processor if you are using Epoxy's annotations (recommended)
     kapt "com.airbnb.android:epoxy-processor:4.2.0"
 
