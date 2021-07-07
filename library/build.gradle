@@ -4,9 +4,24 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'shot'
 apply plugin: 'com.hiya.jacoco-android'
+apply plugin: 'pl.droidsonroids.pitest'
 
 jacoco {
     toolVersion = "0.8.4"
+}
+
+pitest {
+    targetClasses = ['com.friendoye.recyclerxray.*']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    verbose = true
+    mutators = [
+            'DEFAULTS',
+            'NON_VOID_METHOD_CALLS',
+            //'NULL_RETURNS',
+    ]
+    timeoutConstInMillis = 20_000
 }
 
 android {
@@ -86,6 +101,14 @@ dependencies {
     testImplementation "io.mockk:mockk:1.10.5"
     testImplementation "org.robolectric:robolectric:4.5.1"
     testImplementation 'androidx.test:core:1.3.0'
+    // The following libraries were added for preventing
+    // Pitest from crash due to missing libraries in passed
+    // classpath.
+    testImplementation 'io.mockk:mockk-agent-common:1.10.2'
+    testImplementation 'io.mockk:mockk-agent-api:1.10.2'
+    testImplementation 'io.mockk:mockk-agent-jvm:1.10.2'
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testImplementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
 
     androidTestImplementation "androidx.lifecycle:lifecycle-common:2.2.0"
     androidTestImplementation 'androidx.test:core-ktx:1.3.0'
