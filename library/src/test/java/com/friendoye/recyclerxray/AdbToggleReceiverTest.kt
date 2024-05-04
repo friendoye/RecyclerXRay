@@ -30,7 +30,7 @@ class AdbToggleReceiverTest {
         adbToggleReceiver = AdbToggleReceiver(
             testContext,
             intentAction = "test-toggle-x-ray",
-            recyclerXRays = listOf(recyclerXRayMock)
+            recyclerXRays = listOf(recyclerXRayMock),
         )
         lifecycle.addObserver(adbToggleReceiver)
     }

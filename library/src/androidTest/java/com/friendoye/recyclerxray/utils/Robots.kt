@@ -14,8 +14,8 @@ class TestRobot {
             .perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                     position,
-                    ViewActions.click()
-                )
+                    ViewActions.click(),
+                ),
             )
     }
 
@@ -23,8 +23,8 @@ class TestRobot {
         onView(ViewMatchers.withId(R.id.test_recycler_view))
             .perform(
                 RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                    position
-                )
+                    position,
+                ),
             )
     }
 }

@@ -18,7 +18,7 @@ import androidx.lifecycle.OnLifecycleEvent
 class AdbToggleReceiver(
     private val context: Context,
     private val intentAction: String = "xray-toggle",
-    internal var recyclerXRays: List<LocalRecyclerXRay> = listOf(RecyclerXRay)
+    internal var recyclerXRays: List<LocalRecyclerXRay> = listOf(RecyclerXRay),
 ) : BroadcastReceiver(), LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

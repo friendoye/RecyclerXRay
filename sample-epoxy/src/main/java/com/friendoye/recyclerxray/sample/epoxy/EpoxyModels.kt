@@ -1,4 +1,5 @@
 @file:SuppressLint("NonConstantResourceId")
+
 package com.friendoye.recyclerxray.sample.epoxy
 
 import android.annotation.SuppressLint
@@ -62,12 +63,12 @@ abstract class LargeModel : EpoxyModelWithHolder<LargeModel.Holder>() {
 class WidestView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr)
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class EmptyView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
 ) : FrameLayout(context, attrs, defStyleAttr)

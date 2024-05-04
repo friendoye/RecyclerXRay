@@ -7,7 +7,7 @@ import androidx.viewbinding.ViewBinding
 class DefaultViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
 class ViewBindingViewHolder(
-    private val viewBinding: ViewBinding
+    private val viewBinding: ViewBinding,
 ) : RecyclerView.ViewHolder(viewBinding.root)
 
 class PrimitiveArgsViewHolder(
@@ -18,11 +18,11 @@ class PrimitiveArgsViewHolder(
     private val nullableString: String?,
     private val nullableBoolean: Boolean?,
     private val nullableAny: Any?,
-    view: View
+    view: View,
 ) : RecyclerView.ViewHolder(view)
 
 class CustomArgsViewHolder(
     private val first: FirstCustomClass,
     private val second: SecondCustomClass,
-    view: View
+    view: View,
 ) : RecyclerView.ViewHolder(view)

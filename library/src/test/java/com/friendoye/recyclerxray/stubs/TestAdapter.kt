@@ -7,7 +7,7 @@ import com.friendoye.recyclerxray.XRayCustomParamsAdapterProvider
 
 class TestAdapter(
     private val itemsCount: Int,
-    private val paramsDelegate: XRayCustomParamsAdapterProvider
+    private val paramsDelegate: XRayCustomParamsAdapterProvider,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider by paramsDelegate {
 

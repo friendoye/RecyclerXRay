@@ -38,7 +38,7 @@ class XRayCustomParamsProvidersTest {
             null,
             null,
             mapOf("another_param" to 10),
-            mapOf("another_param" to "test11")
+            mapOf("another_param" to "test11"),
         )
         val adapterParams = { position: Int -> mapOf("adapter_param" to position + 1) }
 
@@ -50,7 +50,7 @@ class XRayCustomParamsProvidersTest {
                 repeat(currentSize - prevSize) {
                     latch.countDown()
                 }
-            }
+            },
         )
 
         val recyclerXRay = LocalRecyclerXRay()
@@ -81,12 +81,12 @@ class XRayCustomParamsProvidersTest {
                 mapOf("adapter_param" to 8),
                 mapOf("adapter_param" to 9),
                 mapOf("another_param" to 10, "adapter_param" to 10),
-                mapOf("another_param" to "test11", "adapter_param" to 11)
+                mapOf("another_param" to "test11", "adapter_param" to 11),
             ),
             testDebugViewHolder.resultsMap
                 .toList()
                 .sortedBy { it.first }
-                .map { it.second.customParams }
+                .map { it.second.customParams },
         )
     }
 }

@@ -18,10 +18,10 @@ import com.friendoye.recyclerxray.internal.RecyclerXRayApi
  */
 object XRayInitializer {
 
-    internal var NOT_INITIALIZED_PROVIDER: () -> RecyclerXRayApi = { NotInitializedRecyclerXRayApi }
-    internal var NO_OP_PROVIDER: (XRaySettings) -> RecyclerXRayApi = ::NoOpRecyclerXRayApi
+    internal var notInitializedProvider: () -> RecyclerXRayApi = { NotInitializedRecyclerXRayApi }
+    internal var noOpProvider: (XRaySettings) -> RecyclerXRayApi = ::NoOpRecyclerXRayApi
 
-    internal var xRayApiProvider: () -> RecyclerXRayApi = NOT_INITIALIZED_PROVIDER
+    internal var xRayApiProvider: () -> RecyclerXRayApi = notInitializedProvider
     internal var isInitialized = false
 
     /**
@@ -33,7 +33,7 @@ object XRayInitializer {
     @JvmOverloads
     fun init(
         context: Context,
-        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()
+        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build(),
     ) {
         val app = context.applicationContext as Application
         val isAppDebuggable = (app.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
@@ -46,14 +46,14 @@ object XRayInitializer {
     @JvmOverloads
     fun init(
         isNoOpMode: Boolean = false,
-        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build()
+        defaultXRaySettings: XRaySettings = XRaySettings.Builder().build(),
     ) {
         if (isInitialized) {
             throw IllegalStateException("RecyclerXRay is already initialized.")
         }
 
         xRayApiProvider = if (isNoOpMode) {
-            { NO_OP_PROVIDER(defaultXRaySettings) }
+            { noOpProvider(defaultXRaySettings) }
         } else {
             { RealRecyclerXRayApi(defaultXRaySettings) }
         }
@@ -69,7 +69,7 @@ object XRayInitializer {
 
     @VisibleForTesting
     internal fun reset() {
-        xRayApiProvider = NOT_INITIALIZED_PROVIDER
+        xRayApiProvider = notInitializedProvider
         isInitialized = false
     }
 }

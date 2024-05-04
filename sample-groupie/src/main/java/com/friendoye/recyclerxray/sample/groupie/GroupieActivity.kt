@@ -84,19 +84,19 @@ class GroupieActivity : AppCompatActivity() {
             .enableNestedRecyclersSupport(true)
             .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                 override fun provide(
-                    nestedAdapter: RecyclerView.Adapter<*>
+                    nestedAdapter: RecyclerView.Adapter<*>,
                 ): XRaySettings? {
                     return XRaySettings.Builder().build()
                 }
             })
             .withExtraLoggableLinkProviders(
-                listOf(com.friendoye.recyclerxray.GroupieLinkProvider())
+                listOf(com.friendoye.recyclerxray.GroupieLinkProvider()),
             )
             .build()
     }
 
     class SampleAdapterSpanLookup(
-        private val adapterProvider: () -> GroupAdapter<*>
+        private val adapterProvider: () -> GroupAdapter<*>,
     ) : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             val item = adapterProvider().getItem(position)
@@ -104,9 +104,10 @@ class GroupieActivity : AppCompatActivity() {
                 is SmallItem -> 1
                 is LargeItem -> 2
                 is WidestItem,
-                is EmptyItem -> 3
+                is EmptyItem,
+                -> 3
                 else -> throw IllegalStateException(
-                    "Unknown item = $item for position = $position"
+                    "Unknown item = $item for position = $position",
                 )
             }
         }

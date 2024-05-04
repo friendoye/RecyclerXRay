@@ -16,8 +16,9 @@ import com.friendoye.recyclerxray.sample.shared.databinding.ItemSampleWidestBind
 
 @SuppressLint("SetTextI18n")
 class SmallViewHolder private constructor(
-    private val binding: ItemSampleSmallBinding
-) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Small>,
+    private val binding: ItemSampleSmallBinding,
+) : RecyclerView.ViewHolder(binding.root),
+    Bindable<ItemType.Small>,
     XRayCustomParamsViewHolderProvider {
 
     override fun bind(item: ItemType.Small) {
@@ -39,7 +40,7 @@ class SmallViewHolder private constructor(
 
 @SuppressLint("SetTextI18n")
 class LargeViewHolder private constructor(
-    private val binding: ItemSampleLargeBinding
+    private val binding: ItemSampleLargeBinding,
 ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Large> {
 
     override fun bind(item: ItemType.Large) {
@@ -62,8 +63,9 @@ class LargeViewHolder private constructor(
 class Outer {
 
     class WidestViewHolder private constructor(
-        private val binding: ItemSampleWidestBinding
-    ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Widest>,
+        private val binding: ItemSampleWidestBinding,
+    ) : RecyclerView.ViewHolder(binding.root),
+        Bindable<ItemType.Widest>,
         XRayCustomParamsViewHolderProvider {
 
         override fun provideCustomParams(): Map<String, Any?>? {
@@ -81,7 +83,7 @@ class Outer {
 }
 
 class EmptyViewHolder private constructor(
-    private val binding: ItemSampleEmptyBinding
+    private val binding: ItemSampleEmptyBinding,
 ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.Empty> {
 
     companion object {
@@ -94,7 +96,7 @@ class EmptyViewHolder private constructor(
 }
 
 class HorizontalRecyclerViewHolder private constructor(
-    private val binding: ItemSampleHorizontalRecyclerBinding
+    private val binding: ItemSampleHorizontalRecyclerBinding,
 ) : RecyclerView.ViewHolder(binding.root), Bindable<ItemType.HorizontalRecycler> {
 
     private val innerAdapter = InnerHorizontalAdapter()
@@ -110,7 +112,7 @@ class HorizontalRecyclerViewHolder private constructor(
         if (item.changeAdapter) {
             // 1) Replace adapter on each re-bind
             binding.innerRecyclerView.adapter = RecyclerXRay.wrap(
-                InnerHorizontalAdapter(item.items)
+                InnerHorizontalAdapter(item.items),
             )
             binding.innerRecyclerView.post { binding.innerRecyclerView.requestLayout() }
         } else {

@@ -27,12 +27,13 @@ class InternalLogTest {
             .joinToString(separator = "\n") { "${it.type} ${it.tag} ${it.msg}" }
 
         Assert.assertEquals(
-            logsInLogcat, """
+            logsInLogcat,
+            """
                 |${Log.DEBUG} TestD she used to meet me
                 |${Log.INFO} TestI on the Eastside
                 |${Log.WARN} TestW will meet sometime
                 |${Log.ERROR} TestE error!
-            """.trimMargin()
+            """.trimMargin(),
         )
     }
 
@@ -52,8 +53,8 @@ class InternalLogTest {
                 Entry(Entry.Level.DEBUG, "TestTag", "have love"),
                 Entry(Entry.Level.INFO, "TagTest", "will travel"),
                 Entry(Entry.Level.WARNING, "TagTest", "oye"),
-                Entry(Entry.Level.ERROR, "TagTest", "error!", error)
-            )
+                Entry(Entry.Level.ERROR, "TagTest", "error!", error),
+            ),
         )
     }
 

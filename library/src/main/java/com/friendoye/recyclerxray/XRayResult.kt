@@ -13,5 +13,5 @@ data class XRayResult(
     val customParams: Map<String, Any?>,
     val viewWidth: Int,
     val viewHeight: Int,
-    val viewVisibility: Int
+    val viewVisibility: Int,
 )

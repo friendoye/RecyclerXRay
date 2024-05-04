@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 internal open class DelegateRecyclerAdapter<T : RecyclerView.ViewHolder>(
-    internal val decoratedAdapter: RecyclerView.Adapter<T>
+    internal val decoratedAdapter: RecyclerView.Adapter<T>,
 ) : RecyclerView.Adapter<T>() {
 
     override fun unregisterAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {

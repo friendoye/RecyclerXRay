@@ -65,7 +65,7 @@ class GhostViewHolder private constructor(root: View) : RecyclerView.ViewHolder(
 
 class InnerRecyclerViewHolder private constructor(
     root: View,
-    private val innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*>
+    private val innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*>,
 ) : RecyclerView.ViewHolder(root) {
     private val recycler: RecyclerView
         get() = (itemView as ViewGroup).getChildAt(0) as RecyclerView
@@ -102,7 +102,7 @@ class InnerRecyclerViewHolder private constructor(
     companion object {
         fun create(
             parent: ViewGroup,
-            innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*>
+            innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*>,
         ): InnerRecyclerViewHolder {
             val root = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_integration_inner_adapter_test_layout, parent, false)

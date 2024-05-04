@@ -9,7 +9,7 @@ import com.friendoye.recyclerxray.sample.shared.InnerItemType.Companion.getOrdin
 import com.friendoye.recyclerxray.sample.shared.type
 
 class InnerHorizontalAdapter(
-    givenItems: List<InnerItemType> = emptyList()
+    givenItems: List<InnerItemType> = emptyList(),
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items = givenItems

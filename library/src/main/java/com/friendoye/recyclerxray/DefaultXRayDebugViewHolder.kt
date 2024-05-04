@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.friendoye.recyclerxray.databinding.XrayItemDebugLayoutBinding
 import com.friendoye.recyclerxray.internal.startGripAnimation
-import kotlinx.android.synthetic.main.xray_item_debug_layout.view.debug_info_text_view
 
 /**
  * Default implementation of [XRayDebugViewHolder]. Used by default for all [LocalRecyclerXRay]'s.
@@ -19,8 +19,8 @@ open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
 
     @SuppressLint("SetTextI18n")
     override fun bindView(debugView: View, result: XRayResult) {
-        debugView.apply {
-            debug_info_text_view.apply {
+        XrayItemDebugLayoutBinding.bind(debugView).apply {
+            debugInfoTextView.apply {
                 text = prepareDebugText(result)
                 setBackgroundColor(result.color)
             }
@@ -28,8 +28,8 @@ open class DefaultXRayDebugViewHolder : XRayDebugViewHolder {
     }
 
     override fun onEmptyViewClick(debugView: View, result: XRayResult) {
-        debugView.apply {
-            debug_info_text_view.startGripAnimation()
+        XrayItemDebugLayoutBinding.bind(debugView).apply {
+            debugInfoTextView.startGripAnimation()
         }
     }
 

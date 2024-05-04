@@ -59,7 +59,7 @@ class XRayDebugViewClicksTest {
             "VisibleViewHolder(RvIntegrationTestItemViewHolders.kt:10)",
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("VisibleViewHolder") }
-                .joinToString(separator = "\n") { it.message }
+                .joinToString(separator = "\n") { it.message },
         )
     }
 
@@ -87,7 +87,7 @@ class XRayDebugViewClicksTest {
             """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("LargeVisibleViewHolder") }
-                .joinToString(separator = "\n") { it.message }
+                .joinToString(separator = "\n") { it.message },
         )
 
         Assert.assertEquals(
@@ -97,8 +97,8 @@ class XRayDebugViewClicksTest {
             """.trimMargin(),
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("VisibleViewHolder") }
-                .joinToString(separator = "\n") { it.message }
-            )
+                .joinToString(separator = "\n") { it.message },
+        )
     }
 
     @Test
@@ -130,7 +130,7 @@ class XRayDebugViewClicksTest {
             "GhostViewHolder(RvIntegrationTestItemViewHolders.kt:50)",
             InternalLog.testLogger.accumulatedLogs
                 .filter { it.message.startsWith("GhostViewHolder") }
-                .joinToString(separator = "\n") { it.message }
+                .joinToString(separator = "\n") { it.message },
         )
 
         Assert.assertTrue(wasEmptyViewClicked)
@@ -241,11 +241,29 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
                 .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
                 .build()
         }
-        val fullItems = listOf(Indexed(1), Indexed(2), SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/, Indexed(1), Indexed(2))
+        val fullItems = listOf(
+            Indexed(1),
+            Indexed(2),
+            SmallOne,
+            SmallOne, SmallOne,
+            SmallTwo,
+            SmallTwo, SmallOne,
+            SmallOne,
+            SmallTwo,
+        )
+        val partialItems = listOf(
+            SmallOne,
+            // SmallOne, SmallOne,
+            SmallTwo,
+            // SmallTwo, SmallOne,
+            SmallOne,
+            // SmallTwo,
+            Indexed(1),
+            Indexed(2),
+        )
         val testAdapter = createTestAdapter(
             *fullItems.toTypedArray(),
-            useDiffUtils = true
+            useDiffUtils = true,
         )
 
         activityTestRule.scenario.onActivity { activity ->
@@ -277,20 +295,41 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
                 .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
                 .build()
         }
-        val fullItems1 = listOf(SmallOne, SmallOne, SmallOne, SmallTwo)
-        val partialItems1 = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo)
-        val fullItems2 = listOf(SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems2 = listOf(/* SmallTwo,*/ SmallOne, SmallOne/*, SmallTwo*/)
+        val fullItems1 = listOf(
+            SmallOne,
+            SmallOne,
+            SmallOne,
+            SmallTwo,
+        )
+        val partialItems1 = listOf(
+            SmallOne,
+            // SmallOne, SmallOne,
+            SmallTwo,
+        )
+        val fullItems2 = listOf(
+            SmallTwo,
+            SmallOne,
+            SmallOne,
+            SmallTwo,
+        )
+        val partialItems2 = listOf(
+            // SmallTwo
+            SmallOne,
+            SmallOne,
+            // SmallTwo
+        )
         val testAdapter1 = createTestAdapter(*fullItems1.toTypedArray(), useDiffUtils = true)
         val testAdapter2 = createTestAdapter(*fullItems2.toTypedArray(), useDiffUtils = true)
 
         activityTestRule.scenario.onActivity { activity ->
-            activity.testRecycler.adapter = recyclerXRay.wrap(ConcatAdapter(
-                ConcatAdapter.Config.Builder()
-                    .setIsolateViewTypes(false)
-                    .build(),
-                listOf(testAdapter1, testAdapter2)
-            ))
+            activity.testRecycler.adapter = recyclerXRay.wrap(
+                ConcatAdapter(
+                    ConcatAdapter.Config.Builder()
+                        .setIsolateViewTypes(false)
+                        .build(),
+                    listOf(testAdapter1, testAdapter2),
+                ),
+            )
             recyclerXRay.toggleSecrets()
         }
 
@@ -320,11 +359,27 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
                 .withDefaultXRayDebugViewHolder(RvIntegrationXRayDebugViewHolder())
                 .build()
         }
-        val fullItems = listOf(SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo)
-        val partialItems = listOf(SmallOne, /* SmallOne, SmallOne,*/ SmallTwo, /* SmallTwo, SmallOne,*/ SmallOne/*, SmallTwo*/)
+        val fullItems = listOf(
+            SmallOne,
+            SmallOne,
+            SmallOne,
+            SmallTwo,
+            SmallTwo,
+            SmallOne,
+            SmallOne,
+            SmallTwo,
+        )
+        val partialItems = listOf(
+            SmallOne,
+            // SmallOne, SmallOne,
+            SmallTwo,
+            // SmallTwo, SmallOne,
+            SmallOne,
+            // SmallTwo
+        )
         val testAdapter = createTestAdapter(
             *partialItems.toTypedArray(),
-            useDiffUtils = false
+            useDiffUtils = false,
         )
 
         activityTestRule.scenario.onActivity { activity ->
@@ -354,7 +409,7 @@ class XRayDebugViewClicksScreenshotTest : ScreenshotTest {
         }
         val testAdapter = createTestAdapter(
             SmallOne, SmallOne, SmallOne, SmallTwo, SmallTwo, SmallOne, SmallOne, SmallTwo,
-            useDiffUtils = false
+            useDiffUtils = false,
         )
         val wrappedAdapter = recyclerXRay.wrap(testAdapter)
 

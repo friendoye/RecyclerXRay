@@ -10,7 +10,7 @@ sealed class InnerItemType {
                 1 -> Box::class.java
                 2 -> Circle::class.java
                 else -> throw IllegalStateException(
-                    "Cannot get InnerItemType for ordinal = $ordinal"
+                    "Cannot get InnerItemType for ordinal = $ordinal",
                 )
             }
         }

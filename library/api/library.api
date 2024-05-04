@@ -7,6 +7,13 @@ public final class com/friendoye/recyclerxray/AdbToggleReceiver : android/conten
 	public final fun unregister ()V
 }
 
+public final class com/friendoye/recyclerxray/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
 public class com/friendoye/recyclerxray/DefaultXRayDebugViewHolder : com/friendoye/recyclerxray/XRayDebugViewHolder {
 	public fun <init> ()V
 	public fun bindView (Landroid/view/View;Lcom/friendoye/recyclerxray/XRayResult;)V
@@ -138,5 +145,14 @@ public final class com/friendoye/recyclerxray/XRaySettings$Builder {
 	public final fun withLabel (Ljava/lang/String;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withMinDebugViewSize (I)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
 	public final fun withNestedXRaySettingsProvider (Lcom/friendoye/recyclerxray/NestedXRaySettingsProvider;)Lcom/friendoye/recyclerxray/XRaySettings$Builder;
+}
+
+public final class com/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding : androidx/viewbinding/ViewBinding {
+	public final field debugInfoTextView Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/friendoye/recyclerxray/databinding/XrayItemDebugLayoutBinding;
 }
 

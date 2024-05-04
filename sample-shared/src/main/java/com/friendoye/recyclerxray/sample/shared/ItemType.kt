@@ -7,7 +7,7 @@ sealed class ItemType {
     object Empty : ItemType()
     data class HorizontalRecycler(
         val items: List<InnerItemType>,
-        val changeAdapter: Boolean = false
+        val changeAdapter: Boolean = false,
     ) : ItemType()
 
     companion object {
@@ -19,7 +19,7 @@ sealed class ItemType {
                 4 -> Empty::class.java
                 5 -> HorizontalRecycler::class.java
                 else -> throw IllegalStateException(
-                    "Cannot get ItemType for ordinal = $ordinal"
+                    "Cannot get ItemType for ordinal = $ordinal",
                 )
             }
         }

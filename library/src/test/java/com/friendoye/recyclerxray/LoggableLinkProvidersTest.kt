@@ -47,21 +47,25 @@ class CompositeLoggableLinkProviderTest {
 
     @Test
     fun `Return first non-null link`() {
-        val linkProvider = CompositeLoggableLinkProvider(listOf(
-            { _: Class<*> -> null }.asLinkProvider(),
-            { _: Class<*> -> "I love links way to much!" }.asLinkProvider(),
-            { _: Class<*> -> null }.asLinkProvider()
-        ))
+        val linkProvider = CompositeLoggableLinkProvider(
+            listOf(
+                { _: Class<*> -> null }.asLinkProvider(),
+                { _: Class<*> -> "I love links way to much!" }.asLinkProvider(),
+                { _: Class<*> -> null }.asLinkProvider(),
+            ),
+        )
         val link = linkProvider.getLoggableLinkToFileWithClass(mockk(), DefaultViewHolder::class.java)
         Assert.assertEquals(link, "I love links way to much!")
     }
 
     @Test
     fun `Return null if all providers returned null`() {
-        val linkProvider = CompositeLoggableLinkProvider(listOf(
-            { _: Class<*> -> null }.asLinkProvider(),
-            { _: Class<*> -> null }.asLinkProvider()
-        ))
+        val linkProvider = CompositeLoggableLinkProvider(
+            listOf(
+                { _: Class<*> -> null }.asLinkProvider(),
+                { _: Class<*> -> null }.asLinkProvider(),
+            ),
+        )
         val link = linkProvider.getLoggableLinkToFileWithClass(mockk(), DefaultViewHolder::class.java)
         Assert.assertNull(link)
     }
@@ -70,7 +74,7 @@ class CompositeLoggableLinkProviderTest {
         return object : LoggableLinkProvider {
             override fun getLoggableLinkToFileWithClass(
                 viewHolder: RecyclerView.ViewHolder,
-                clazz: Class<out RecyclerView.ViewHolder>
+                clazz: Class<out RecyclerView.ViewHolder>,
             ): String? {
                 return this@asLinkProvider.invoke(clazz)
             }

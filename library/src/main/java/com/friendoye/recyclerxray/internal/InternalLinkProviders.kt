@@ -8,11 +8,11 @@ import com.friendoye.recyclerxray.LoggableLinkProvider
  * provided [LoggableLinkProvider]s, otherwise - `null`.
  */
 internal class CompositeLoggableLinkProvider(
-    private val linkProviders: List<LoggableLinkProvider>
+    private val linkProviders: List<LoggableLinkProvider>,
 ) : LoggableLinkProvider {
     override fun getLoggableLinkToFileWithClass(
         viewHolder: RecyclerView.ViewHolder,
-        clazz: Class<out RecyclerView.ViewHolder>
+        clazz: Class<out RecyclerView.ViewHolder>,
     ): String? {
         return linkProviders.asSequence()
             .map { it.getLoggableLinkToFileWithClass(viewHolder, clazz) }
@@ -27,7 +27,7 @@ internal class CompositeLoggableLinkProvider(
 internal class DefaultLoggableLinkProvider : LoggableLinkProvider {
     override fun getLoggableLinkToFileWithClass(
         viewHolder: RecyclerView.ViewHolder,
-        clazz: Class<out RecyclerView.ViewHolder>
+        clazz: Class<out RecyclerView.ViewHolder>,
     ): String? {
         clazz.apply {
             try {

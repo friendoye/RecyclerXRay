@@ -43,8 +43,8 @@ class MiscTest {
                 .setIsolateViewTypes(false)
                 .build(),
             listOf(
-                StubRecyclerAdapter()
-            )
+                StubRecyclerAdapter(),
+            ),
         )
 
         Assert.assertFalse(adapter.checkIsWrappedCorrectly())
@@ -58,9 +58,9 @@ class MiscTest {
                     .setIsolateViewTypes(false)
                     .build(),
                 listOf(
-                    StubRecyclerAdapter()
-                )
-            )
+                    StubRecyclerAdapter(),
+                ),
+            ),
         )
 
         Assert.assertTrue(adapter.checkIsWrappedCorrectly())
@@ -74,8 +74,8 @@ class MiscTest {
                 .build(),
             listOf(
                 StubRecyclerAdapter(),
-                localRecyclerXRay.wrap(StubRecyclerAdapter())
-            )
+                localRecyclerXRay.wrap(StubRecyclerAdapter()),
+            ),
         )
 
         Assert.assertFalse(adapter.checkIsWrappedCorrectly())
@@ -89,8 +89,8 @@ class MiscTest {
                 .build(),
             listOf(
                 localRecyclerXRay.wrap(StubRecyclerAdapter()),
-                localRecyclerXRay.wrap(StubRecyclerAdapter())
-            )
+                localRecyclerXRay.wrap(StubRecyclerAdapter()),
+            ),
         )
 
         Assert.assertTrue(adapter.checkIsWrappedCorrectly())
@@ -104,8 +104,8 @@ class MiscTest {
                 .build(),
             listOf(
                 StubRecyclerAdapter(),
-                localRecyclerXRay.wrap(StubRecyclerAdapter())
-            )
+                localRecyclerXRay.wrap(StubRecyclerAdapter()),
+            ),
         )
 
         Assert.assertTrue(adapter.checkIsWrappedCorrectly())

@@ -82,13 +82,13 @@ class EpoxyActivity : AppCompatActivity() {
             .enableNestedRecyclersSupport(true)
             .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                 override fun provide(
-                    nestedAdapter: RecyclerView.Adapter<*>
+                    nestedAdapter: RecyclerView.Adapter<*>,
                 ): XRaySettings? {
                     return XRaySettings.Builder().build()
                 }
             })
             .withExtraLoggableLinkProviders(
-                listOf(com.friendoye.recyclerxray.EpoxyLinkProvider())
+                listOf(com.friendoye.recyclerxray.EpoxyLinkProvider()),
             )
             .build()
     }

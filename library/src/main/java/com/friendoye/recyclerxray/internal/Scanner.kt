@@ -9,7 +9,7 @@ import java.util.Random
 import kotlin.LazyThreadSafetyMode.NONE
 
 internal class Scanner(
-    private val colorRandom: Random = provideDefaultColorGeneratorRandom()
+    private val colorRandom: Random = provideDefaultColorGeneratorRandom(),
 ) {
 
     private val holderInfoToColorMap: MutableMap<Pair<Class<*>, Int>, Int> = mutableMapOf()
@@ -21,7 +21,7 @@ internal class Scanner(
         holder: RecyclerView.ViewHolder,
         itemType: Int,
         extraCustomParams: Map<String, Any?>?,
-        originalItemView: View
+        originalItemView: View,
     ): XRayResult {
         return XRayResult(
             viewHolderClass = holder.javaClass,
@@ -30,12 +30,12 @@ internal class Scanner(
             customParams = holder.extractCustomParams(extraParams = extraCustomParams),
             viewWidth = originalItemView.width,
             viewHeight = originalItemView.height,
-            viewVisibility = originalItemView.visibility
+            viewVisibility = originalItemView.visibility,
         )
     }
 
     private fun <T : RecyclerView.ViewHolder> T.extractCustomParams(
-        extraParams: Map<String, Any?>? = null
+        extraParams: Map<String, Any?>? = null,
     ): Map<String, Any?> {
         val holderParams = (this as? XRayCustomParamsViewHolderProvider)
             ?.provideCustomParams()

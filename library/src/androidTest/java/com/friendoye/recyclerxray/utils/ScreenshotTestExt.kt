@@ -8,13 +8,13 @@ fun ScreenshotTest.compareRecyclerScreenshot(
     recyclerView: RecyclerView,
     heightInPx: Int? = null,
     widthInPx: Int? = null,
-    name: String? = null
+    name: String? = null,
 ) {
     InstrumentationRegistry.getInstrumentation().waitForIdleSync()
     compareScreenshot(
         recyclerView,
         heightInPx ?: recyclerView.height,
         widthInPx ?: recyclerView.width,
-        name
+        name,
     )
 }
