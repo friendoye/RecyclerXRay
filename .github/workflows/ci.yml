@@ -67,14 +67,14 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: unit-tests-reports
           path: reports.zip
 
       - name: Upload tests coverage
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: unit-tests-coverage
           path: library/build/reports/kover
@@ -127,14 +127,14 @@ jobs:
 
       - name: Upload tests reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'android-tests-${{ matrix.api-level }}-reports'
           path: build/androidTest-results
 
       - name: Upload tests coverage
         if: ${{ matrix.api-level == 25 }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'android-tests-${{ matrix.api-level }}-coverage'
           path: library/build/reports/coverage
@@ -200,7 +200,7 @@ jobs:
 
       - name: Upload tests reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'screenshot-tests-reports'
           path: library/build/reports/shot
@@ -216,12 +216,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download unit tests coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: unit-tests-coverage
 
       - name: Download android tests coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: android-tests-25-coverage
 
