@@ -4,9 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 
 /**
  * Allows to toggle several [LocalRecyclerXRay]'s secrets at once.
@@ -19,14 +18,20 @@ class AdbToggleReceiver(
     private val context: Context,
     private val intentAction: String = "xray-toggle",
     internal var recyclerXRays: List<LocalRecyclerXRay> = listOf(RecyclerXRay),
-) : BroadcastReceiver(), LifecycleObserver {
+) : BroadcastReceiver(), DefaultLifecycleObserver {
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    override fun onStart(owner: LifecycleOwner) {
+        register()
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        unregister()
+    }
+
     fun register() {
         context.registerReceiver(this, IntentFilter(intentAction))
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun unregister() {
         context.unregisterReceiver(this)
     }

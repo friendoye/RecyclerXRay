@@ -1,7 +1,9 @@
-public final class com/friendoye/recyclerxray/AdbToggleReceiver : android/content/BroadcastReceiver, androidx/lifecycle/LifecycleObserver {
+public final class com/friendoye/recyclerxray/AdbToggleReceiver : android/content/BroadcastReceiver, androidx/lifecycle/DefaultLifecycleObserver {
 	public fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/util/List;)V
 	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun onReceive (Landroid/content/Context;Landroid/content/Intent;)V
+	public fun onStart (Landroidx/lifecycle/LifecycleOwner;)V
+	public fun onStop (Landroidx/lifecycle/LifecycleOwner;)V
 	public final fun register ()V
 	public final fun toggleSecrets ()V
 	public final fun unregister ()V

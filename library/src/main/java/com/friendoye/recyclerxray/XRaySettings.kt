@@ -1,7 +1,7 @@
 package com.friendoye.recyclerxray
 
 import androidx.annotation.Dimension
-import androidx.annotation.Dimension.PX
+import androidx.annotation.Dimension.Companion.PX
 import androidx.recyclerview.widget.RecyclerView
 
 /**
