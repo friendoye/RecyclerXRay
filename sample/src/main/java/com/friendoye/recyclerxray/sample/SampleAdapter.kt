@@ -9,7 +9,8 @@ import com.friendoye.recyclerxray.sample.shared.ItemType
 import com.friendoye.recyclerxray.sample.shared.ItemType.Companion.getOrdinal
 import com.friendoye.recyclerxray.sample.shared.type
 
-class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
+class SampleAdapter :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider {
 
     var items: List<ItemType> = emptyList()
@@ -22,7 +23,8 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
                     // To animate change of horizontal RecyclerView content,
                     // we treat all ItemType.HorizontalRecycler items as the same.
                     if (oldItem is ItemType.HorizontalRecycler &&
-                        newItem is ItemType.HorizontalRecycler) {
+                        newItem is ItemType.HorizontalRecycler
+                    ) {
                         return true
                     } else {
                         return super.areItemsTheSame(oldItemPosition, newItemPosition)
@@ -43,10 +45,10 @@ class SampleAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     override fun provideCustomParams(position: Int): Map<String, Any?>? {
         return when (ItemType.fromOrdinal(getItemViewType(position))) {
             type<ItemType.Small>() -> mapOf(
-                "Number" to (items[position] as ItemType.Small).number
+                "Number" to (items[position] as ItemType.Small).number,
             )
             type<ItemType.Large>() -> mapOf(
-                "String" to (items[position] as ItemType.Large).string
+                "String" to (items[position] as ItemType.Large).string,
             )
             else -> null
         }

@@ -60,13 +60,13 @@ internal sealed class InternalLog {
             val level: Level,
             val tag: String,
             val message: String,
-            val throwable: Throwable? = null
+            val throwable: Throwable? = null,
         ) {
             enum class Level {
                 INFO,
                 DEBUG,
                 WARNING,
-                ERROR
+                ERROR,
             }
         }
     }

@@ -33,7 +33,7 @@ class XRayInitializerTest {
     fun `Check init in no-op mode`() {
         val mockApi = mockk<RecyclerXRayApi>()
         val fakeApiProvider: (XRaySettings) -> RecyclerXRayApi = { mockApi }
-        XRayInitializer.NO_OP_PROVIDER = fakeApiProvider
+        XRayInitializer.noOpProvider = fakeApiProvider
 
         XRayInitializer.init(isNoOpMode = true)
 

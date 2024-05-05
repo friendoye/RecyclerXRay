@@ -4,5 +4,5 @@ class FirstCustomClass
 
 data class SecondCustomClass(
     val integer: Int,
-    val string: String
+    val string: String,
 )

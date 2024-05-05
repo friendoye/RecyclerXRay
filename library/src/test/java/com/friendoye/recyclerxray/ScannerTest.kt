@@ -73,11 +73,11 @@ class ScannerTest {
                     return mapOf(
                         "delegate_param_1" to 12,
                         "delegate_param_2" to "inner_string",
-                        "overridden_param" to "delegate_param"
+                        "overridden_param" to "delegate_param",
                     )
                 }
             },
-            view = mockView
+            view = mockView,
         )
 
         val result = scanner.scan(
@@ -86,17 +86,20 @@ class ScannerTest {
             mapOf(
                 "provided_param_1" to 10,
                 "provided_param_2" to "outer_string",
-                "overridden_param" to "provided_param"
+                "overridden_param" to "provided_param",
             ),
-            mockView
+            mockView,
         )
 
-        Assert.assertEquals(result.customParams, mapOf(
-            "delegate_param_1" to 12,
-            "delegate_param_2" to "inner_string",
-            "provided_param_1" to 10,
-            "provided_param_2" to "outer_string",
-            "overridden_param" to "provided_param"
-        ))
+        Assert.assertEquals(
+            result.customParams,
+            mapOf(
+                "delegate_param_1" to 12,
+                "delegate_param_2" to "inner_string",
+                "provided_param_1" to 10,
+                "provided_param_2" to "outer_string",
+                "overridden_param" to "provided_param",
+            ),
+        )
     }
 }

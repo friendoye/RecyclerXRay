@@ -6,7 +6,7 @@ import com.friendoye.recyclerxray.testing.InternalLog
 
 internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
     private val xRayApi: RealRecyclerXRayApi,
-    private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?
+    private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
 ) {
 
     companion object {
@@ -31,12 +31,12 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
                 if (holder.savedInnerAdapter == null) {
                     InternalLog.d(
                         DEFAULT_INTERNAL_LOG_TAG,
-                        "[$TAG] New adapter: ${recycler?.adapter}"
+                        "[$TAG] New adapter: ${recycler?.adapter}",
                     )
                 } else {
                     InternalLog.d(
                         DEFAULT_INTERNAL_LOG_TAG,
-                        "[$TAG] ${holder.savedInnerAdapter} -> ${recycler?.adapter}"
+                        "[$TAG] ${holder.savedInnerAdapter} -> ${recycler?.adapter}",
                     )
                 }
                 holder.savedInnerAdapter = recycler?.adapter
@@ -45,7 +45,7 @@ internal class InnerAdapterWatcher<T : RecyclerView.ViewHolder>(
     }
 
     private fun <VH : RecyclerView.ViewHolder> tryWrapNestedAdapter(
-        innerAdapter: RecyclerView.Adapter<VH>?
+        innerAdapter: RecyclerView.Adapter<VH>?,
     ): RecyclerView.Adapter<*>? {
         var adapter = innerAdapter
         if (adapter != null && adapter !is ScannableRecyclerAdapter<*>) {

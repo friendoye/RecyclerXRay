@@ -5,7 +5,7 @@ import com.friendoye.recyclerxray.testing.InternalLog
 
 internal class OverlayHideController(
     private val ownerAdapter: RecyclerView.Adapter<*>,
-    private val isInXRayModeProvider: () -> Boolean
+    private val isInXRayModeProvider: () -> Boolean,
 ) {
 
     private var isInited: Boolean = false

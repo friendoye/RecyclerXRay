@@ -7,7 +7,7 @@ import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicLong
 
 internal class RealRecyclerXRayApi(
-    defaultSettings: XRaySettings = XRaySettings.Builder().build()
+    defaultSettings: XRaySettings = XRaySettings.Builder().build(),
 ) : RecyclerXRayApi {
 
     companion object {
@@ -51,7 +51,7 @@ internal class RealRecyclerXRayApi(
 
     override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
         adapter: T,
-        settings: XRaySettings
+        settings: XRaySettings,
     ): RecyclerView.Adapter<VH> {
         return internalWrap(adapter, settings)
     }
@@ -63,12 +63,12 @@ internal class RealRecyclerXRayApi(
 
     private fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> internalWrap(
         adapter: T,
-        settings: XRaySettings
+        settings: XRaySettings,
     ): RecyclerView.Adapter<VH> {
         if (adapter is ScannableRecyclerAdapter<*> && adapter.parentXRayApiId == id) {
             InternalLog.i(
                 DEFAULT_LOG_TAG,
-                "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)"
+                "Skipping wrapping same wrapped adapter for RecyclerXRay ${settings.label}($id)...)",
             )
             return adapter
         }
@@ -86,8 +86,8 @@ internal class RealRecyclerXRayApi(
             settings.nestedXRaySettingsProvider,
             settings.failOnNotFullyWrappedAdapter,
             CompositeLoggableLinkProvider(
-                settings.extraLinkProviders + DefaultLoggableLinkProvider()
-            )
+                settings.extraLinkProviders + DefaultLoggableLinkProvider(),
+            ),
         )
     }
 
@@ -95,14 +95,16 @@ internal class RealRecyclerXRayApi(
         adapters.forEach { weakAdapter ->
             weakAdapter.get()?.let { adapter ->
                 try {
-                    adapter.notifyItemRangeChanged(0, adapter.itemCount,
-                        XRayPayload(id)
+                    adapter.notifyItemRangeChanged(
+                        0,
+                        adapter.itemCount,
+                        XRayPayload(id),
                     )
                 } catch (e: Exception) {
                     InternalLog.e(
                         DEFAULT_INTERNAL_LOG_TAG,
                         "Something went wrong during updateAdapters(), buf we didn't fail ...",
-                        e
+                        e,
                     )
                 }
             }

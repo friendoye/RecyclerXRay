@@ -1,5 +1,6 @@
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
+// TODO(https://github.com/friendoye/RecyclerXRay/issues/181): Migrate to new repo
+//apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "org.jetbrains.dokka-android"
 
 ext {

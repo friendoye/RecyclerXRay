@@ -58,10 +58,11 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = false,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
-                Visible
+                Visible,
             )
 
             onActivity { activity ->
@@ -86,11 +87,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = false,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
                 Visible,
-                innerWrapper = { localRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) }
+                innerWrapper = { localRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) },
             )
 
             onActivity { activity ->
@@ -122,11 +124,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = false,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
                 Visible,
-                innerWrapper = { innerRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) }
+                innerWrapper = { innerRecyclerXRay.wrap(it as RecyclerView.Adapter<RecyclerView.ViewHolder>) },
             )
 
             onActivity { activity ->
@@ -148,7 +151,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>
+                        nestedAdapter: RecyclerView.Adapter<*>,
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
@@ -160,10 +163,11 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             val testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = false,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
-                Visible
+                Visible,
             )
 
             onActivity { activity ->
@@ -182,7 +186,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>
+                        nestedAdapter: RecyclerView.Adapter<*>,
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
@@ -195,11 +199,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = true, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = true,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
                 Visible,
-                useDiffUtils = true
+                useDiffUtils = true,
             )
 
             onActivity { activity ->
@@ -211,11 +216,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 testAdapter.items = listOf(
                     LargeVisible,
                     InnerRecycler(
-                        changeAdapter = true, useDiffUtils = true,
-                        items = listOf(Circle)
+                        changeAdapter = true,
+                        useDiffUtils = true,
+                        items = listOf(Circle),
                     ),
                     LargeVisible,
-                    Visible
+                    Visible,
                 )
             }
         }
@@ -230,7 +236,7 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 .enableNestedRecyclersSupport(true)
                 .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                     override fun provide(
-                        nestedAdapter: RecyclerView.Adapter<*>
+                        nestedAdapter: RecyclerView.Adapter<*>,
                     ): XRaySettings? {
                         return XRaySettings.Builder().build()
                     }
@@ -245,11 +251,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
             testAdapter = createTestAdapter(
                 Visible,
                 InnerRecycler(
-                    changeAdapter = false, useDiffUtils = true,
-                    items = listOf(Box, Circle, Box, Circle)
+                    changeAdapter = false,
+                    useDiffUtils = true,
+                    items = listOf(Box, Circle, Box, Circle),
                 ),
                 Visible,
-                useDiffUtils = true
+                useDiffUtils = true,
             )
 
             onActivity { activity ->
@@ -261,11 +268,12 @@ class NestedRecyclerXRayTest : ScreenshotTest {
                 testAdapter.items = listOf(
                     LargeVisible,
                     InnerRecycler(
-                        changeAdapter = false, useDiffUtils = true,
-                        items = listOf(Circle)
+                        changeAdapter = false,
+                        useDiffUtils = true,
+                        items = listOf(Circle),
                     ),
                     LargeVisible,
-                    Visible
+                    Visible,
                 )
             }
         }

@@ -63,8 +63,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .build(),
                 listOf(
                     firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
-                )
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible)),
+                ),
             )
 
             onActivity { activity ->
@@ -85,8 +85,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .build(),
                 listOf(
                     firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
-                )
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible)),
+                ),
             )
 
             onActivity { activity ->
@@ -113,8 +113,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .build(),
                 listOf(
                     firstXRay.wrap(createTestAdapter(LargeVisible, Ghost(), Visible, Visible)),
-                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
-                )
+                    secondXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible)),
+                ),
             )
 
             onActivity { activity ->
@@ -136,8 +136,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .build(),
                 listOf(
                     createTestAdapter(LargeVisible, Ghost(), Visible, Visible),
-                    createTestAdapter(Visible, Ghost(), Visible, LargeVisible)
-                )
+                    createTestAdapter(Visible, Ghost(), Visible, LargeVisible),
+                ),
             )
 
             onActivity { activity ->
@@ -160,8 +160,8 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
                     .build(),
                 listOf(
                     createTestAdapter(LargeVisible, Ghost(), Visible, Visible),
-                    firstXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible))
-                )
+                    firstXRay.wrap(createTestAdapter(Visible, Ghost(), Visible, LargeVisible)),
+                ),
             )
 
             onActivity { activity ->
@@ -173,7 +173,9 @@ class ConcatAdapterIntegrationTest : ScreenshotTest {
             }
         }
 
-        Assert.assertTrue(shooter.accumulatedExceptions
-            .first() is RecyclerAdapterNotFullyWrappedException)
+        Assert.assertTrue(
+            shooter.accumulatedExceptions
+                .first() is RecyclerAdapterNotFullyWrappedException,
+        )
     }
 }

@@ -11,7 +11,7 @@ import com.friendoye.recyclerxray.XRayResult
 internal fun createTestAdapter(
     vararg items: IntegrationTestItemType,
     useDiffUtils: Boolean = false,
-    innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*> = { it }
+    innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*> = { it },
 ): RvIntegrationTestAdapter {
     return RvIntegrationTestAdapter(useDiffUtils, innerWrapper).apply {
         this.items = items.toList()
@@ -24,7 +24,7 @@ internal fun createTestAdapterWithDiffUtil(vararg items: IntegrationTestItemType
 
 class RvIntegrationTestAdapter(
     val useDiffUtils: Boolean = false,
-    val innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*> = { it }
+    val innerWrapper: (RecyclerView.Adapter<*>) -> RecyclerView.Adapter<*> = { it },
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<IntegrationTestItemType> = emptyList()
@@ -38,7 +38,8 @@ class RvIntegrationTestAdapter(
                         // To proper change internal structure of InnerRecycler,
                         // we treat all InnerRecycler items as the same.
                         if (oldItem is IntegrationTestItemType.InnerRecycler &&
-                            newItem is IntegrationTestItemType.InnerRecycler) {
+                            newItem is IntegrationTestItemType.InnerRecycler
+                        ) {
                             return true
                         } else {
                             return super.areItemsTheSame(oldItemPosition, newItemPosition)
@@ -104,7 +105,7 @@ sealed class IntegrationTestItemType {
     data class InnerRecycler(
         val changeAdapter: Boolean,
         val useDiffUtils: Boolean,
-        val items: List<InnerTestItemType>
+        val items: List<InnerTestItemType>,
     ) : IntegrationTestItemType()
     data class Indexed(val index: Int) : IntegrationTestItemType()
 }

@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.karumi.shot.waitForActivity
+import com.karumi.shot.ActivityScenarioUtils.waitForActivity
 
 fun Context.dip(value: Int): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
 fun Context.dip(value: Float): Int = (value * (resources?.displayMetrics?.density ?: 0f)).toInt()
 
 open class DiffCalculator<T>(
     var oldItems: List<T>? = null,
-    var newItems: List<T>? = null
+    var newItems: List<T>? = null,
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
@@ -55,7 +55,7 @@ fun <T : Activity> ActivityScenario<T>.ensureAllViewHoldersBind(recyclerView: Re
     onActivity {
         recyclerView.scrollToPosition(
             recyclerView.adapter?.itemCount?.minus(1)?.coerceAtLeast(0)
-                ?: 0
+                ?: 0,
         )
     }
 

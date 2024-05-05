@@ -4,7 +4,7 @@ package com.friendoye.recyclerxray
  * Exception to indicate, that [LocalRecyclerXRay] were used before proper initialization.
  */
 class RecyclerXRayIsNotInitializedException : IllegalStateException(
-    "RecyclerXRay wasn't initialized. Use one of RecyclerXRay.init() methods."
+    "RecyclerXRay wasn't initialized. Use one of RecyclerXRay.init() methods.",
 )
 
 /**
@@ -17,5 +17,5 @@ class MultipleRecyclerXRayAttachedException(message: String) : IllegalStateExcep
  * by [LocalRecyclerXRay]. Should be triggered, only if
  */
 class RecyclerAdapterNotFullyWrappedException : IllegalStateException(
-    "RecyclerView's adapter is not fully wrapped. Did you wrap() each adapter in ConcatAdapter?"
+    "RecyclerView's adapter is not fully wrapped. Did you wrap() each adapter in ConcatAdapter?",
 )

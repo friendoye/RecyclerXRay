@@ -5,7 +5,7 @@ import com.friendoye.recyclerxray.XRaySettings
 
 @Suppress("SetterBackingFieldAssignment", "UNCHECKED_CAST")
 internal class NoOpRecyclerXRayApi(
-    defaultSettings: XRaySettings
+    defaultSettings: XRaySettings,
 ) : RecyclerXRayApi {
 
     @Suppress("UNUSED_PARAMETER")
@@ -30,7 +30,7 @@ internal class NoOpRecyclerXRayApi(
 
     override fun <T : RecyclerView.Adapter<VH>, VH : RecyclerView.ViewHolder> wrap(
         adapter: T,
-        settings: XRaySettings
+        settings: XRaySettings,
     ): RecyclerView.Adapter<VH> {
         return adapter
     }

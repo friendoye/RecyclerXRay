@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.friendoye.recyclerxray.sample.groupie">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -13,7 +12,9 @@
         android:name="com.friendoye.recyclerxray.sample.shared.SampleApplication"
         tools:ignore="AllowBackup">
 
-        <activity android:name=".GroupieActivity">
+        <activity
+            android:name=".GroupieActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

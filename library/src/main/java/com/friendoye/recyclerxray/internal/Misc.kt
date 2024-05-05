@@ -29,11 +29,13 @@ internal fun Random.generateColorSequence(): Sequence<Int> {
     return generateSequence {
         hue += GOLDEN_RATIO_CONSTANT
         hue %= 1
-        Color.HSVToColor(floatArrayOf(
-            360 * hue, // hue
-            0.5f, // saturation
-            0.95f // value
-        ))
+        Color.HSVToColor(
+            floatArrayOf(
+                360 * hue, // hue
+                0.5f, // saturation
+                0.95f, // value
+            ),
+        )
     }
 }
 
@@ -44,8 +46,8 @@ internal fun <T : RecyclerView.ViewHolder> T.isWrappedByXRay(): Boolean {
 
 internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(
     xRayWrapperContainer: View,
-    xRayApiId: Long? = _xRayApiId,
-    xRayDebugLabel: String? = _xRayDebugLabel
+    xRayApiId: Long? = this.xRayApiId,
+    xRayDebugLabel: String? = this.xRayDebugLabel,
 ): T = apply {
     xRayWrapperContainer.setTag(R.id.original_item_view_key, itemView.asWeakRef())
     if (xRayApiId != null) {
@@ -58,8 +60,8 @@ internal fun <T : RecyclerView.ViewHolder> T.replaceItemView(
 }
 
 internal fun <T : RecyclerView.ViewHolder> T.rebindInfo(
-    xRayApiId: Long? = _xRayApiId,
-    xRayDebugLabel: String? = _xRayDebugLabel
+    xRayApiId: Long? = this.xRayApiId,
+    xRayDebugLabel: String? = this.xRayDebugLabel,
 ): T = apply {
     if (isWrappedByXRay()) {
         val xRayWrapperContainer = itemView
@@ -87,10 +89,10 @@ internal inline val <T : RecyclerView.ViewHolder> T.originalItemView: View
             ?.get() as? View ?: itemView
     }
 
-internal inline val <T : RecyclerView.ViewHolder> T._xRayApiId: Long?
+internal inline val <T : RecyclerView.ViewHolder> T.xRayApiId: Long?
     get() = itemView.getTag(R.id.x_ray_api_id) as? Long
 
-internal inline val <T : RecyclerView.ViewHolder> T._xRayDebugLabel: String?
+internal inline val <T : RecyclerView.ViewHolder> T.xRayDebugLabel: String?
     get() = itemView.getTag(R.id.x_ray_debug_label) as? String
 
 internal val <T : RecyclerView.ViewHolder> T.innerRecycler: RecyclerView?
@@ -133,7 +135,7 @@ internal fun RecyclerView.Adapter<*>.checkIsWrappedCorrectly(): Boolean {
     val recyclerAdapter = this
     val isFullyWrappedOutside = recyclerAdapter is ScannableRecyclerAdapter
     val isFullyWrappedInside = recyclerAdapter is ConcatAdapter &&
-            (recyclerAdapter.hasIsolateViewTypes || recyclerAdapter.adapters.all { it is ScannableRecyclerAdapter })
+        (recyclerAdapter.hasIsolateViewTypes || recyclerAdapter.adapters.all { it is ScannableRecyclerAdapter })
 
     return isFullyWrappedOutside || isFullyWrappedInside
 }

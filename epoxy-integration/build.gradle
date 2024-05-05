@@ -1,18 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.hiya.jacoco-android'
-
-jacoco {
-    toolVersion = "0.8.4"
-}
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    namespace 'com.friendoye.recyclerxray.epoxy.integration'
+
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -25,23 +21,8 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.all {
-            jacoco {
-                // To accumulate coverage from Robolectric
-                includeNoLocationClasses = true
-                excludes = ['jdk.internal.*']
-            }
-        }
-    }
-
     kotlinOptions {
         allWarningsAsErrors = true
-    }
-
-    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-    libraryVariants.all {
-        it.generateBuildConfig.enabled = false
     }
 }
 
@@ -64,4 +45,4 @@ ext {
     libraryDescription = 'Utils for Epoxy integration with RecyclerXRay.'
 }
 
-apply from: '../deploy.gradle'
+//apply from: '../deploy.gradle'

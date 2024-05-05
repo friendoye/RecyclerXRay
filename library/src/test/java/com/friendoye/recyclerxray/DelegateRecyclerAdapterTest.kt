@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.friendoye.recyclerxray.internal.DelegateRecyclerAdapter
 import com.friendoye.recyclerxray.internal.XRayPayload
 import com.friendoye.recyclerxray.stubs.TestViewHolder1
+import io.mockk.clearAllMocks
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert
 import org.junit.Test
 
@@ -17,6 +19,11 @@ class DelegateRecyclerAdapterTest {
     val adapterMock: RecyclerView.Adapter<RecyclerView.ViewHolder> = mockk(relaxUnitFun = true)
     val parentViewMock: ViewGroup = mockk()
     val recyclerViewMock: RecyclerView = mockk()
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
 
     @Test
     fun `Delegate getItemCount()`() {

@@ -10,7 +10,7 @@ import com.friendoye.recyclerxray.test.R
 
 internal fun createInnerTestAdapter(
     vararg items: InnerTestItemType,
-    useDiffUtils: Boolean = true
+    useDiffUtils: Boolean = true,
 ): InnerRecyclerTestAdapter {
     return InnerRecyclerTestAdapter(useDiffUtils = useDiffUtils).apply {
         this.items = items.toList()
@@ -18,7 +18,7 @@ internal fun createInnerTestAdapter(
 }
 
 class InnerRecyclerTestAdapter(
-    var useDiffUtils: Boolean
+    var useDiffUtils: Boolean,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<InnerTestItemType> = emptyList()

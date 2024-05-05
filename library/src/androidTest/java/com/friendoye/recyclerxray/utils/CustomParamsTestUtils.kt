@@ -12,7 +12,7 @@ import com.friendoye.recyclerxray.test.R
 
 fun createAdapterWithCustomParams(
     viewHoldersParams: List<Map<String, Any?>?>,
-    adapterParams: (Int) -> Map<String, Any?>?
+    adapterParams: (Int) -> Map<String, Any?>?,
 ): CustomParamsTestAdapter {
     val viewHolderProviders = viewHoldersParams.map {
         { parentView: ViewGroup ->
@@ -22,7 +22,8 @@ fun createAdapterWithCustomParams(
         }
     }
     return CustomParamsTestAdapter(
-        viewHolderProviders, createCustomParamDelegate(adapterParams)
+        viewHolderProviders,
+        createCustomParamDelegate(adapterParams),
     )
 }
 
@@ -44,7 +45,7 @@ private fun createCustomParamDelegate(mapProvider: (Int) -> Map<String, Any?>?):
 
 class CustomParamsTestAdapter constructor(
     private val viewHolderProviders: List<(ViewGroup) -> RecyclerView.ViewHolder>,
-    private val paramsProviderDelegate: XRayCustomParamsAdapterProvider
+    private val paramsProviderDelegate: XRayCustomParamsAdapterProvider,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     XRayCustomParamsAdapterProvider by paramsProviderDelegate {
 
@@ -66,14 +67,14 @@ class CustomParamsTestAdapter constructor(
 
 class CustomParamsTestViewHolder constructor(
     view: View,
-    private val paramsProviderDelegate: XRayCustomParamsViewHolderProvider
+    private val paramsProviderDelegate: XRayCustomParamsViewHolderProvider,
 ) : RecyclerView.ViewHolder(view),
     XRayCustomParamsViewHolderProvider by paramsProviderDelegate
 
 class ResultRecordableXRayDebugViewHolder<K : Any>(
     private val keyProvider: (XRayResult) -> K,
     private val resultMapSizeChanged: (Int, Int) -> Unit = { _, _ -> },
-    private val withLogs: Boolean = false
+    private val withLogs: Boolean = false,
 ) : XRayDebugViewHolder {
     val resultsMap = mutableMapOf<K, XRayResult>()
 

@@ -11,5 +11,5 @@ class TestViewHolder4(view: View) : RecyclerView.ViewHolder(view)
 
 class XRayCustomParamsDelegateViewHolder(
     paramsProviderDelegate: XRayCustomParamsViewHolderProvider,
-    view: View
+    view: View,
 ) : RecyclerView.ViewHolder(view), XRayCustomParamsViewHolderProvider by paramsProviderDelegate

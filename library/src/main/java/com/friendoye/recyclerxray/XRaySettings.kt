@@ -14,7 +14,7 @@ data class XRaySettings internal constructor(
     val enableNestedRecyclersSupport: Boolean,
     val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
     val failOnNotFullyWrappedAdapter: Boolean,
-    val extraLinkProviders: List<LoggableLinkProvider>
+    val extraLinkProviders: List<LoggableLinkProvider>,
 ) {
 
     /**
@@ -23,7 +23,9 @@ data class XRaySettings internal constructor(
     class Builder {
 
         internal var debugViewHolder: XRayDebugViewHolder = DefaultXRayDebugViewHolder()
-        @Dimension(unit = PX) internal var minDebugViewSize: Int? = null
+
+        @Dimension(unit = PX)
+        internal var minDebugViewSize: Int? = null
         internal var label: String? = null
         internal var enableNestedRecyclersSupport: Boolean = false
         internal var nestedXRaySettingsProvider: NestedXRaySettingsProvider? = null
@@ -96,7 +98,7 @@ data class XRaySettings internal constructor(
             enableNestedRecyclersSupport = enableNestedRecyclersSupport,
             nestedXRaySettingsProvider = nestedXRaySettingsProvider,
             failOnNotFullyWrappedAdapter = failOnNotFullyWrappedAdapter,
-            extraLinkProviders = extraLinkProviders
+            extraLinkProviders = extraLinkProviders,
         )
     }
 }

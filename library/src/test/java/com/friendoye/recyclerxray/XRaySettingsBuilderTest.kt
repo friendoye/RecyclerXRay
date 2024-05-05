@@ -90,7 +90,8 @@ class XRaySettingsBuilderTest {
             .withNestedXRaySettingsProvider(mockNestedXRaySettingsProvider)
         val result = builder.build()
         Assert.assertEquals(
-            result.nestedXRaySettingsProvider, mockNestedXRaySettingsProvider
+            result.nestedXRaySettingsProvider,
+            mockNestedXRaySettingsProvider,
         )
     }
 
@@ -107,7 +108,8 @@ class XRaySettingsBuilderTest {
             .failOnNotFullyWrappedAdapter(false)
         val result = builder.build()
         Assert.assertEquals(
-            result.failOnNotFullyWrappedAdapter, false
+            result.failOnNotFullyWrappedAdapter,
+            false,
         )
     }
 
@@ -117,7 +119,7 @@ class XRaySettingsBuilderTest {
         val result = builder.build()
         Assert.assertEquals(
             result.extraLinkProviders,
-            emptyList<LoggableLinkProvider>()
+            emptyList<LoggableLinkProvider>(),
         )
     }
 
@@ -127,7 +129,8 @@ class XRaySettingsBuilderTest {
             .withExtraLoggableLinkProviders(listOf(mockLoggableLinkProvider))
         val result = builder.build()
         Assert.assertEquals(
-            result.extraLinkProviders, listOf(mockLoggableLinkProvider)
+            result.extraLinkProviders,
+            listOf(mockLoggableLinkProvider),
         )
     }
 }

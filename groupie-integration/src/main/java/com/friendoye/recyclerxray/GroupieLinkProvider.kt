@@ -9,10 +9,9 @@ import java.lang.Exception
  * Helper [LoggableLinkProvider] implementation for [Groupie] library.
  */
 class GroupieLinkProvider : LoggableLinkProvider {
-
     override fun getLoggableLinkToFileWithClass(
         viewHolder: RecyclerView.ViewHolder,
-        clazz: Class<out RecyclerView.ViewHolder>
+        clazz: Class<out RecyclerView.ViewHolder>,
     ): String? {
         if (clazz.isAssignableFrom(GroupieViewHolder::class.java)) {
             viewHolder as GroupieViewHolder
@@ -29,15 +28,17 @@ class GroupieLinkProvider : LoggableLinkProvider {
                     constructor.newInstance(*array)
                 } catch (e: Exception) {
                     var linkToClass: String?
-                    linkToClass = canonicalName?.run {
-                        e.cause?.stackTrace?.find { it.toString().contains(this) }?.run {
-                            "$fileName:$lineNumber"
+                    linkToClass =
+                        canonicalName?.run {
+                            e.cause?.stackTrace?.find { it.toString().contains(this) }?.run {
+                                "$fileName:$lineNumber"
+                            }
                         }
-                    }
                     if (linkToClass == null) {
-                        linkToClass = e.cause?.stackTrace?.get(0)?.run {
-                            "$fileName:$lineNumber"
-                        }
+                        linkToClass =
+                            e.cause?.stackTrace?.get(0)?.run {
+                                "$fileName:$lineNumber"
+                            }
                     }
                     if (linkToClass != null) {
                         return "$simpleName($linkToClass)"
@@ -51,18 +52,19 @@ class GroupieLinkProvider : LoggableLinkProvider {
 
     @Suppress("UNCHECKED_CAST", "IMPLICIT_CAST_TO_ANY")
     private fun <T> Class<T>.createInstance(): T? {
-        val value = when (this) {
-            Byte::class.java -> 0.toByte()
-            Short::class.java -> 0.toShort()
-            Int::class.java -> 0
-            Long::class.java -> 0L
-            Float::class.java -> 0f
-            Double::class.java -> 0.0
-            Char::class.java -> ' '
-            String::class.java -> ""
-            Boolean::class.java -> false
-            else -> null
-        }
+        val value =
+            when (this) {
+                Byte::class.java -> 0.toByte()
+                Short::class.java -> 0.toShort()
+                Int::class.java -> 0
+                Long::class.java -> 0L
+                Float::class.java -> 0f
+                Double::class.java -> 0.0
+                Char::class.java -> ' '
+                String::class.java -> ""
+                Boolean::class.java -> false
+                else -> null
+            }
         return value as T?
     }
 }

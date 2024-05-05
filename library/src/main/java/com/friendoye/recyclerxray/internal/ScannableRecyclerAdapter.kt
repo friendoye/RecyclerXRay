@@ -34,23 +34,23 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     private val nestedXRaySettingsProvider: NestedXRaySettingsProvider?,
     private val failOnNotFullyWrappedAdapter: Boolean,
     private val loggableLinkProvider: LoggableLinkProvider,
-    private val scanner: Scanner = Scanner()
+    private val scanner: Scanner = Scanner(),
 ) : DelegateRecyclerAdapter<T>(decoratedAdapter),
     XRayCustomParamsAdapterProvider {
 
     private val holderViewWrapper = HolderViewWrapper(
         xRayDebugViewHolder,
-        minDebugViewSize
+        minDebugViewSize,
     )
 
     private val innerAdapterWatcher = InnerAdapterWatcher<T>(
         xRayApi,
-        nestedXRaySettingsProvider
+        nestedXRaySettingsProvider,
     )
 
     private val overlayHideController = OverlayHideController(
         ownerAdapter = this,
-        isInXRayModeProvider = isInXRayModeProvider
+        isInXRayModeProvider = isInXRayModeProvider,
     )
 
     @RecyclerView.Orientation
@@ -87,10 +87,12 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         val holder = super.onCreateViewHolder(holderWrapper, viewType)
         if (holder.isWrappedByXRay()) {
             ExceptionShooter.fire(
-                MultipleRecyclerXRayAttachedException("""
+                MultipleRecyclerXRayAttachedException(
+                    """
                     |It seems like ViewHolder was decorated by several ${ScannableRecyclerAdapter::class.java.simpleName}'s.
                     |${holder.prepareDebugInfo()}
-                """.trimMargin())
+                    """.trimMargin(),
+                ),
             )
         }
 
@@ -99,7 +101,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
 
         // TODO: Unstable API
         holderWrapper.doOnLayout {
-            if (holder._xRayApiId == parentXRayApiId) {
+            if (holder.xRayApiId == parentXRayApiId) {
                 holder.bindXRayMode()
             }
         }
@@ -109,13 +111,15 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         }
 
         val xRayContainer = holderViewWrapper.wrap(
-            holderWrapper, holderItemParams, currentOrientation
+            holderWrapper,
+            holderItemParams,
+            currentOrientation,
         )
 
         return holder.replaceItemView(
             xRayWrapperContainer = xRayContainer,
             xRayApiId = parentXRayApiId,
-            xRayDebugLabel = debugXRayLabel
+            xRayDebugLabel = debugXRayLabel,
         )
     }
 
@@ -139,7 +143,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
 
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
-                innerAdapterWatcher.hasInnerAdapter(holder)
+            innerAdapterWatcher.hasInnerAdapter(holder)
 
         holder.originalItemViewContext { originalHolder ->
             super.onBindViewHolder(originalHolder, position)
@@ -147,7 +151,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 itemType = originalHolder.itemViewType,
                 isInXRayMode = isInXRayModeProvider(),
                 showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
-                customParamsFromAdapter = provideCustomParams(originalHolder.bindingAdapterPosition)
+                customParamsFromAdapter = provideCustomParams(originalHolder.bindingAdapterPosition),
             )
         }
     }
@@ -171,20 +175,20 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         holder.rebindInfo(xRayApiId = parentXRayApiId, xRayDebugLabel = debugXRayLabel)
 
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
-                innerAdapterWatcher.hasInnerAdapter(holder)
+            innerAdapterWatcher.hasInnerAdapter(holder)
 
         holder.bindXRayMode(
             itemType = holder.itemViewType,
             isInXRayMode = isInXRayModeProvider(),
             showInnerAdapterIndicator = shouldShowInnerAdapterXRay,
-            customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition)
+            customParamsFromAdapter = provideCustomParams(holder.bindingAdapterPosition),
         )
     }
 
     // TODO: Unstable API
     private fun T.bindXRayMode() {
         val shouldShowInnerAdapterXRay = enableNestedRecyclersSupport &&
-                innerAdapterWatcher.hasInnerAdapter(this)
+            innerAdapterWatcher.hasInnerAdapter(this)
 
         bindXRayMode(
             // TODO: WARNING: Temporary workaround. Remove it
@@ -196,7 +200,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
                 provideCustomParams(bindingAdapterPosition)
             } catch (e: Throwable) {
                 null
-            }
+            },
         )
     }
 
@@ -204,14 +208,17 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
         itemType: Int,
         isInXRayMode: Boolean,
         showInnerAdapterIndicator: Boolean,
-        customParamsFromAdapter: Map<String, Any?>?
+        customParamsFromAdapter: Map<String, Any?>?,
     ) {
         (itemView as? ViewGroup)?.children?.forEach { view ->
             when {
                 view.tag == "DEBUG" -> {
                     view.isVisible = isInXRayMode && !showInnerAdapterIndicator
                     val xRayResult = scanner.scan(
-                        this, itemType, customParamsFromAdapter, originalItemView
+                        this,
+                        itemType,
+                        customParamsFromAdapter,
+                        originalItemView,
                     )
                     if (isInXRayMode) {
                         view.isClickable = true
@@ -242,7 +249,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     private fun View.setLoggableLinkClickListener(
         viewHolder: T,
         xRayResult: XRayResult,
-        position: Int
+        position: Int,
     ) {
         val isHidden = overlayHideController.isOverlayHidden.getOrNull(position)
         // TODO: WARNING: Temporary workaround. Remove it
@@ -268,7 +275,7 @@ internal class ScannableRecyclerAdapter<T : RecyclerView.ViewHolder>(
     private fun <T : RecyclerView.ViewHolder> T.prepareDebugInfo(): String {
         return """
             |Debug info:
-            |> RecyclerXRays: $debugXRayLabel($parentXRayApiId) -> $_xRayDebugLabel($_xRayApiId)
+            |> RecyclerXRays: $debugXRayLabel($parentXRayApiId) -> $xRayDebugLabel($xRayApiId)
             |> Decorated ViewHolder class: ${javaClass.simpleName}
         """.trimMargin()
     }

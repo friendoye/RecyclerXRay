@@ -3,7 +3,7 @@ package com.friendoye.recyclerxray.stubs
 import androidx.recyclerview.widget.RecyclerView
 
 class CountableAdapterDataObserver constructor(
-    internal var methodsInvokedCount: Int
+    internal var methodsInvokedCount: Int,
 ) : RecyclerView.AdapterDataObserver() {
 
     override fun onChanged() {

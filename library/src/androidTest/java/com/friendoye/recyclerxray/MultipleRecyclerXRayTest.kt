@@ -59,7 +59,9 @@ class MultipleRecyclerXRayTest {
 
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
 
-        Assert.assertTrue(ExceptionShooter.testShooter.accumulatedExceptions
-            .first() is MultipleRecyclerXRayAttachedException)
+        Assert.assertTrue(
+            ExceptionShooter.testShooter.accumulatedExceptions
+                .first() is MultipleRecyclerXRayAttachedException,
+        )
     }
 }

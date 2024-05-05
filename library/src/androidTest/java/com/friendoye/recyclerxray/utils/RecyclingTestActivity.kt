@@ -26,9 +26,9 @@ class RecyclingTestActivity : ComponentActivity() {
             addItemDecoration(
                 DividerItemDecoration(this@RecyclingTestActivity, RecyclerView.VERTICAL).apply {
                     setDrawable(
-                        ContextCompat.getDrawable(this@RecyclingTestActivity, R.drawable.drawable_vert_divider)!!
+                        ContextCompat.getDrawable(this@RecyclingTestActivity, R.drawable.drawable_vert_divider)!!,
                     )
-                }
+                },
             )
         }
     }

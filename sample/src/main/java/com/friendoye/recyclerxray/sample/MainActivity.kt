@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity() {
                     RecyclerXRay.wrap(sampleAdapter),
                     RecyclerXRay.wrap(horizontalRecyclerWithAdapterChangeAdapter),
                     localRecyclerXRay.wrap(localSampleAdapter),
-                    RecyclerXRay.wrap(horizontalRecyclerAdapter)
-                )
+                    RecyclerXRay.wrap(horizontalRecyclerAdapter),
+                ),
             )
             sampleAdapter = RecyclerXRay.unwrap((adapter as ConcatAdapter).adapters[0])
         }
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
             .enableNestedRecyclersSupport(true)
             .withNestedXRaySettingsProvider(object : NestedXRaySettingsProvider {
                 override fun provide(
-                    nestedAdapter: RecyclerView.Adapter<*>
+                    nestedAdapter: RecyclerView.Adapter<*>,
                 ): XRaySettings? {
                     return XRaySettings.Builder().build()
                 }
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     class SampleAdapterSpanLookup(
-        private val adapterProvider: () -> ConcatAdapter
+        private val adapterProvider: () -> ConcatAdapter,
     ) : GridLayoutManager.SpanSizeLookup() {
         override fun getSpanSize(position: Int): Int {
             val ordinal = adapterProvider().getItemViewType(position)
@@ -159,9 +159,10 @@ class MainActivity : AppCompatActivity() {
                 type<ItemType.Large>() -> 2
                 type<ItemType.Widest>(),
                 type<ItemType.Empty>(),
-                type<ItemType.HorizontalRecycler>() -> 3
+                type<ItemType.HorizontalRecycler>(),
+                -> 3
                 else -> throw IllegalStateException(
-                    "Unknown viewType = $ordinal for position = $position"
+                    "Unknown viewType = $ordinal for position = $position",
                 )
             }
         }
