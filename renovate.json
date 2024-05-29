@@ -1,6 +1,116 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "config:recommended"
+    "extends": ["config:base"],
+    "schedule": ["before 2pm on the first and third monday of the month"],
+    "packageRules": [
+        {
+            "matchPackageNames": [
+                "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+                "org.jetbrains.kotlin:kotlin-gradle-plugin"
+            ],
+            "groupName": "kotlin-updates-major",
+            "matchUpdateTypes": ["major"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+        {
+            "matchPackageNames": [
+                "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+                "org.jetbrains.kotlin:kotlin-gradle-plugin"
+            ],
+            "groupName": "kotlin-updates",
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+
+
+        {
+            "matchPackageNames": [
+                "com.android.tools.build:gradle",
+                "gradle"
+            ],
+            "groupName": "gradle-updates-major",
+            "matchUpdateTypes": ["major"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+        {
+            "matchPackageNames": [
+                "com.android.tools.build:gradle",
+                "gradle"
+            ],
+            "groupName": "gradle-updates",
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+
+
+        {
+            "matchPackageNames": [
+                "com.jfrog.bintray.gradle:gradle-bintray-plugin",
+                "com.karumi:shot",
+                "org.jetbrains.kotlinx:binary-compatibility-validator",
+                "com.diffplug.spotless",
+                "org.jetbrains.dokka",
+                "org.jetbrains.kotlinx.kover"
+            ],
+            "matchUpdateTypes": ["major"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+        {
+            "matchPackageNames": [
+                "com.jfrog.bintray.gradle:gradle-bintray-plugin",
+                "com.karumi:shot",
+                "org.jetbrains.kotlinx:binary-compatibility-validator",
+                "com.diffplug.spotless",
+                "org.jetbrains.dokka",
+                "org.jetbrains.kotlinx.kover"
+            ],
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+
+        {
+            "matchPackageNames": [
+                "org.robolectric:robolectric",
+                "io.mockk:mockk",
+                "junit:junit"
+            ],
+            "groupName": "unit-tests-major",
+            "matchUpdateTypes": ["major"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+        {
+            "matchPackageNames": [
+                "org.robolectric:robolectric",
+                "io.mockk:mockk",
+                "junit:junit"
+            ],
+            "groupName": "unit-tests",
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7
+        },
+
+
+        {
+            "matchPackagePatterns": ["^androidx\\.test:.*$"],
+            "groupName": "androidx-test-updates-major",
+            "matchUpdateTypes": ["major"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7,
+        },
+        {
+            "matchPackagePatterns": ["^androidx\\.test:.*$"],
+            "groupName": "androidx-test-updates",
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchConfidenceLevels": ["high", "medium"],
+            "stabilityDays": 7,
+        }
     ]
 }
