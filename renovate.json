@@ -101,6 +101,30 @@
             "groupName": "androidx-test-updates",
             "matchUpdateTypes": ["minor", "patch"],
             "minimumReleaseAge": "7 days"
+        },
+
+
+        {
+            "matchPackagePatterns": [".*"],
+            "excludePackagePatterns": [
+                "^androidx\\.test:.*$"
+            ],
+            "excludePackageNames": [
+                "org.robolectric:robolectric",
+                "io.mockk:mockk",
+                "junit:junit",
+                "com.jfrog.bintray.gradle:gradle-bintray-plugin",
+                "com.karumi:shot",
+                "org.jetbrains.kotlinx:binary-compatibility-validator",
+                "com.diffplug.spotless",
+                "org.jetbrains.dokka",
+                "org.jetbrains.kotlinx.kover",
+                "com.android.tools.build:gradle",
+                "gradle",
+                "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+                "org.jetbrains.kotlin:kotlin-gradle-plugin"
+            ],
+            "enabled": false
         }
     ]
 }
